@@ -12,7 +12,7 @@
     
     
     
-    <title>为各版本linux添加yum源 | Elapse&#39;s Blog</title>
+    <title>search | Elapse&#39;s Blog</title>
     <link href=”https://Ernket.github.io“ rel=”prefetch” />
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -206,76 +206,183 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 gal-right" id="mainstay">
-                    
-<article class="article well article-body" id="article">
-    <div class="breadcrumb">
-        <i class="fa fa-home"></i>
-        <a href="https://Ernket.github.io">Elapse&#39;s Blog</a>
-        >
-        <span>为各版本linux添加yum源</span>
-    </div>
-    <!-- 大型设备详细文章 -->
-    <div class="hidden-xs">
-        <div class="title-article">
-            <h1>
-                <a href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a>
-            </h1>
-        </div>
-        <div class="tag-article">
-            
-            <span class="label label-gal">
-                <i class="fa fa-tags"></i>
-                
-                <a href="/tags/linux/">linux</a>
-                
-            </span>
-            
-            <span class="label label-gal">
-                <i class="fa fa-calendar"></i> 2018-01-28
-            </span>
-            
-        </div>
-    </div>
-    <!-- 小型设备详细文章 -->
-    <div class="visible-xs">
-        <center>
-            <div class="title-article">
-                <h4>
-                    <a href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a>
-                </h4>
-            </div>
-            <p>
-                <i class="fa fa-calendar"></i> 2018-01-28
-            </p>
-            <p>
-                
-                <i class="fa fa-tags"></i>
-                
-                <a href="/tags/linux/">linux</a>
-                
-                
-                
-            </p>
-        </center>
-    </div>
-    <div class="content-article">
-        <h1 id="为各版本linux添加yum源"><a href="#为各版本linux添加yum源" class="headerlink" title="为各版本linux添加yum源"></a>为各版本linux添加yum源</h1><p>这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源</p>
-<p>国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//更新为阿里云的源</span><br><span class="line"></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo</span><br><span class="line"></span><br><span class="line">//更新为163的源</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS6-Base-163.repo</span><br><span class="line"></span><br><span class="line">//更新为搜狐的源</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.sohu.com/help/CentOS-Base-sohu.repo</span><br></pre></td></tr></table></figure>
-<p>1.进入yum源配置目录</p>
-<pre><code>cd /etc/yum.repos.d
-</code></pre><p>2.做什么改动前最后都做个备份 以防出错 还能恢复</p>
-<pre><code>mv CentOS-Base.repo CentOS-Base.repo.bak
-</code></pre><p>3.下载新的CentOS-Base.repo 到/etc/yum.repos.d/</p>
-<pre><code>wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
-</code></pre><p>4.运行yum makecache生成缓存</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
-<hr>
-<p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
+                    <!-- 搜索页面(尽可能接近ZanBlog搜索功能) -->
 
-    </div>
-</article>
+<!-- search自定义页面 -->
+<script type="text/javascript">
 
+	var htmlEntityMap = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		'\'': '&#39;',
+		'/': '&#x2F;'
+	};
+
+	// 参照hexo过滤html的方法(事实上感觉静态也没什么可以过滤的)
+	function escapeKey(str) {
+		if (typeof str !== 'string') throw new TypeError('str must be a string!');
+
+		// http://stackoverflow.com/a/12034334
+		return str.replace(/[&<>"'\/]/g, function(a) {
+			return htmlEntityMap[a];
+		});
+	}
+
+	var query = decodeURIComponent(window.location.search).substring(1).split('&')
+    // 获取搜索关键词
+    var s = escapeKey(query[0].split('=')[1])
+    // 获取当前页数
+    var p = query.length > 1 ? query[1].split('=')[1] : 1
+    // 获取每页的页码数
+    var pageSize = '10'
+    var useLeancloud = ''
+    $.getJSON('/content.json', function (json) {
+      $('#search-breadcrumb').append(`搜索'${s}'的结果`)
+      var result = getArticles(s, 'posts', json).concat(getArticles(s, 'pages', json))
+      if (result.length === 0 || result.length <= (p - 1) * pageSize) {
+      	// TODO 显示404页面
+      } else {
+        displaySearchResult(result.slice((p - 1) * pageSize, p * pageSize))
+        displayPagination(result)
+      }
+    })
+
+    function getArticles(val, type, json) {
+      return json[type].filter((e) => {
+        return e.title.indexOf(val) !== -1 || e.text.indexOf(val) !== -1
+      })
+    }
+
+    function displaySearchResult(result) {
+      var resultList = $('#article-list')
+      result.forEach(function (article) {
+      	var [month, day] = article.date.split('-')
+        ''
+        ''
+        var defaultPreview = '/imgs/preview/preview1.jpg'
+        var preview = article.preview ? article.preview : defaultPreview
+        var path = '/' + article.path
+        resultList.append(`<div class="article well clearfix article-body article-excerpt" data-aos="flip-up">
+                                <div class="data-article hidden-xs">
+                                    <span class="month">${month}月</span>
+                                    <span class="day">${day}</span>
+                                </div>
+                                <section class="hidden-xs">
+                                    <div class="title-article">
+                                        <h1>
+                                            <a href="${path}">
+                                                <span>${article.title}</span>
+                                            </a>
+                                        </h1>
+                                    </div>
+                                    <div class="tag-article">
+                                        ${ useLeancloud ? '<span class="label label-gal"><i class="fa fa-eye"></i></span>' : ''}
+                                        <span class="label label-gal">
+                                            <i class="fa fa-comments"></i>
+                                            <a href="${path}#comments">739</a>
+                                        </span>
+                                    </div>
+                                    <div class="alert alert-gal article-body content-article">
+                                         <div class="item">
+                                            <a href="${path}">
+                                                <div class="img">
+                                                    <img src="${preview}" alt="${article.title}">
+                                                </div>
+                                                <div class="info">
+                                                    <p>${article.excerpt}</p>
+                                                </div>
+                                            </a>
+                                         </div>
+					                </div>
+					            </section>
+                           </div>`)
+      })
+      if (useLeancloud) {
+        var Counter = AV.Object.extend('Counter')
+        showPostsTime(Counter)
+      }
+    }
+
+    function displayPagination(result) {
+      var pgContainer = $('#gal-pagination')
+      var pg = $(pgContainer.find('.pagination-gal')[0])
+      if(result.length > 0) {
+        pgContainer.css('display', 'block')
+      }
+      var num = Math.ceil(result.length / pageSize)
+      var root = '/search'
+      var link = root + `/index.html?s=${s}`
+      if(p > 1) {
+      	pg.append(`<li class="prev"><a href="${link}&page=${p-1}">«</a></li>`)
+      }
+      if(p > 7) {
+      	pg.append(`<li><a href="${link}">1</a></li>
+                   <li><span>...</span></li>`)
+        for(var i = p - 3; i < p; i++) {
+          pg.append(`<li><a href="${link}&page=${i}">${i}</a></li>`)
+        }
+      } else {
+      	for(var j = 1; j < p; j++) {
+          pg.append(`<li><a href="${link}${j === 1 ? '' : `&page=${j}`}">${j}</a></li>`)
+        }
+      }
+      pg.append(`<li class="current"><span>${p}</span></li>`)
+      if(p + 7 < num) {
+      	for(var i = p + 1; i <= p + 3; i++) {
+          pg.append(`<li><a href="${link}&page=${i}">${i}</a></li>`)
+        }
+        pg.append(`<li><span>...</span></li>`)
+      } else {
+      	for(var j = p + 1; j <= num; j++) {
+          pg.append(`<li><a href="${link}&page=${j}">${j}</a></li>`)
+        }
+      }
+      if(p < num) {
+      	pg.append(`<li class="next"><a href="${link}&page=${p+1}">»</a></li>`)
+      }
+    }
+
+    // 很挫地定义了多一次, 到时再改了...
+    function showPostsTime(Counter) {
+      var entries = []
+      var excerpts = $('.article-excerpt')
+      excerpts.each(function () {
+        entries.push($(this).find('.title-article').first().find('a').attr('href').trim())
+      })
+      var query = new AV.Query(Counter)
+      query.containedIn('url', entries)
+      query.find().then(function (result) {
+        excerpts.each(function () {
+          var href = $(this).find('.title-article').first().find('a').attr('href').trim()
+          var r = result.filter(function (e) {
+            return e.get('url') === href
+          })
+          if(r.length > 0) {
+            $(this).find('i.fa-eye').each(function () {
+              $(this).after(' ' + r[0].get('time') + ' ℃')
+            })
+          } else {
+            $(this).find('i.fa-eye').each(function () {
+              $(this).after(' 0 ℃')
+            })
+          }
+        })
+      }).then(function (error) {
+        console.log('Error:' + error.code + ' ' + error.message)
+      })
+    }
+
+</script>
+<div class="breadcrumb breadcrumb-gal" id="search-breadcrumb">
+    <i class="fa fa-home"></i>
+</div>
+<div id="article-list"></div>
+<div id="gal-pagination" class="clearfix" style="display: none;">
+    <ul class="pagination pagination-gal pull-right"></ul>
+</div>
+<!-- 404页面 -->
 
                 </div>
                 <aside class="col-md-4 gal-left" id="sidebar">
@@ -416,19 +523,31 @@
             
             <li class="list-group-item">
                 <span class="post-title">
+                    <a href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/">Centos6.5下 PXE+Kickstart无人值守安装</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
                     <a href="/2018/01/28/Centos6.5安装kvm虚拟化/">Centos6.5安装kvm虚拟化</a>
                 </span>
             </li>
             
             <li class="list-group-item">
                 <span class="post-title">
-                    <a href="/2018/01/27/NTFS 数据隐藏及恢复/">NTFS 数据隐藏及恢复</a>
+                    <a href="/2018/02/26/Juice-Shop Windows平台搭建/">Juice-Shop Windows平台搭建</a>
                 </span>
             </li>
             
             <li class="list-group-item">
                 <span class="post-title">
                     <a href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/">OWASP Juice Shop v6.4.1部分题目答案（二）</a>
                 </span>
             </li>
             
@@ -456,18 +575,6 @@
                 </span>
             </li>
             
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2018/03/01/游戏旅行青蛙逆向破解/">游戏旅行青蛙逆向破解</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
-                    <a href="/2018/02/27/突破WEB登陆/">突破web系统登录（一）</a>
-                </span>
-            </li>
-            
         </ul>
     </div>
 </aside>
@@ -477,33 +584,33 @@
         <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
             <ul class="nav nav-pills pills-gal">
                 <li class="">
-                    <a href="/2018/01/28/为各版本linux添加yum源/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                    <a href="/search/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
                 </li>
                 <li class="">
-                    <a href="/2018/01/28/为各版本linux添加yum源/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                    <a href="/search/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
                 </li>
                 <li class="">
-                    <a href="/2018/01/28/为各版本linux添加yum源/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                    <a href="/search/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/linux/" style="font-size: 17.54568561793355px;" class="tag-cloud-link">linux</a>
+    <a href="/tags/linux/" style="font-size: 12.687928994597334px;" class="tag-cloud-link">linux</a>
     
-    <a href="/tags/Docker/" style="font-size: 8.682842271607976px;" class="tag-cloud-link">Docker</a>
+    <a href="/tags/Docker/" style="font-size: 12.448180147486028px;" class="tag-cloud-link">Docker</a>
     
-    <a href="/tags/虚拟化/" style="font-size: 10.944622160996513px;" class="tag-cloud-link">虚拟化</a>
+    <a href="/tags/虚拟化/" style="font-size: 19.818905805216694px;" class="tag-cloud-link">虚拟化</a>
     
-    <a href="/tags/windows/" style="font-size: 14.434715769686926px;" class="tag-cloud-link">windows</a>
+    <a href="/tags/windows/" style="font-size: 15.275329595922583px;" class="tag-cloud-link">windows</a>
     
-    <a href="/tags/网络安全/" style="font-size: 10.612634915387567px;" class="tag-cloud-link">网络安全</a>
+    <a href="/tags/网络安全/" style="font-size: 8.101174829284938px;" class="tag-cloud-link">网络安全</a>
     
-    <a href="/tags/Python/" style="font-size: 10.48512819769844px;" class="tag-cloud-link">Python</a>
+    <a href="/tags/Python/" style="font-size: 16.475440965637205px;" class="tag-cloud-link">Python</a>
     
-    <a href="/tags/工具/" style="font-size: 13.151820370425524px;" class="tag-cloud-link">工具</a>
+    <a href="/tags/工具/" style="font-size: 8.428972252497779px;" class="tag-cloud-link">工具</a>
     
-    <a href="/tags/逆向破解/" style="font-size: 19.080277251546033px;" class="tag-cloud-link">逆向破解</a>
+    <a href="/tags/逆向破解/" style="font-size: 13.878582233823677px;" class="tag-cloud-link">逆向破解</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">

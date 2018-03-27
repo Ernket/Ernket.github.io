@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="Elapse&#39;s Blog">
 <meta property="og:description" content="前言：本文的内容是由Elapse和Asolmn共同编写，内容更新全看我俩什么时候脑袋一抽学Python，本文不具备专业性，仅供自己学习，在特别的块因为使用的Python版本不同，所以个别会标明版本，并在后期逐渐完善全版本  基础:3月19号:Python运算符算术运算符先把代码贴出来，帮助理解 123456#!/usr/bin/python# -*- coding: UTF-8 -*-a = 21">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-20T02:29:19.572Z">
+<meta property="og:updated_time" content="2018-03-27T06:12:02.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python学习日志">
 <meta name="twitter:description" content="前言：本文的内容是由Elapse和Asolmn共同编写，内容更新全看我俩什么时候脑袋一抽学Python，本文不具备专业性，仅供自己学习，在特别的块因为使用的Python版本不同，所以个别会标明版本，并在后期逐渐完善全版本  基础:3月19号:Python运算符算术运算符先把代码贴出来，帮助理解 123456#!/usr/bin/python# -*- coding: UTF-8 -*-a = 21">
@@ -373,7 +373,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  2,223字
+                  2,501字
                 </span>
               
 
@@ -389,7 +389,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  10分钟
+                  11分钟
                 </span>
               
             </div>
@@ -510,8 +510,23 @@
 <p> 那么下面就来举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = 1</span><br><span class="line">b = 2</span><br><span class="line">if a != b:</span><br><span class="line">    print &quot;a不等于b&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;a等于b&quot;</span><br></pre></td></tr></table></figure></p>
 <p>输出结果为a不等于b，它会根据你的判断条件，也就是if后面的语句，来判断返回的结果为true还是false，如果是true，就接着下面的一条执行，如果返回的是false，则执行else后面的语句。<br>扩展：多个判断条件<br>当判断条件为多个时，可以用这种形式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = 2</span><br><span class="line">b = 2</span><br><span class="line">if a != b:</span><br><span class="line">    print &quot;1&quot;</span><br><span class="line">elif a == b:</span><br><span class="line">    print &quot;2&quot;</span><br><span class="line">else:</span><br><span class="line">    print &quot;3&quot;</span><br></pre></td></tr></table></figure></p>
 <h2 id="While循环语句"><a href="#While循环语句" class="headerlink" title="While循环语句"></a>While循环语句</h2><p>While语句用于循环执行程序，形式为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">while 判断条件:</span><br><span class="line">    执行语句</span><br></pre></td></tr></table></figure></p>
-<p>当返回的值为true时，会一直循环执行，当判断条件为false时，就循环结束<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">asolmn = 0</span><br><span class="line">while (asolmn &lt; 9):</span><br><span class="line">    print &quot;The num is:&quot;, asolmn</span><br><span class="line">    asolmn += 1</span><br><span class="line">print &quot;Bye!&quot;</span><br></pre></td></tr></table></figure></p>
+<p>当返回的值为true时，会一直循环执行，当判断条件为false时，就循环结束，举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">asolmn = 0</span><br><span class="line">while (asolmn &lt; 9):</span><br><span class="line">    print &quot;The num is:&quot;, asolmn</span><br><span class="line">    asolmn += 1</span><br><span class="line">print &quot;Bye!&quot;</span><br></pre></td></tr></table></figure></p>
 <p>输出结果为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">The num is: 0</span><br><span class="line">The num is: 1</span><br><span class="line">The num is: 2</span><br><span class="line">The num is: 3</span><br><span class="line">The num is: 4</span><br><span class="line">The num is: 5</span><br><span class="line">The num is: 6</span><br><span class="line">The num is: 7</span><br><span class="line">The num is: 8</span><br><span class="line">Bye!</span><br></pre></td></tr></table></figure></p>
+<p>当”asolmn”小于9时，返回就一直是true，所以便会一直执行下面那一条输出语句，接着”asolmn”的值+1，返回到第一条，继续执行，直到返回false</p>
+<h2 id="3月22日-for循环语句"><a href="#3月22日-for循环语句" class="headerlink" title="3月22日:for循环语句"></a>3月22日:for循环语句</h2><p>Python中的for，可以循环任何项目，例如一个列表或者一个字符串，举个循环字符串的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for elapse in &apos;Asolmn&apos;:</span><br><span class="line">    print &apos;test:&apos;, elapse</span><br></pre></td></tr></table></figure>
+<p>输出结果为</p>
+<blockquote>
+<p>test: A<br>test: s<br>test: o<br>test: l<br>test: m<br>test: n</p>
+</blockquote>
+<p>同样的，它也可以循环列表的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">elpase = [&apos;app&apos;,&apos;ban&apos;,&apos;aso&apos;]</span><br><span class="line">for elapse in elpase:</span><br><span class="line">    print &apos;test:&apos;, elapse</span><br><span class="line">print &quot;have fun&quot;</span><br></pre></td></tr></table></figure>
+<p>输出结果为:</p>
+<blockquote>
+<p>test: app<br>test: ban<br>test: aso<br>have fun</p>
+</blockquote>
+<h2 id="3月23日-Python-Break语句"><a href="#3月23日-Python-Break语句" class="headerlink" title="3月23日:Python Break语句"></a>3月23日:Python Break语句</h2><p>Break语句，事用来终止循环语句的，即没有返回false或者递归完也会停止循环的语句。<br>例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for elapse in &apos;asolmn&apos;:</span><br><span class="line">   if elapse == &apos;o&apos;:</span><br><span class="line">      break</span><br><span class="line">   print &apos;test:&apos;, elapse</span><br></pre></td></tr></table></figure></p>
+<p>一个for是循环了一个字符串，当他要循环时，他会经过一个if判断，判断elapse等不等于’o’，若等于，就打破循环（停止循环），并执行下一条</p>
 <hr>
 
       
@@ -773,7 +788,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言："><span class="nav-number">1.</span> <span class="nav-text">前言：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">2.</span> <span class="nav-text">基础:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3月19号-Python运算符"><span class="nav-number">2.1.</span> <span class="nav-text">3月19号:Python运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术运算符"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较运算符"><span class="nav-number">2.1.2.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#赋值运算符"><span class="nav-number">2.1.3.</span> <span class="nav-text">赋值运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月20号-Python字符串"><span class="nav-number">2.2.</span> <span class="nav-text">3月20号:Python字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串基本操作"><span class="nav-number">2.2.1.</span> <span class="nav-text">字符串基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转义字符"><span class="nav-number">2.2.2.</span> <span class="nav-text">转义字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#格式化符号"><span class="nav-number">2.2.3.</span> <span class="nav-text">格式化符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串方法"><span class="nav-number">2.2.4.</span> <span class="nav-text">字符串方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lower-方法"><span class="nav-number">2.2.5.</span> <span class="nav-text">lower()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upper-方法"><span class="nav-number">2.2.6.</span> <span class="nav-text">upper()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replace-方法"><span class="nav-number">2.2.7.</span> <span class="nav-text">replace()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split-方法"><span class="nav-number">2.2.8.</span> <span class="nav-text">split()方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月20日-Python条件语句"><span class="nav-number">2.3.</span> <span class="nav-text">3月20日:Python条件语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#While循环语句"><span class="nav-number">2.4.</span> <span class="nav-text">While循环语句</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言："><span class="nav-number">1.</span> <span class="nav-text">前言：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">2.</span> <span class="nav-text">基础:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3月19号-Python运算符"><span class="nav-number">2.1.</span> <span class="nav-text">3月19号:Python运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术运算符"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较运算符"><span class="nav-number">2.1.2.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#赋值运算符"><span class="nav-number">2.1.3.</span> <span class="nav-text">赋值运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月20号-Python字符串"><span class="nav-number">2.2.</span> <span class="nav-text">3月20号:Python字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串基本操作"><span class="nav-number">2.2.1.</span> <span class="nav-text">字符串基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转义字符"><span class="nav-number">2.2.2.</span> <span class="nav-text">转义字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#格式化符号"><span class="nav-number">2.2.3.</span> <span class="nav-text">格式化符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串方法"><span class="nav-number">2.2.4.</span> <span class="nav-text">字符串方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lower-方法"><span class="nav-number">2.2.5.</span> <span class="nav-text">lower()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upper-方法"><span class="nav-number">2.2.6.</span> <span class="nav-text">upper()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replace-方法"><span class="nav-number">2.2.7.</span> <span class="nav-text">replace()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split-方法"><span class="nav-number">2.2.8.</span> <span class="nav-text">split()方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月20日-Python条件语句"><span class="nav-number">2.3.</span> <span class="nav-text">3月20日:Python条件语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#While循环语句"><span class="nav-number">2.4.</span> <span class="nav-text">While循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月22日-for循环语句"><span class="nav-number">2.5.</span> <span class="nav-text">3月22日:for循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3月23日-Python-Break语句"><span class="nav-number">2.6.</span> <span class="nav-text">3月23日:Python Break语句</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -824,7 +839,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">blog全站共12.1k个字</span>
+  <span class="post-count">blog全站共12.4k个字</span>
 </div>
 
         

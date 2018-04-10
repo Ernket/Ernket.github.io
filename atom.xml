@@ -135,16 +135,13 @@
     <link href="https://Ernket.github.io/2018/02/27/%E7%AA%81%E7%A0%B4WEB%E7%99%BB%E9%99%86/"/>
     <id>https://Ernket.github.io/2018/02/27/突破WEB登陆/</id>
     <published>2018-02-27T00:34:13.000Z</published>
-    <updated>2018-02-28T05:28:18.633Z</updated>
+    <updated>2018-04-10T09:13:55.196Z</updated>
     
     <content type="html"><![CDATA[<h1 id="突破web系统登录（一）"><a href="#突破web系统登录（一）" class="headerlink" title="突破web系统登录（一）"></a>突破web系统登录（一）</h1><p>在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法</p><h3 id="登录绕过"><a href="#登录绕过" class="headerlink" title="登录绕过"></a>登录绕过</h3><ul><li>登录绕过，无疑是最轻松，最省时间的方法了，目前的主要方法有:<br>1.SQL万能密码登录，语句：admin’ or ‘1’=’1’ –<br>2.XSS获取别的用户的Cookie后，替换登录系统<br>3.通过爆破目录、Google Hacking、目录文件扫描等方法，找到没有授权、做防护的页面，直接进行绕过<br>4.通过别人留下来的后门文件或这默认的管理员密码等，直接登录<h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3></li><li>除去登录绕过，还可以尝试用工具进行爆破，但是猜解一个用户的管理员密码则需要成千上万条密码来尝试。<br>1.用BurpSuite进行密码爆破<br>2.利用Python脚本进行爆破，例如htpwdScan(<a href="https://github.com/lijiejie/htpwdScan" target="_blank" rel="noopener">https://github.com/lijiejie/htpwdScan</a>)<br>3.利用一些网上别人整理好的密码字典进行爆破，也可做到高效。例如一些TOP500、TOP1000(<a href="https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords</a>)<br>4.如果还是没有猜解成功的话，那可以根据对方的信息（例如邮箱、姓名、生日）等构造一个字典进行爆破（kali工具推荐cupp，安装命令apt-get install cupp,github链接:<a href="https://github.com/Mebus/cupp）" target="_blank" rel="noopener">https://github.com/Mebus/cupp）</a></li></ul>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h1 id=&quot;突破web系统登录（一）&quot;&gt;&lt;a href=&quot;#突破web系统登录（一）&quot; class=&quot;headerlink&quot; title=&quot;突破web系统登录（一）&quot;&gt;&lt;/a&gt;突破web系统登录（一）&lt;/h1&gt;&lt;p&gt;在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做
-      
+      在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法
     
     </summary>
     

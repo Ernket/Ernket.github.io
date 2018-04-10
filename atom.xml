@@ -157,18 +157,13 @@
     <link href="https://Ernket.github.io/2018/02/26/Juice-Shop%20Windows%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA/"/>
     <id>https://Ernket.github.io/2018/02/26/Juice-Shop Windows平台搭建/</id>
     <published>2018-02-26T02:03:56.000Z</published>
-    <updated>2018-04-10T08:16:02.247Z</updated>
+    <updated>2018-04-10T09:16:09.653Z</updated>
     
     <content type="html"><![CDATA[<p>Juice-shop是OWASP的一款漏洞环境，里面包括了目前的TOP10漏洞，还有一些有深度的漏洞，难度各有不同，juice-shop可以用docker来部署也可以在windows或linux的环境下用node.js发布出来，下面就开始搭建</p><hr><p>1.首先在github上下载源码<br><code>https://github.com/bkimminich/juice-shop/releases/tag/v6.4.2</code></p><p><img src="http://i2.51cto.com/images/blog/201802/26/529e5cae7f8415dd5be057ec26112ec5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><p>  下载自己对应的系统以及node版本的文件，要注意juice-shop-6.4.2后面跟着的这个node，如果是node6那么你就需要去按照对应的node.js为6.x版本的才能成功发布出来（node.js下载可到<a href="https://github.com/nodejs/Release）" target="_blank" rel="noopener">https://github.com/nodejs/Release）</a><br>    <img src="http://i2.51cto.com/images/blog/201802/26/268c3bf9d8fea4d35987a41678b34401.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><p>  2.安装node，打开你下载的node安装包，安装时全部默认即可，然后先检验node.js是否安装成功<br>Win+r打开运行输入cmd开启命令行，再打node –v查看node版本如果可以看到版本且是自己需要的版本说明安装无误<br><img src="http://i2.51cto.com/images/blog/201802/26/2becc0a384342a8319c1b45d0753136d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><p>  3.发布Juice-Shop<br>  打开CMD，使用cd命令来进入Juice-shop源码文件夹（也可在文件夹中Shift+鼠标右键，点击“在此处打开命令窗口”)<br>  然后输入nmp start<br><img src="http://i2.51cto.com/images/blog/201802/26/cf0e1ae618ad3c061ea0823599569f6d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><p>  完成<br> 用浏览器访问本地3000端口即可看到页面<br> <img src="http://i2.51cto.com/images/blog/201802/26/2d146b1db29c08e120923c46d8169278.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><hr><p>  感谢@butters对该文章的技术支持。软件链接地址均为@butters提供。如需转载，请注明出处。否则将追究法律责任</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;Juice-shop是OWASP的一款漏洞环境，里面包括了目前的TOP10漏洞，还有一些有深度的漏洞，难度各有不同，juice-shop可以用docker来部署也可以在windows或linux的环境下用node.js发布出来，下面就开始搭建&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;1.首
-      
+      Juice-shop是OWASP的一款漏洞环境，里面包括了目前的TOP10漏洞，还有一些有深度的漏洞，难度各有不同，juice-shop可以用docker来部署也可以在windows或linux的环境下用node.js发布出来
     
     </summary>
     

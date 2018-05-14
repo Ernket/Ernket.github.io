@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        突破web系统登录（一）｜undefined
+        Metsploit连接数据库｜undefined
         
     </title>
 
-    <link rel="canonical" href="https://Ernket.github.io/2018/02/27/突破WEB登陆/">
+    <link rel="canonical" href="https://Ernket.github.io/2018/04/24/启动数据库/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,15 +147,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>突破web系统登录（一）</h1>
+                    <h1>Metsploit连接数据库</h1>
                     
                     <span class="meta">
                          作者 Elapse
                         <span>
-                          日期 2018-02-27
+                          日期 2018-04-24
                          </span>
                     </span>
                     <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#linux"
+                           title="linux">linux</a>
                         
                         <a class="tag" href="/tags/#网络安全"
                            title="网络安全">网络安全</a>
@@ -167,7 +170,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            突破web系统登录（一）
+            Metsploit连接数据库
         </span>
     </div>
 </header>
@@ -178,26 +181,22 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="突破web系统登录（一）"><a href="#突破web系统登录（一）" class="headerlink" title="突破web系统登录（一）"></a>突破web系统登录（一）</h1><p>在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法</p>
-<h3 id="登录绕过"><a href="#登录绕过" class="headerlink" title="登录绕过"></a>登录绕过</h3><ul>
-<li>登录绕过，无疑是最轻松，最省时间的方法了，目前的主要方法有:<br>1.SQL万能密码登录，语句：admin’ or ‘1’=’1’ –<br>2.XSS获取别的用户的Cookie后，替换登录系统<br>3.通过爆破目录、Google Hacking、目录文件扫描等方法，找到没有授权、做防护的页面，直接进行绕过<br>4.通过别人留下来的后门文件或这默认的管理员密码等，直接登录<h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3></li>
-<li>除去登录绕过，还可以尝试用工具进行爆破，但是猜解一个用户的管理员密码则需要成千上万条密码来尝试。<br>1.用BurpSuite进行密码爆破<br>2.利用Python脚本进行爆破，例如htpwdScan(<a href="https://github.com/lijiejie/htpwdScan" target="_blank" rel="noopener">https://github.com/lijiejie/htpwdScan</a>)<br>3.利用一些网上别人整理好的密码字典进行爆破，也可做到高效。例如一些TOP500、TOP1000(<a href="https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords</a>)<br>4.如果还是没有猜解成功的话，那可以根据对方的信息（例如邮箱、姓名、生日）等构造一个字典进行爆破（kali工具推荐cupp，安装命令apt-get install cupp,github链接:<a href="https://github.com/Mebus/cupp）" target="_blank" rel="noopener">https://github.com/Mebus/cupp）</a></li>
-</ul>
+                <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># /etc/init.d/postgresql start</span></span><br></pre></td></tr></table></figure>
+<h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># vim /usr/share/metasploit-framework/config/database.yml</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
+<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root<span class="meta">@kali:~#</span> msfconsole </span><br><span class="line">                                                  </span><br><span class="line"> _                                                    _</span><br><span class="line">/ \    /\         __                         _   __  /_/ __</span><br><span class="line">|<span class="string"> </span>|<span class="string">\  / </span>|<span class="string"> _____   \ \           ___   _____ </span>|<span class="string"> </span>|<span class="string"> /  \ _   \ \</span></span><br><span class="line">|<span class="string"> </span>|<span class="string"> \/</span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> ___\ </span>|<span class="string">- -</span>|<span class="string">   /\    / __\ </span>|<span class="string"> -__/ </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>|<span class="string">- -</span>|</span><br><span class="line">|<span class="string">_</span>|<span class="string">   </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> _</span>|<span class="string">__  </span>|<span class="string"> </span>|<span class="string">_  / -\ __\ \   </span>|<span class="string"> </span>|<span class="string">    </span>|<span class="string"> </span>|<span class="string"> \__/</span>|<span class="string"> </span>|<span class="string">  </span>|<span class="string"> </span>|_</span><br><span class="line">      |<span class="string">/  </span>|<span class="string">____/  \___\/ /\ \\___/   \/     \__</span>|<span class="string">    </span>|<span class="string">_\  \___\</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">       =[ metasploit v4.16.32-dev                         ]</span></span><br><span class="line"><span class="string">+ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]</span></span><br><span class="line"><span class="string">+ -- --=[ 507 payloads - 40 encoders - 10 nops            ]</span></span><br><span class="line"><span class="string">+ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br><span class="line"><span class="string">msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf</span></span><br><span class="line"><span class="string">[*] Rebuilding the module cache in the background...</span></span><br><span class="line"><span class="string">msf &gt; creds </span></span><br><span class="line"><span class="string">Credentials</span></span><br><span class="line"><span class="string">===========</span></span><br><span class="line"></span><br><span class="line"><span class="string">host       origin     service           public  private  realm        private_type</span></span><br><span class="line"><span class="string">----       ------     -------           ------  -------  -----        ------------</span></span><br><span class="line"><span class="string">x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; db_status </span><br><span class="line"><span class="string">[*]</span> postgresql connected to msf</span><br><span class="line">msf &gt;</span><br></pre></td></tr></table></figure></p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/03/01/游戏旅行青蛙逆向破解/" data-toggle="tooltip" data-placement="top"
-                           title="游戏旅行青蛙逆向破解">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2018/02/26/Juice-Shop Windows平台搭建/" data-toggle="tooltip" data-placement="top"
-                           title="Juice-Shop Windows平台搭建">Next Post &rarr;</a>
+                        <a href="/2018/04/24/metsploit获取电脑密码/" data-toggle="tooltip" data-placement="top"
+                           title="Metsploit破解hash">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -213,7 +212,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#突破web系统登录（一）"><span class="toc-text">突破web系统登录（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#登录绕过"><span class="toc-text">登录绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#密码爆破"><span class="toc-text">密码爆破</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#启动数据库"><span class="toc-text">启动数据库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看数据库配置信息"><span class="toc-text">查看数据库配置信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#连接数据库"><span class="toc-text">连接数据库</span></a></li></ol>
                 </div>
             </div>
         </div>

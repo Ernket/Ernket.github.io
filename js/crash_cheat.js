@@ -9,7 +9,7 @@ var OriginTitile = document.title;
      }
      else {
          $('[rel="icon"]').attr('href', "/favicon.ico");
-         document.title = '什么都没有' + OriginTitile;
+         document.title = '什么都没有|' + OriginTitile;
          titleTime = setTimeout(function () {
              document.title = OriginTitile;
          }, 2000);

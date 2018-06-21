@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Elapse&#39; blog</title>
+  <title>Elapse</title>
   <icon>https://www.gravatar.com/avatar/9bc04837569c80e4c3e5bf4f88011282</icon>
   <subtitle>互联网本来是安全的，自从有了研究安全的人，就变得不安全了。</subtitle>
   <link href="/atom.xml" rel="self"/>

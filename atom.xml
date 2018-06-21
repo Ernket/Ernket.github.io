@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Elapse&#39; blog</title>
-  
+  <icon>https://www.gravatar.com/avatar/9bc04837569c80e4c3e5bf4f88011282</icon>
   <subtitle>互联网本来是安全的，自从有了研究安全的人，就变得不安全了。</subtitle>
   <link href="/atom.xml" rel="self"/>
   
@@ -11,7 +11,7 @@
   
   <author>
     <name>Elapse</name>
-    
+    <email>elap_se@yahoo.com</email>
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
@@ -240,9 +240,9 @@
       <category term="windows" scheme="https://Ernket.github.io/categories/windows/"/>
     
     
-      <category term="windows" scheme="https://Ernket.github.io/tags/windows/"/>
-    
       <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="windows" scheme="https://Ernket.github.io/tags/windows/"/>
     
   </entry>
   

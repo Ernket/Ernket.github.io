@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        OWASP Juice Shop v6.4.1部分题目答案｜Elapse&#39; blog
+        正在开新坑中.....｜Elapse&#39; blog
         
     </title>
 
-    <link rel="canonical" href="https://Ernket.github.io/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">
+    <link rel="canonical" href="https://Ernket.github.io/2018/06/29/新坑/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -153,18 +153,15 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>OWASP Juice Shop v6.4.1部分题目答案</h1>
+                    <h1>正在开新坑中.....</h1>
                     
                     <span class="meta">
                          作者 Elapse
                         <span>
-                          日期 2018-01-31
+                          日期 2018-06-29
                          </span>
                     </span>
                     <div class="tags text-center">
-                        
-                        <a class="tag" href="/tags/#linux"
-                           title="linux">linux</a>
                         
                         <a class="tag" href="/tags/#网络安全"
                            title="网络安全">网络安全</a>
@@ -176,7 +173,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            OWASP Juice Shop v6.4.1部分题目答案
+            正在开新坑中.....
         </span>
     </div>
 </header>
@@ -187,46 +184,17 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案"></a>OWASP Juice Shop v6.4.1部分题目答案</h1><blockquote>
-<p>OWASP Juice Shop是一个专门用于安全技能训练的靶场环境</p>
-</blockquote>
-<p>安装完成后的界面:<br><img src="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<ol>
-<li>Score Board<br>这题的意思是找到一个隐藏的计分界面，通过查看网页源代码可查出<br><img src="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>之后打开页面即可<br><img src="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Admin Section&amp;Error Handling<br>访问商店管理部分。这个网站一用工具爆破就会崩溃，所以这里采用手工，在试了admin和administrator之后皆不成功，百度找了一下还有administration,尝试，成功<br><img src="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>登陆管理员用户，点击登陆,构造语句<br><img src="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功登陆<br><img src="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Five-Star Feedback<br>将所有5星反馈全部删除即可<br><img src="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成<br><img src="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>XSS Tier 1<br>往页面插入恶意代码,随意找一个框，构造语句<br><code>&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>Enter,完成<br><img src="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Zero Stars<br>最简单的一个，随意登陆一个用户，在”联系我们”处，随意发一个反馈，然后将数据包内容更改<br><img src="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将“2”改为0即可<br><img src="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Basket Access<br>进入别人的购物篮，很简单，只需要改包即可<br><img src="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将”1”改为其他数字，发送即可<br><img src="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>规定使用密码登陆，不用语句。打开工具密码爆破，得出密码为admin123，在回到登陆界面，登陆即可完成<br><img src="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li><p>Reset Jim’s Password<br>通过上一道题可以得出邮箱是”@juice-sh.op”,打开登陆界面，点击忘记密码，输入邮箱<br><img src="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<blockquote>
-<p>这里面的Samuel来自于星战梗</p>
-</blockquote>
-</li>
-<li><p>Login Jim<br>上面改了用户Jim的密码后直接登陆即可</p>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>总结<br>这个渗透环境包含了许多有代表性的漏洞，在许多漏洞上也需要通过抓取数据包来分析，由于自身的技术不够，所以只解决了上面这些题目，不得不说这个环境对于初入这方面的人来说是不错的</p>
-</blockquote>
+                <p>新坑正在填，也许很快就会发了，也许几个月后才发（笑）</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/" data-toggle="tooltip" data-placement="top"
-                           title="OWASP Juice Shop v6.4.1部分题目答案（二）">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2018/01/30/CentOS7安装Docker/" data-toggle="tooltip" data-placement="top"
-                           title="CentOS7安装Docker">Next Post &rarr;</a>
+                        <a href="/2018/06/27/JIS-CTF靶机渗透笔记/" data-toggle="tooltip" data-placement="top"
+                           title="JIS-CTF靶机渗透笔记">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -242,7 +210,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OWASP-Juice-Shop-v6-4-1部分题目答案"><span class="toc-text">OWASP Juice Shop v6.4.1部分题目答案</span></a></li></ol>
+                    
                 </div>
             </div>
         </div>

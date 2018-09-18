@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2018-09-12T15:26:40.877Z</updated>
+  <updated>2018-09-18T14:21:43.210Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2018Kali可用更新源</title>
+    <link href="https://Ernket.github.io/2018/09/18/2018kali%E6%9B%B4%E6%96%B0%E6%BA%90/"/>
+    <id>https://Ernket.github.io/2018/09/18/2018kali更新源/</id>
+    <published>2018-09-18T14:20:43.000Z</published>
+    <updated>2018-09-18T14:21:43.210Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>源文件路径：/etc/apt/sources.list<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#中科大</span></span><br><span class="line">deb http:<span class="comment">//mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</span></span><br><span class="line">deb-src http:<span class="comment">//mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#阿里云</span></span><br><span class="line">deb http:<span class="comment">//mirrors.aliyun.com/kali kali-rolling main non-free contrib</span></span><br><span class="line">deb-src http:<span class="comment">//mirrors.aliyun.com/kali kali-rolling main non-free contrib</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#清华大学</span></span><br><span class="line">deb http:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free</span></span><br><span class="line">deb-src https:<span class="comment">//mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#浙大</span></span><br><span class="line">deb http:<span class="comment">//mirrors.zju.edu.cn/kali kali-rolling main contrib non-free</span></span><br><span class="line">deb-src http:<span class="comment">//mirrors.zju.edu.cn/kali kali-rolling main contrib non-free</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#东软大学</span></span><br><span class="line">deb http:<span class="comment">//mirrors.neusoft.edu.cn/kali kali-rolling/main non-free contrib</span></span><br><span class="line">deb-src http:<span class="comment">//mirrors.neusoft.edu.cn/kali kali-rolling/main non-free contrib</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#官方源</span></span><br><span class="line">deb http:<span class="comment">//http.kali.org/kali kali-rolling main non-free contrib</span></span><br><span class="line">deb-src http:<span class="comment">//http.kali.org/kali kali-rolling main non-free contrib</span></span><br></pre></td></tr></table></figure></p></blockquote><p>保存了之后执行apt-get update就好了</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--more--&gt;
+    
+    </summary>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>CH4INRULZ_v1.0.1靶机攻略</title>
@@ -451,28 +473,6 @@
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
     
       <category term="Docker" scheme="https://Ernket.github.io/tags/Docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python安装pip模块</title>
-    <link href="https://Ernket.github.io/2018/01/29/python%E5%AE%89%E8%A3%85pip%E6%A8%A1%E5%9D%97/"/>
-    <id>https://Ernket.github.io/2018/01/29/python安装pip模块/</id>
-    <published>2018-01-29T06:15:45.000Z</published>
-    <updated>2018-04-10T08:35:01.429Z</updated>
-    
-    <content type="html"><![CDATA[<p>pip 是一个现代的，通用的 Python 包管理工具。提供了对Python 包的查找、下载、安装、卸载的功能。</p><hr><p>Python想要用pip来安装，得先安装pip模块<br><code>https://pypi.python.org/pypi/pip#downloads</code><br><img src="http://i2.51cto.com/images/blog/201801/29/e3fac557dbaac02444526d3b4358569a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>下载完成后，解压到python同个目录下<br><img src="http://i2.51cto.com/images/blog/201801/29/fa059851016faf06d0706ac195ea9148.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>用命令来安装<br><code>python setup.py install</code><br><img src="http://i2.51cto.com/images/blog/201801/29/5b279b38ab61a2effceddb8b087e9bc1.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/29/9156d8497edbc02ea8912c1140c3711d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>安装完成</p><hr><p>若安装过程中出现”No module named setuptools”这个错误,则需要单独再去下载一个setuptools<br><code>https://pypi.python.org/pypi/setuptools</code><br>下载后解压到和python同目录下，cd进入，用python setup.py install安装<br><img src="http://i2.51cto.com/images/blog/201801/29/beb89cf9a7abea06fc7e14ebb563de5d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成后再回到前面，重复一遍就行了</p><hr><p>若出现”‘pip’ 不是内部或外部命令，也不是可运行的程序<br>或批处理文件。”<br><img src="http://i2.51cto.com/images/blog/201801/31/619a45b1675218c92912ee82f798b828.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>只需要将Python目录下的Scripts添加进环境变量里就OK了<br><img src="http://i2.51cto.com/images/blog/201801/31/1c220edc5fbfd3512fa41d36e71d34b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/6abf02a787011e5363a4a5a757170a85.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;!--more--&gt;
-    
-    </summary>
-    
-      <category term="Python" scheme="https://Ernket.github.io/categories/Python/"/>
-    
-    
-      <category term="Python" scheme="https://Ernket.github.io/tags/Python/"/>
     
   </entry>
   

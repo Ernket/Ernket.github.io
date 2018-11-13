@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2018-09-18T14:23:43.292Z</updated>
+  <updated>2018-11-13T05:48:32.106Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python3调用Google翻译</title>
+    <link href="https://Ernket.github.io/2018/11/13/Python3%E8%B0%83%E7%94%A8Google%E7%BF%BB%E8%AF%91/"/>
+    <id>https://Ernket.github.io/2018/11/13/Python3调用Google翻译/</id>
+    <published>2018-11-13T05:48:30.000Z</published>
+    <updated>2018-11-13T05:48:32.106Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>想弄一个批量翻译的东西，奈何百度翻译别人根本不研究，所以只能看谷歌翻译的了；这份代码的作者写的太聪明了，是真的很棒，思路很好，看到这样的代码简直年轻10岁</p><h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>这翻译的环境需要</p><ul><li>Python 3.5.4:<ul><li>urllib (安装方法: pip install urllib5)</li><li>execjs (安装方法: pip install PyExecJs)</li><li>requests (安装方法: pip install requests)</li><li>termcolor (安装方法: pip install termcolor)</li></ul></li></ul><h1 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h1><p>直接在google翻译的url上拼接语句是不可行的，google在其中有一个关键参数tk，这个参数是利用js算出来的，不同的内容不同的值，然而还是有大佬把tk值得算法代码写出来了，<a href="https://github.com/cocoa520/Google_TK" target="_blank" rel="noopener">GitHub链接</a> ,膜拜一波大佬</p><p>正题开始<br>先把tk值得算法搬出来<br><img src="http://t1.aixinxi.net/o_1cs5nnph11tfg1i2l2odgjg1fh5a.png-j.jpg" alt=""></p><p>伪造报头，伪装成浏览器的<br>这里用的是谷歌浏览器<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_url</span><span class="params">(url)</span></span><span class="symbol">:</span></span><br><span class="line">    headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'</span>&#125;</span><br><span class="line">    req = requests.get(url=url, headers=headers)</span><br><span class="line">    <span class="keyword">return</span> req.content.decode(<span class="string">'utf-8'</span>)</span><br></pre></td></tr></table></figure></p><p>翻译的字符长度是有限制的，测试出来的结果是不能大于4891，这里在def一个限制长度的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_length</span><span class="params">(content)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(content) &gt; <span class="number">4891</span>:</span><br><span class="line">        print(<span class="string">"翻译文本超过限制！"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></table></figure></p><p>下面这个def是最重要的，因为直接输出的结果，是一大串列表属性的内容，如下图<br><img src="http://t1.aixinxi.net/o_1cs5omqitjrp141hmdf144bmlca.png-j.jpg" alt=""><br>看的就很难受，所以这里要把不必要的东西都过滤掉，只要翻译<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_result</span><span class="params">(parm)</span></span><span class="symbol">:</span></span><br><span class="line">    result = parm</span><br><span class="line">    str_end = result.find(<span class="string">"\","</span>) <span class="comment">#查找字符串 \号开始,号结束</span></span><br><span class="line">    <span class="keyword">if</span> str_end &gt; <span class="number">4</span><span class="symbol">:</span></span><br><span class="line">        print(<span class="string">"翻译的结果为："</span>,result[<span class="number">4</span><span class="symbol">:str_end</span>]) <span class="comment">#输出结果截取，只要翻译的一部分</span></span><br></pre></td></tr></table></figure></p><p>接下来就把上面定义的都给调用起来，分两块，一块是英译中，一块是中译英<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def en_to_zn_translate(content, tk):</span><br><span class="line">    max_length(content) <span class="comment">#content是后面自己input的字符串</span></span><br><span class="line">    content = urllib.parse.<span class="literal">quote</span>(content) <span class="comment">#转换成url编码</span></span><br><span class="line">    <span class="comment">#英译汉</span></span><br><span class="line">    url = <span class="string">"http://translate.google.cn/translate_a/single?client=t"</span> \</span><br><span class="line">          <span class="string">"&amp;sl=en&amp;tl=zh-CN&amp;hl=zh-CN&amp;dt=at&amp;dt=bd&amp;dt=ex&amp;dt=ld&amp;dt=md&amp;dt=qca"</span> \</span><br><span class="line">          <span class="string">"&amp;dt=rw&amp;dt=rm&amp;dt=ss&amp;dt=t&amp;ie=UTF-8&amp;oe=UTF-8&amp;clearbtn=1&amp;otf=1&amp;pc=1"</span> \</span><br><span class="line">          <span class="string">"&amp;srcrom=0&amp;ssel=0&amp;tsel=0&amp;kc=2&amp;tk=%s&amp;q=%s"</span> % (tk, content)</span><br><span class="line">    <span class="literal">result</span> = open_url(url) <span class="comment">#请求网址</span></span><br><span class="line">    print_result(<span class="literal">result</span>)<span class="comment">#输出结果</span></span><br></pre></td></tr></table></figure></p><p>汉译英差不多的，只是Url中的一些参数变了而已<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">zn_to_en_translate</span><span class="params">(content,tk)</span></span><span class="symbol">:</span></span><br><span class="line">    max_length(content) <span class="comment">#content是后面自己input的字符串</span></span><br><span class="line">    content = urllib.parse.quote(content) <span class="comment">#转换成url编码</span></span><br><span class="line">    <span class="comment">#汉译英</span></span><br><span class="line">    url = <span class="string">"http://translate.google.cn/translate_a/single?client=t"</span>\</span><br><span class="line">          <span class="string">"&amp;sl=zh-CN&amp;tl=en&amp;hl=zh-CN&amp;dt=at&amp;dt=bd&amp;dt=ex&amp;dt=ld&amp;dt=md&amp;dt=qca"</span>\</span><br><span class="line">          <span class="string">"&amp;dt=rw&amp;dt=rm&amp;dt=ss&amp;dt=t&amp;ie=UTF-8&amp;oe=UTF-8"</span>\</span><br><span class="line">          <span class="string">"&amp;source=btn&amp;ssel=3&amp;tsel=3&amp;kc=0&amp;tk=%s&amp;q=%s"</span><span class="string">%(tk,content)</span></span><br><span class="line">    result = open_url(url) <span class="comment">#请求网址</span></span><br><span class="line">    print_result(result) <span class="comment">#输出结果</span></span><br></pre></td></tr></table></figure></p><p>接着弄个大整合，把这些全部都调用到一起，在这中间在分出模式选择，英译汉还是汉译英，下面就是各种调用了，算tk值，调用翻译等<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def main():</span><br><span class="line">    js = Return_tk()</span><br><span class="line">    while True:</span><br><span class="line">        print(termcolor.colored("请先输入要进行的操作：q表示退出；e表示英文翻译成中文；z表示中文翻译成英文。","red"))</span><br><span class="line">        <span class="keyword">change</span> = <span class="keyword">input</span>(<span class="string">"请选择翻译选项："</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">change</span> == <span class="string">'q'</span>:</span><br><span class="line">            print(<span class="string">"再见"</span>)</span><br><span class="line">            break</span><br><span class="line">        elif <span class="keyword">change</span> == <span class="string">'e'</span>:</span><br><span class="line">            <span class="keyword">content</span> = <span class="keyword">input</span>(<span class="string">"请输入要翻译的英文："</span>)</span><br><span class="line">            tk = js.getTk(<span class="keyword">content</span>)</span><br><span class="line">            en_to_zn_translate(<span class="keyword">content</span>,tk)</span><br><span class="line">        elif <span class="keyword">change</span> ==  <span class="string">'z'</span>:</span><br><span class="line">            <span class="keyword">content</span> = <span class="keyword">input</span>(<span class="string">"请输入要翻译的中文："</span>)</span><br><span class="line">            tk = js.getTk(<span class="keyword">content</span>)</span><br><span class="line">            zn_to_en_translate(<span class="keyword">content</span>,tk)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"请输入正确的选项！"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">main</span>()</span><br></pre></td></tr></table></figure></p><p>完整的代码太长了，有需要的话可以上我的<a href="https://github.com/Ernket/Google-Translate" target="_blank" rel="noopener">Github项目</a>里面下载</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--more--&gt;
+    
+    </summary>
+    
+      <category term="Python" scheme="https://Ernket.github.io/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="https://Ernket.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>2018Kali可用更新源</title>
@@ -210,9 +232,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -234,9 +256,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -302,9 +324,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -418,9 +440,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -442,37 +464,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
+      <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
       <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS7安装Docker</title>
-    <link href="https://Ernket.github.io/2018/01/30/CentOS7%E5%AE%89%E8%A3%85Docker/"/>
-    <id>https://Ernket.github.io/2018/01/30/CentOS7安装Docker/</id>
-    <published>2018-01-30T02:01:08.000Z</published>
-    <updated>2018-04-10T08:39:16.383Z</updated>
-    
-    <content type="html"><![CDATA[<p>系统要求：<br>Docker支持 64 位版本 CentOS 7，并且要求内核版本不低于 3.10。 CentOS 7 满足最低内核的要求，但由于内核版本比较低，部分功能（如 overlay2 存储层驱动）无法使用，并且部分功能可能不太稳定。</p><blockquote><p>环境：CentOS7</p></blockquote><ul><li>使用yum安装docker：<br><code>$ yum install docker-io -y</code></li><li><p>启动：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> systemctl <span class="built_in">enable</span> docker</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl start docker</span></span><br></pre></td></tr></table></figure></li><li><p>测试 Docker 是否安装正确:<br><code>$ docker run hello-world</code><br><img src="http://i2.51cto.com/images/blog/201801/30/eec9c47383ebd9d7517245be924f2a18.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p></li><li><p>运行:<br>有了镜像后，我们就能够以这个镜像为基础启动并运行一个容器。以上面的 ubuntu:16.04 为例，如果我们打算启动里面的 bash 并且进行交互式操作的话，可以执行下面的命令。<br>$ docker run -it –rm ubuntu:16.04 bash<br><img src="http://i2.51cto.com/images/blog/201801/30/df10e7e1e7a3c9642ac2748afd6bac11.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p><blockquote><p>-it：这是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。<br>–rm：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。<br>ubuntu:16.04：这是指用 ubuntu:16.04 镜像为基础来启动容器。<br>bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash。</p></blockquote></li><li><p>查看镜像:<br><code>$ docker images</code></p></li><li>删除容器：<br>列出最近使用的容器<br><code>$ docker ps -a</code><br>删除<br><code>$ docker rm &lt;container ID&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/30/87921bcad03d08df28574733837f063e.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li></ul><hr><p>若想要在容器中导入文件<br>那么，在docker容器启动的时候，挂载到宿主机的一个目录，可以用-v参数来指定。<br>例如我要启动一个Ubuntu容器，将宿主机的/etc/Elapse目录挂载到容器的/etc/eee目录，可通过以下方式指定：<br><code>$ docker run -it -v /etc/Elapse:/etc/eee ubuntu:16.04 bash</code><br>这样启动后，容器内就会自动创建或使用目录。通过这种方式，想导入文件直接cp即可</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;系统要求：&lt;br&gt;Docker支持 64 位版本 CentOS 7，并且要求内核版本不低于 3.10。 CentOS 7 满足最低内核的要求，但由于内核版本比较低，部分功能（如 overlay2 存储层驱动）无法使用，并且部分功能可能不太稳定。&lt;/p&gt;
-&lt;blockquot
-      
-    
-    </summary>
-    
-      <category term="linux" scheme="https://Ernket.github.io/categories/linux/"/>
-    
-    
-      <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
-    
-      <category term="Docker" scheme="https://Ernket.github.io/tags/Docker/"/>
     
   </entry>
   

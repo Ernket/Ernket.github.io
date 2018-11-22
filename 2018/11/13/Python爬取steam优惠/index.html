@@ -195,21 +195,17 @@
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pageid = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> pageid&lt;<span class="number">599</span>:</span><br><span class="line">    url = <span class="string">"https://store.steampowered.com/search/?specials=1&amp;page="</span> + str(pageid)</span><br><span class="line">    res = requests.<span class="keyword">get</span>(url)</span><br><span class="line">    soup = bs4.BeautifulSoup(res.<span class="built_in">text</span>)</span><br><span class="line">    <span class="built_in">contents</span> = soup.select('<span class="keyword">div</span>[<span class="built_in">class</span>=<span class="string">"responsive_search_name_combined"</span>]')</span><br></pre></td></tr></table></figure>
 <p>这样，599页的steam游戏优惠的界面都会被requests请求一遍，并查找指定的元素,也就是存放游戏名的元素<br>接下来把游戏名抓取下来<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">    name = content.<span class="builtin-name">find</span>(<span class="string">"span"</span>,<span class="attribute">class_</span>=<span class="string">"title"</span>).string.strip()</span><br><span class="line">    <span class="builtin-name">print</span>(name)</span><br></pre></td></tr></table></figure></p>
 <p>运行一下<br><img src="http://t1.aixinxi.net/o_1cst4vojd1rcb1ml1nsi1dbh176aa.png-j.jpg" alt=""><br>成功，右边，游戏名出来了，接下来把名字都保存成txt<br><img src="http://t1.aixinxi.net/o_1cst5573e17m3ekam256f81uhva.png-j.jpg" alt=""><br>要注意的是，有的游戏名很奇怪，有特殊符号，写不进去，那么就会报错，所以，添加一个异常处理就好了<br>下面贴出完整代码<br><img src="http://t1.aixinxi.net/o_1cstgb3d3sjr1vqprkm1hmulbaa.png-j.jpg" alt=""><br>爬虫的主要问题，基本就是字符串的编码问题，现在整理出来的，最好的方法应该就是直接把url编码的当作正常内容输入就好了</p>
+<p>完整代码<a href="https://github.com/Ernket/steam-discount-game" target="_blank" rel="noopener">下载</a></p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/11/13/Python3调用Google翻译/" data-toggle="tooltip" data-placement="top"
-                           title="Python3调用Google翻译">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2018/09/18/2018kali更新源/" data-toggle="tooltip" data-placement="top"
-                           title="2018Kali可用更新源">Next Post &rarr;</a>
+                        <a href="/2018/11/13/Python3调用Google翻译/" data-toggle="tooltip" data-placement="top"
+                           title="Python3调用Google翻译">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

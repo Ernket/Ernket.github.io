@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Metsploit连接数据库｜Elapse&#39; blog
+        虚拟机安装MacOS｜Elapse&#39; blog
         
     </title>
 
-    <link rel="canonical" href="https://Ernket.github.io/2018/04/24/启动数据库/">
+    <link rel="canonical" href="https://Ernket.github.io/2018/07/31/macos虚拟机安装/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -153,21 +153,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Metsploit连接数据库</h1>
+                    <h1>虚拟机安装MacOS</h1>
                     
                     <span class="meta">
                          作者 Elapse
                         <span>
-                          日期 2018-04-24
+                          日期 2018-07-31
                          </span>
                     </span>
                     <div class="tags text-center">
                         
                         <a class="tag" href="/tags/#linux"
                            title="linux">linux</a>
-                        
-                        <a class="tag" href="/tags/#网络安全"
-                           title="网络安全">网络安全</a>
                         
                     </div>
                 </div>
@@ -176,7 +173,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Metsploit连接数据库
+            虚拟机安装MacOS
         </span>
     </div>
 </header>
@@ -187,12 +184,14 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># /etc/init.d/postgresql start</span></span><br></pre></td></tr></table></figure>
-<h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># vim /usr/share/metasploit-framework/config/database.yml</span></span><br></pre></td></tr></table></figure>
-<p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
-<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root<span class="meta">@kali:~#</span> msfconsole </span><br><span class="line">                                                  </span><br><span class="line"> _                                                    _</span><br><span class="line">/ \    /\         __                         _   __  /_/ __</span><br><span class="line">|<span class="string"> </span>|<span class="string">\  / </span>|<span class="string"> _____   \ \           ___   _____ </span>|<span class="string"> </span>|<span class="string"> /  \ _   \ \</span></span><br><span class="line">|<span class="string"> </span>|<span class="string"> \/</span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> ___\ </span>|<span class="string">- -</span>|<span class="string">   /\    / __\ </span>|<span class="string"> -__/ </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>|<span class="string">- -</span>|</span><br><span class="line">|<span class="string">_</span>|<span class="string">   </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> _</span>|<span class="string">__  </span>|<span class="string"> </span>|<span class="string">_  / -\ __\ \   </span>|<span class="string"> </span>|<span class="string">    </span>|<span class="string"> </span>|<span class="string"> \__/</span>|<span class="string"> </span>|<span class="string">  </span>|<span class="string"> </span>|_</span><br><span class="line">      |<span class="string">/  </span>|<span class="string">____/  \___\/ /\ \\___/   \/     \__</span>|<span class="string">    </span>|<span class="string">_\  \___\</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">       =[ metasploit v4.16.32-dev                         ]</span></span><br><span class="line"><span class="string">+ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]</span></span><br><span class="line"><span class="string">+ -- --=[ 507 payloads - 40 encoders - 10 nops            ]</span></span><br><span class="line"><span class="string">+ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br><span class="line"><span class="string">msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf</span></span><br><span class="line"><span class="string">[*] Rebuilding the module cache in the background...</span></span><br><span class="line"><span class="string">msf &gt; creds </span></span><br><span class="line"><span class="string">Credentials</span></span><br><span class="line"><span class="string">===========</span></span><br><span class="line"></span><br><span class="line"><span class="string">host       origin     service           public  private  realm        private_type</span></span><br><span class="line"><span class="string">----       ------     -------           ------  -------  -----        ------------</span></span><br><span class="line"><span class="string">x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; db_status </span><br><span class="line"><span class="string">[*]</span> postgresql connected to msf</span><br><span class="line">msf &gt;</span><br></pre></td></tr></table></figure></p>
+                <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
+<li>Vmware Workstation任意版本</li>
+<li>MacOS 10.11(下载地址:链接：<a href="https://pan.baidu.com/s/1iYLYVelaBaJuCpwCqkUhBg" target="_blank" rel="noopener">https://pan.baidu.com/s/1iYLYVelaBaJuCpwCqkUhBg</a> 提取码：c8y5 )</li>
+<li>unlocker(下载地址：链接：<a href="https://pan.baidu.com/s/1Rr_4K1Z4UZ2xU44kGRCNzg" target="_blank" rel="noopener">https://pan.baidu.com/s/1Rr_4K1Z4UZ2xU44kGRCNzg</a> 提取码：rsgk ）</li>
+</ul>
+<h1 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h1><p>Vmware安装懒得说，主要讲系统安装<br>Vmware是没有安装mac系统这个选项的<br>所以需要unlocker<br>解压了之后，管理员方式运行<code>win-install.cmd</code><br>安装完后打开Vmware后就可以看到这个选项了<br><img src="http://t1.aixinxi.net/o_1ctc5d7uvp516t24br1n7171ea.png-j.jpg" alt=""><br>在下面选择系统版本为10.11，然后下一步（后面的默认即可）</p>
+<p>这里要注意一下，直接启动虚拟机会报错<br>所以你需要通过编辑vmx文件，添加一条配置来解决<br>打开虚拟机的vmx文件<br><img src="http://t1.aixinxi.net/o_1ctc5iqnh1cb31nss267occ1u4ga.png-j.jpg" alt=""><br>找到<code>smc.present = &quot;TRUE&quot;</code><br>在下面添加一行<code>smc.version = 0</code><br><img src="http://t1.aixinxi.net/o_1ctc5g1kt9256r9jmh183k1d1aa.png-j.jpg" alt=""><br>重新打开macOS虚拟机，这个时候就不会报错了<br>接着你会来到这个界面<br><img src="http://t1.aixinxi.net/o_1ctc5qs8f1b9c1vfc11eaiji9k5a.png-j.jpg" alt=""><br>选择什么语言看你喜欢，反正我用中文<br>继续下一步，他会让你选择安装的位置，但是它告诉你没有足够的空间来安装<br><img src="http://t1.aixinxi.net/o_1ctc6195915qk8nnbfi19t81qp0a.png-j.jpg" alt=""><br>当时我还以为真的是我设置的40G少了，后来看了看觉得不对劲，这个不是安装的系统吗，怎么可能有内存安装<br>正确的操作是<br>点击实用工具-磁盘工具<br><img src="http://t1.aixinxi.net/o_1ctc67hgo4el1n0h1ssh6s91pj3a.png-j.jpg" alt=""><br>点击你的虚拟磁盘，然后格式化<br><img src="http://t1.aixinxi.net/o_1ctc693f119qieh01b2s12ia18mla.png-j.jpg" alt=""><br><img src="http://t1.aixinxi.net/o_1ctc6akfvurl1isl8vcbpuqgba.png-j.jpg" alt=""><br>单机抹掉，完成格式化<br><img src="http://t1.aixinxi.net/o_1ctc6cfks1s4a1c926tove4pd7a.png-j.jpg" alt=""><br>然后我们回到之前的页面，可以看到多出来了一个Elapse这个盘<br><img src="http://t1.aixinxi.net/o_1ctc6dqpk2i0100lev78q71m3ra.png-j.jpg" alt=""><br>点继续，等待安装<br><img src="http://t1.aixinxi.net/o_1ctc6eqmk1nii1psrabt15oqna0a.png-j.jpg" alt=""><br>安装完毕后，就是简单的系统设置了<br><img src="http://t1.aixinxi.net/o_1ctc8176319ccfjt1veems65l0a.png-j.jpg" alt=""><br>根据自己需要设置<br><img src="http://t1.aixinxi.net/o_1ctc8fbqokll1cnv9lj1cr351a.png-j.jpg" alt=""><br>设置完后，就完事了<br><img src="http://t1.aixinxi.net/o_1ctc8khtj136vsggn2j1084mqia.png-j.jpg" alt=""></p>
+<p>（苹果系统真香）</p>
 
                 <hr>
                 
@@ -200,14 +199,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/06/14/JoomlaSQL注入（CVE-2018-8045）利用/" data-toggle="tooltip" data-placement="top"
-                           title="JoomlaSQL注入（CVE-2018-8045）利用">&larr; Previous Post</a>
+                        <a href="/2018/09/12/CH4INRULZ_v1.0.1靶机攻略/" data-toggle="tooltip" data-placement="top"
+                           title="CH4INRULZ_v1.0.1靶机攻略">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2018/04/24/metsploit获取电脑密码/" data-toggle="tooltip" data-placement="top"
-                           title="Metsploit破解hash">Next Post &rarr;</a>
+                        <a href="/2018/07/31/“深海迷航” 为期两个星期的深海探险 完结/" data-toggle="tooltip" data-placement="top"
+                           title="“深海迷航” 为期两个星期的深海探险 完结">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -223,7 +222,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#启动数据库"><span class="toc-text">启动数据库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看数据库配置信息"><span class="toc-text">查看数据库配置信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#连接数据库"><span class="toc-text">连接数据库</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作"><span class="toc-text">操作</span></a></li></ol>
                 </div>
             </div>
         </div>

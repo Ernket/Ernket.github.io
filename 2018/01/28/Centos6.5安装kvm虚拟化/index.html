@@ -421,36 +421,93 @@
             <div id="articleContent">
                 <p>KVM简介：<br>1.KVM是开源软件，全称是kernel-based virtual machine（基于内核的虚拟机）。<br>2.是x86架构且硬件支持虚拟化技术（如 intel VT 或 AMD-V）的Linux全虚拟化解决方案。<br>3.KVM能在不改变linux或windows镜像的情况下同时运行多个虚拟机，（它的意思是多个虚拟机使用同一镜像）并为每一个虚拟机配置个性化硬件环境（网卡、磁盘、图形适配器……）</p>
 <p>一、设置虚拟机支持虚拟化<br><img src="http://i2.51cto.com/images/blog/201801/28/0b3b950dae8251a522b6cdf7f61a81d1.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>二、先关闭防火墙和selinux<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@cany ~]#<span class="built_in"> service </span>iptables stop    关闭防火墙</span><br><span class="line">[root@cany ~]# setenforce 0             关闭selinux（临时生效）</span><br><span class="line">setenforce: SELinux is disabled</span><br></pre></td></tr></table></figure></p>
-<p>永久生效方法</p>
-<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@cany</span> ~]<span class="meta"># vim /etc/sysconfig/selinux   SELINUX=enforcing 改为disabled 并reboot生效</span></span><br></pre></td></tr></table></figure>
-<p>三、检查服务器是否支持虚拟化</p>
-<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@cany</span> ~]<span class="meta"># grep -E -o <span class="string">'vmx|svm'</span> /proc/cpuinfo</span></span><br><span class="line">vmx    如果有输出VMX就支持虚拟化</span><br></pre></td></tr></table></figure>
-<p>四、安装KVM所需组件，VM使用桥接网络，使用yum安装方式（配置好yum源）</p>
+<p>二、先关闭防火墙和selinux</p>
+<pre><code>[root@cany ~]# service iptables stop    关闭防火墙
+[root@cany ~]# setenforce 0             关闭selinux（临时生效）
+setenforce: SELinux is disabled
+</code></pre><p>永久生效方法</p>
+<pre><code>[root@cany ~]# vim /etc/sysconfig/selinux   SELINUX=enforcing 改为disabled 并reboot生效
+</code></pre><p>三、检查服务器是否支持虚拟化</p>
+<pre><code>[root@cany ~]# grep -E -o &#39;vmx|svm&#39; /proc/cpuinfo
+vmx    如果有输出VMX就支持虚拟化
+</code></pre><p>四、安装KVM所需组件，VM使用桥接网络，使用yum安装方式（配置好yum源）</p>
 <pre><code>[root@cany ~]# yum install -y kvm virt-* libvirts bridge-utils qemu-img
 </code></pre><p>五、加载kvm模块，查看kvm模块是否被加载</p>
-<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@cany ~]<span class="comment"># modprobe kvm-intel</span></span><br><span class="line">[root@cany ~]<span class="comment"># lsmod | grep kvm</span></span><br><span class="line">kvm_intel            <span class="number"> 54285 </span><span class="number"> 0 </span></span><br><span class="line">kvm                   <span class="number"> 333172 </span><span class="number"> 1 </span>kvm_intel     成功加载！</span><br></pre></td></tr></table></figure>
-<p>六、配置网卡，具体参数如下<br>创建桥接网卡命令 ：  virsh  iface-bridge  eth0  br0  或者直接编辑网卡配置<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@cany ~]# virsh iface-bridge eth0 br0     出现下面的错误 重启一下libvirt服务就好了</span><br><span class="line"><span class="keyword">error: </span>Failed to reconnect to the hypervisor</span><br><span class="line"><span class="keyword">error: </span>no valid connection</span><br><span class="line"><span class="keyword">error: </span>Failed to connect socket to '/var/run/libvirt/libvirt-sock': No such file or directory</span><br><span class="line">[root@cany ~]# /etc/init.d/libvirtd restart</span><br><span class="line">Stopping libvirtd daemon:                                  [  OK  ]</span><br><span class="line">Starting libvirtd daemon:                                  [  OK  ]</span><br><span class="line">[root@cany ~]# virsh iface-bridge eth0 br0</span><br><span class="line">Created bridge br0 with attached device eth0</span><br><span class="line">Bridge interface br0 started                              成功桥接</span><br><span class="line">[root@cany ~]# service network restart                    重启网卡</span><br></pre></td></tr></table></figure></p>
-<p>此时的网卡信息</p>
+<pre><code>[root@cany ~]# modprobe kvm-intel
+[root@cany ~]# lsmod | grep kvm
+kvm_intel             54285  0 
+kvm                    333172  1 kvm_intel     成功加载！
+</code></pre><p>六、配置网卡，具体参数如下<br>创建桥接网卡命令 ：  virsh  iface-bridge  eth0  br0  或者直接编辑网卡配置</p>
+<pre><code>[root@cany ~]# virsh iface-bridge eth0 br0     出现下面的错误 重启一下libvirt服务就好了
+error: Failed to reconnect to the hypervisor
+error: no valid connection
+error: Failed to connect socket to &#39;/var/run/libvirt/libvirt-sock&#39;: No such file or directory
+[root@cany ~]# /etc/init.d/libvirtd restart
+Stopping libvirtd daemon:                                  [  OK  ]
+Starting libvirtd daemon:                                  [  OK  ]
+[root@cany ~]# virsh iface-bridge eth0 br0
+Created bridge br0 with attached device eth0
+Bridge interface br0 started                              成功桥接
+[root@cany ~]# service network restart                    重启网卡
+</code></pre><p>此时的网卡信息</p>
 <p><img src="http://i2.51cto.com/images/blog/201801/28/ad19ad050b5787cf68d9f63c8f058651.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>注意 ：因为eth0网卡因为与br0 网卡进行桥接，所以eth0不显示ip是正常的</p>
 <p>七、查看目前所有的网桥接口</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@cany ~]# brctl show</span><br><span class="line">bridge name<span class="built_in">	bridge </span>id		STP enabled	interfaces</span><br><span class="line">br0		8000.000c29eb8697	<span class="literal">yes</span>		eth0</span><br><span class="line">virbr0		8000.525400941201	<span class="literal">yes</span>		virbr0-nic</span><br></pre></td></tr></table></figure>
-<p>八、修改VNC配置</p>
+<pre><code>[root@cany ~]# brctl show
+bridge name    bridge id        STP enabled    interfaces
+br0        8000.000c29eb8697    yes        eth0
+virbr0        8000.525400941201    yes        virbr0-nic
+</code></pre><p>八、修改VNC配置</p>
 <pre><code>[root@cany ~]#  vim /etc/libvirt/qemu.conf
     #vnc_listen = &quot;0.0.0.0&quot;  去掉  # 号并wq保存
 </code></pre><p>九、重启libvirtd和messagebus服务</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@cany ~]#<span class="built_in"> service </span>libvirtd restart</span><br><span class="line">Stopping libvirtd daemon:                                  [  OK  ]</span><br><span class="line">Starting libvirtd daemon:                                  [  OK  ]</span><br><span class="line">[root@cany ~]#<span class="built_in"> service </span>messagebus restart</span><br><span class="line">Stopping<span class="built_in"> system </span>message bus:                               [  OK  ]</span><br><span class="line">Starting<span class="built_in"> system </span>message bus:                               [  OK  ]</span><br></pre></td></tr></table></figure>
-<p>十、创建、安装LVM虚拟机</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">root@cany ~</span>]<span class="meta"># mkdir /abc         创建镜像存放目录</span></span><br><span class="line">[<span class="meta">root@cany ~</span>]<span class="meta"># mkdir -p /data/kvm     创建虚拟磁盘存放目录</span></span><br><span class="line">[<span class="meta">root@cany ~</span>]<span class="meta"># dd <span class="meta-keyword">if</span>=/dev/cdrom of=/abc/Centos6.iso  把Centos6.5系统的镜像文件拷贝到abc目录下</span></span><br><span class="line"><span class="number">8726528</span>+<span class="number">0</span> records <span class="keyword">in</span></span><br><span class="line"><span class="number">8726528</span>+<span class="number">0</span> records <span class="keyword">out</span></span><br><span class="line"><span class="number">4467982336</span> bytes (<span class="number">4.5</span> GB) copied, <span class="number">157.25</span> s, <span class="number">28.4</span> MB/s</span><br><span class="line">[<span class="meta">root@cany libvirt</span>]<span class="meta"># cd /data/kvm/    进入虚拟磁盘目录创建img</span></span><br><span class="line">[<span class="meta">root@cany kvm</span>]<span class="meta"># qemu-img create -f qcow2 -o preallocation=metadata kvm_cany.img 5G</span></span><br><span class="line">Formatting <span class="string">'kvm_cany.img'</span>, fmt=qcow2 size=<span class="number">5368709120</span> encryption=off cluster_size=<span class="number">65536</span> preallocation=<span class="string">'metadata'</span> </span><br><span class="line">[<span class="meta">root@cany kvm</span>]<span class="meta"># ls</span></span><br><span class="line">kvm_cany.img</span><br></pre></td></tr></table></figure>
-<p>安装虚拟机</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@cany kvm]# virt-install --name=kvm_cany --ram <span class="number">512</span> --vcpus=<span class="number">1</span> -<span class="keyword">f</span> /data/kvm/kvm_cany.img --cdrom=/<span class="keyword">abc</span>/Centos6.iso --graphics vnc,listen=<span class="number">0.0</span>.<span class="number">0.0</span>,port=<span class="number">7788</span> --force --autostart</span><br><span class="line"></span><br><span class="line">Starting install...</span><br><span class="line">Creating domain...                                                                            |    <span class="number">0</span> B     <span class="number">00</span>:<span class="number">00</span>     </span><br><span class="line">Cannot <span class="keyword">open</span> <span class="keyword">display</span>: </span><br><span class="line">Run <span class="string">'virt-viewer --help'</span> <span class="keyword">to</span> see <span class="keyword">a</span> full <span class="keyword">list</span> of available <span class="keyword">command</span> <span class="built_in">line</span> <span class="keyword">options</span></span><br><span class="line">Domain installation still in progress. You can reconnect <span class="keyword">to</span> </span><br><span class="line">the console <span class="keyword">to</span> <span class="built_in">complete</span> the installation process.</span><br><span class="line"></span><br><span class="line">如果遇到安装失败  请对虚拟磁盘存放目录权限  chmod -R <span class="number">777</span> /data/kvm</span><br></pre></td></tr></table></figure>
-<p>VNC客户端连接KVM虚拟机<br>软件：VNC Viewer<br><img src="http://i2.51cto.com/images/blog/201801/28/54a7da88e3f724c5c63042f2e7faee2e.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/28/dc9de4664ac48791606d0f25be4eec28.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>VNC连上了之后，安装系统就ok了！安装结束后，vnc会自动挂断，因为此时虚拟机并未启动！！！</p>
+<pre><code>[root@cany ~]# service libvirtd restart
+Stopping libvirtd daemon:                                  [  OK  ]
+Starting libvirtd daemon:                                  [  OK  ]
+[root@cany ~]# service messagebus restart
+Stopping system message bus:                               [  OK  ]
+Starting system message bus:                               [  OK  ]
+</code></pre><p>十、创建、安装LVM虚拟机</p>
+<pre><code>[root@cany ~]# mkdir /abc         创建镜像存放目录
+[root@cany ~]# mkdir -p /data/kvm     创建虚拟磁盘存放目录
+[root@cany ~]# dd if=/dev/cdrom of=/abc/Centos6.iso  把Centos6.5系统的镜像文件拷贝到abc目录下
+8726528+0 records in
+8726528+0 records out
+4467982336 bytes (4.5 GB) copied, 157.25 s, 28.4 MB/s
+[root@cany libvirt]# cd /data/kvm/    进入虚拟磁盘目录创建img
+[root@cany kvm]# qemu-img create -f qcow2 -o preallocation=metadata kvm_cany.img 5G
+Formatting &#39;kvm_cany.img&#39;, fmt=qcow2 size=5368709120 encryption=off cluster_size=65536 preallocation=&#39;metadata&#39; 
+[root@cany kvm]# ls
+kvm_cany.img
+</code></pre><p>安装虚拟机</p>
+<pre><code>[root@cany kvm]# virt-install --name=kvm_cany --ram 512 --vcpus=1 -f /data/kvm/kvm_cany.img --cdrom=/abc/Centos6.iso --graphics vnc,listen=0.0.0.0,port=7788 --force --autostart
+
+Starting install...
+Creating domain...                                                                            |    0 B     00:00     
+Cannot open display: 
+Run &#39;virt-viewer --help&#39; to see a full list of available command line options
+Domain installation still in progress. You can reconnect to 
+the console to complete the installation process.
+
+如果遇到安装失败  请对虚拟磁盘存放目录权限  chmod -R 777 /data/kvm
+</code></pre><p>VNC客户端连接KVM虚拟机<br>软件：VNC Viewer<br><img src="http://i2.51cto.com/images/blog/201801/28/54a7da88e3f724c5c63042f2e7faee2e.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/28/dc9de4664ac48791606d0f25be4eec28.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>VNC连上了之后，安装系统就ok了！安装结束后，vnc会自动挂断，因为此时虚拟机并未启动！！！</p>
 <p>使用 virsh控制台为 KVM 系统管理若干任务 下面就让我们来手动开启刚刚安装的KVM虚拟机</p>
-<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@cany kvm]<span class="comment"># virsh</span></span><br><span class="line">Welcome <span class="keyword">to</span> virsh, the virtualization interactive terminal.</span><br><span class="line"></span><br><span class="line">Type:  <span class="string">'help'</span> <span class="keyword">for</span> help <span class="keyword">with</span> commands</span><br><span class="line">       <span class="string">'quit'</span> <span class="keyword">to</span> quit</span><br><span class="line"></span><br><span class="line">virsh <span class="comment"># list --all</span></span><br><span class="line"> Id    Name                           State</span><br><span class="line">----------------------------------------------------</span><br><span class="line"> -     kvm_cany                       shut <span class="literal">off</span></span><br><span class="line"></span><br><span class="line">virsh <span class="comment"># start kvm_cany</span></span><br><span class="line">Domain kvm_cany started</span><br></pre></td></tr></table></figure>
-<p>重新使用VNC客户端进行连接 并对其网卡进行配置<br><img src="http://i2.51cto.com/images/blog/201801/28/4facaa82dfc9b1e4ff1268cba659d193.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<pre><code>[root@cany kvm]# virsh
+Welcome to virsh, the virtualization interactive terminal.
+
+Type:  &#39;help&#39; for help with commands
+       &#39;quit&#39; to quit
+
+virsh # list --all
+ Id    Name                           State
+----------------------------------------------------
+ -     kvm_cany                       shut off
+
+virsh # start kvm_cany
+Domain kvm_cany started
+</code></pre><p>重新使用VNC客户端进行连接 并对其网卡进行配置<br><img src="http://i2.51cto.com/images/blog/201801/28/4facaa82dfc9b1e4ff1268cba659d193.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
 <p>注意：出现网卡重启失败的话 将eth0网卡配置文件中的 HWADDR修改成MACADDR</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf <span class="regexp">/etc/u</span>dev<span class="regexp">/rules.d/</span><span class="number">70</span>-persistent-net.rules</span><br></pre></td></tr></table></figure>
-<p>在虚拟机上查看KVM虚拟机运行状态</p>
+<pre><code>rm -rf /etc/udev/rules.d/70-persistent-net.rules
+</code></pre><p>在虚拟机上查看KVM虚拟机运行状态</p>
 <p><img src="http://i2.51cto.com/images/blog/201801/28/07d23ebb9c759d541ba499f65a05dbe5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
 
             </div>
@@ -673,7 +730,9 @@
                 <div class="card-content article-content">
                     <div class="summary">这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源
 国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：
-123456789//更新为阿里云的源wget -O /etc/yum.repos.d/C</div>
+//更新为阿里云的源
+
+wget -O /etc/yum.repos.d/CentOS-B</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-01-28

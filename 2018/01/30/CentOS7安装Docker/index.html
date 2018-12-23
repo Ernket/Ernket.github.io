@@ -427,11 +427,10 @@
 </blockquote>
 <ul>
 <li>使用yum安装docker：<br><code>$ yum install docker-io -y</code></li>
-<li><p>启动：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> systemctl <span class="built_in">enable</span> docker</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> systemctl start docker</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试 Docker 是否安装正确:<br><code>$ docker run hello-world</code><br><img src="http://i2.51cto.com/images/blog/201801/30/eec9c47383ebd9d7517245be924f2a18.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-</li>
+<li>启动：<pre><code>$ systemctl enable docker
+$ systemctl start docker
+</code></pre></li>
+<li>测试 Docker 是否安装正确:<br><code>$ docker run hello-world</code><br><img src="http://i2.51cto.com/images/blog/201801/30/eec9c47383ebd9d7517245be924f2a18.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
 <li><p>运行:<br>有了镜像后，我们就能够以这个镜像为基础启动并运行一个容器。以上面的 ubuntu:16.04 为例，如果我们打算启动里面的 bash 并且进行交互式操作的话，可以执行下面的命令。<br>$ docker run -it –rm ubuntu:16.04 bash<br><img src="http://i2.51cto.com/images/blog/201801/30/df10e7e1e7a3c9642ac2748afd6bac11.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
 <blockquote>
 <p>-it：这是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。<br>–rm：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。<br>ubuntu:16.04：这是指用 ubuntu:16.04 镜像为基础来启动容器。<br>bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash。</p>

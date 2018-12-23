@@ -8,7 +8,9 @@
     <meta name="keywords" content="为各版本linux添加yum源, Elapse">
     <meta name="description" content="这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源
 国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：
-123456789//更新为阿里云的源wget -O /etc/yum.repos.d/C">
+//更新为阿里云的源
+
+wget -O /etc/yum.repos.d/CentOS-B">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -419,16 +421,25 @@
             <div id="articleContent">
                 <p>这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源</p>
 <p>国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//更新为阿里云的源</span></span><br><span class="line"></span><br><span class="line">wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/CentOS-Base<span class="selector-class">.repo</span> http:<span class="comment">//mirrors.aliyun.com/repo/Centos-6.repo</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//更新为163的源</span></span><br><span class="line">wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/CentOS-Base<span class="selector-class">.repo</span> http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//更新为搜狐的源</span></span><br><span class="line">wget -O /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/CentOS-Base<span class="selector-class">.repo</span> http:<span class="comment">//mirrors.sohu.com/help/CentOS-Base-sohu.repo</span></span><br></pre></td></tr></table></figure>
-<p>1.进入yum源配置目录</p>
-<pre><code>cd /etc/yum.repos.d
+<pre><code>//更新为阿里云的源
+
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+
+//更新为163的源
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS6-Base-163.repo
+
+//更新为搜狐的源
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.sohu.com/help/CentOS-Base-sohu.repo
+</code></pre><p>1.进入yum源配置目录</p>
+<pre><code> cd /etc/yum.repos.d
 </code></pre><p>2.做什么改动前最后都做个备份 以防出错 还能恢复</p>
 <pre><code>mv CentOS-Base.repo CentOS-Base.repo.bak
 </code></pre><p>3.下载新的CentOS-Base.repo 到/etc/yum.repos.d/</p>
 <pre><code>wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
 </code></pre><p>4.运行yum makecache生成缓存</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean <span class="keyword">all</span></span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
-<hr>
+<pre><code>yum clean all
+yum makecache
+</code></pre><hr>
 <p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
 
             </div>

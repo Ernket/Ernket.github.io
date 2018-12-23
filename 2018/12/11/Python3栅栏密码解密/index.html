@@ -427,10 +427,30 @@ python3
 </ul>
 <h2 id="栅栏密码解密"><a href="#栅栏密码解密" class="headerlink" title="栅栏密码解密"></a>栅栏密码解密</h2><p>栅栏密码是一种简单的移动字符位置的加密方法，规则简单，但是难点在于，不知道字符串的”分割线”在哪里<br>先来解释一下栅栏密码解密原理<br>明文: elapse<br>栅栏数: 2<br>密文: easlpe</p>
 <p>这种解密看似是把字符串毫无规则的打乱了，但是换个角度看就很清楚了<br>加密原理：因为每组字符两个，所以6/2=3，elapse这六个字符串就会被分割成三块 el ap se<br>接着一行一个的排列，最后合并到一起，也就是e接着a接着s，然后l接着p接着e<br>就变成了<code>easlpe</code></p>
-<p>这个时候再去看密文<code>easlpe</code>，不就是一列一列下来的吗<br><img src="http://t1.aixinxi.net/o_1cuebkte413934qh7taf8b4p1a.jpg-j.jpg" alt=""><br>换个栅栏数，改为3<br>那么elapse这个明文就会被加密成<code>eplsae</code><br>一组三个字符，分成两块<code>ela pse</code><br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="selector-class">.e</span> <span class="number">3</span><span class="selector-class">.l</span> <span class="number">5</span>.a</span><br><span class="line"><span class="number">2</span><span class="selector-class">.p</span> <span class="number">4</span><span class="selector-class">.s</span> <span class="number">6</span>.e</span><br></pre></td></tr></table></figure></p>
-<p>清楚这个原理后，就可以开始写解密脚本了<br>首先，我们不清楚栅栏密码的栅栏数，我们不知道应该在哪一段去分割开来，在这里需要把2-字符串长度都给循环一边，都解密一遍<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding = utf-8</span></span><br><span class="line">e =input('请输入要解密的字符串\n')</span><br><span class="line">elen = len(e) <span class="comment">#计算字符串长度</span></span><br><span class="line">field=[]</span><br><span class="line">for i in range(2,elen): <span class="comment">#做一个循环，从2开始到数字elen（字符串长度）</span></span><br><span class="line">	if(elen%i==0): <span class="comment">#计算哪些数字能整除字符串</span></span><br><span class="line">		field.append(i) <span class="comment">#将能整除的数字append到field里面</span></span><br></pre></td></tr></table></figure></p>
-<p>接着就是解密的部分了<br>根据上面的解密原理，可以得出，通过栅栏数分割字符串后，将每一组的第一位，每一组的第二位…..按顺序连在一起就可以得出明文了<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> field:</span><br><span class="line">	b = elen // f <span class="comment">#用字符串长度除以上面计算出能整除的数字f</span></span><br><span class="line">	<span class="literal">result</span> = &#123;x:'' <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(b)&#125; </span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(elen): <span class="comment">#字符串有多少位，就循环多少次</span></span><br><span class="line">		a = i % b;</span><br><span class="line">		<span class="literal">result</span>.update(&#123;a:<span class="literal">result</span>[a] + e[i]&#125;) <span class="comment">#字符串截断，并update新数据</span></span><br><span class="line">	d = ''</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(b):</span><br><span class="line">		d = d + <span class="literal">result</span>[i]</span><br><span class="line">	print ('分为'+str(f)+'栏时，解密结果为：  '+d+'\n') <span class="comment">#输出结果，并开始下一个循环，直到循环结束</span></span><br></pre></td></tr></table></figure></p>
-<p>网站加密结果<br><img src="http://t1.aixinxi.net/o_1cuedeplu1o061b1l1e28s5c1n8la.png-j.jpg" alt=""></p>
+<p>这个时候再去看密文<code>easlpe</code>，不就是一列一列下来的吗<br><img src="http://t1.aixinxi.net/o_1cuebkte413934qh7taf8b4p1a.jpg-j.jpg" alt=""><br>换个栅栏数，改为3<br>那么elapse这个明文就会被加密成<code>eplsae</code><br>一组三个字符，分成两块<code>ela pse</code></p>
+<pre><code>1.e 3.l 5.a
+2.p 4.s 6.e
+</code></pre><p>清楚这个原理后，就可以开始写解密脚本了<br>首先，我们不清楚栅栏密码的栅栏数，我们不知道应该在哪一段去分割开来，在这里需要把2-字符串长度都给循环一边，都解密一遍</p>
+<pre><code>#coding = utf-8
+e =input(&#39;请输入要解密的字符串\n&#39;)
+elen = len(e) #计算字符串长度
+field=[]
+for i in range(2,elen): #做一个循环，从2开始到数字elen（字符串长度）
+    if(elen%i==0): #计算哪些数字能整除字符串
+        field.append(i) #将能整除的数字append到field里面
+</code></pre><p>接着就是解密的部分了<br>根据上面的解密原理，可以得出，通过栅栏数分割字符串后，将每一组的第一位，每一组的第二位…..按顺序连在一起就可以得出明文了</p>
+<pre><code>...
+for f in field:
+    b = elen // f #用字符串长度除以上面计算出能整除的数字f
+    result = {x:&#39;&#39; for x in range(b)} 
+    for i in range(elen): #字符串有多少位，就循环多少次
+        a = i % b;
+        result.update({a:result[a] + e[i]}) #字符串截断，并update新数据
+    d = &#39;&#39;
+    for i in range(b):
+        d = d + result[i]
+    print (&#39;分为&#39;+str(f)+&#39;栏时，解密结果为：  &#39;+d+&#39;\n&#39;) #输出结果，并开始下一个循环，直到循环结束
+</code></pre><p>网站加密结果<br><img src="http://t1.aixinxi.net/o_1cuedeplu1o061b1l1e28s5c1n8la.png-j.jpg" alt=""></p>
 <p>脚本运行结果<br><img src="http://t1.aixinxi.net/o_1cuedc76h112m1ambkb67qb0a.png-j.jpg" alt=""></p>
 <p>Done</p>
 
@@ -606,7 +626,10 @@ python3
                 </a>
                 <div class="card-content article-content">
                     <div class="summary">类似前言一样的东西条件竞争是真的好玩，佛了
-解释先上例子123456789&lt;?php	print("Hello,This is test server");	if(isset($_GET['src']))&#123;		copy($_</div>
+解释先上例子
+&lt;?php
+    print(&quot;Hello,This is test server&quot;);
+    if(isset($_GET[&#39;src&#39;</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-22

@@ -6,9 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Metsploit连接数据库, Elapse">
-    <meta name="description" content="启动数据库1root@kali:~# /etc/init.d/postgresql start
+    <meta name="description" content="启动数据库root@kali:~# /etc/init.d/postgresql start
 查看数据库配置信息一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了
-1root@kali:~# vim /u">
+root@kali:~# vim /usr">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -421,13 +421,43 @@
         <hr>
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># /etc/init.d/postgresql start</span></span><br></pre></td></tr></table></figure>
-<h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root<span class="variable">@kali</span><span class="symbol">:~</span><span class="comment"># vim /usr/share/metasploit-framework/config/database.yml</span></span><br></pre></td></tr></table></figure>
-<p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
-<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root<span class="meta">@kali:~#</span> msfconsole </span><br><span class="line">                                                  </span><br><span class="line"> _                                                    _</span><br><span class="line">/ \    /\         __                         _   __  /_/ __</span><br><span class="line">|<span class="string"> </span>|<span class="string">\  / </span>|<span class="string"> _____   \ \           ___   _____ </span>|<span class="string"> </span>|<span class="string"> /  \ _   \ \</span></span><br><span class="line">|<span class="string"> </span>|<span class="string"> \/</span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> ___\ </span>|<span class="string">- -</span>|<span class="string">   /\    / __\ </span>|<span class="string"> -__/ </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>||<span class="string"> </span>|<span class="string"> </span>|<span class="string">- -</span>|</span><br><span class="line">|<span class="string">_</span>|<span class="string">   </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> _</span>|<span class="string">__  </span>|<span class="string"> </span>|<span class="string">_  / -\ __\ \   </span>|<span class="string"> </span>|<span class="string">    </span>|<span class="string"> </span>|<span class="string"> \__/</span>|<span class="string"> </span>|<span class="string">  </span>|<span class="string"> </span>|_</span><br><span class="line">      |<span class="string">/  </span>|<span class="string">____/  \___\/ /\ \\___/   \/     \__</span>|<span class="string">    </span>|<span class="string">_\  \___\</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">       =[ metasploit v4.16.32-dev                         ]</span></span><br><span class="line"><span class="string">+ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]</span></span><br><span class="line"><span class="string">+ -- --=[ 507 payloads - 40 encoders - 10 nops            ]</span></span><br><span class="line"><span class="string">+ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br><span class="line"><span class="string">msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf</span></span><br><span class="line"><span class="string">[*] Rebuilding the module cache in the background...</span></span><br><span class="line"><span class="string">msf &gt; creds </span></span><br><span class="line"><span class="string">Credentials</span></span><br><span class="line"><span class="string">===========</span></span><br><span class="line"></span><br><span class="line"><span class="string">host       origin     service           public  private  realm        private_type</span></span><br><span class="line"><span class="string">----       ------     -------           ------  -------  -----        ------------</span></span><br><span class="line"><span class="string">x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password</span></span><br><span class="line"></span><br><span class="line"><span class="string">msf &gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msf &gt; db_status </span><br><span class="line"><span class="string">[*]</span> postgresql connected to msf</span><br><span class="line">msf &gt;</span><br></pre></td></tr></table></figure></p>
+                <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><pre><code>root@kali:~# /etc/init.d/postgresql start
+</code></pre><h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
+<pre><code>root@kali:~# vim /usr/share/metasploit-framework/config/database.yml
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
+<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便</p>
+<pre><code>root@kali:~# msfconsole 
 
+ _                                                    _
+/ \    /\         __                         _   __  /_/ __
+| |\  / | _____   \ \           ___   _____ | | /  \ _   \ \
+| | \/| | | ___\ |- -|   /\    / __\ | -__/ | || | || | |- -|
+|_|   | | | _|__  | |_  / -\ __\ \   | |    | | \__/| |  | |_
+      |/  |____/  \___\/ /\ \\___/   \/     \__|    |_\  \___\
+
+
+       =[ metasploit v4.16.32-dev                         ]
++ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]
++ -- --=[ 507 payloads - 40 encoders - 10 nops            ]
++ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]
+
+msf &gt;
+msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf
+[*] Rebuilding the module cache in the background...
+msf &gt; creds 
+Credentials
+===========
+
+host       origin     service           public  private  realm        private_type
+----       ------     -------           ------  -------  -----        ------------
+x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password
+
+msf &gt;
+</code></pre><p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态</p>
+<pre><code>msf &gt; db_status 
+[*] postgresql connected to msf
+msf &gt;
+</code></pre>
             </div>
             <hr/>
 

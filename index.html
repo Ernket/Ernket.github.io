@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="生命的质感和构造，即存在本身">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://t1.aixinxi.net/o_1cchm5njs7gl16be1v1o49op0ka.png-j.jpg">
+    <link rel="alternate" type="application/atom+xml" title="Elapse" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Elapse&#39; blog
+        
+    </title>
+
+    <link rel="canonical" href="https://Ernket.github.io/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "true" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Elapse
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+
+<style>
+
+    .custom-haojen-container .post-preview:nth-of-type(1),
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        text-align: center;
+        background-repeat: no-repeat;
+        border-radius: 3px;
+        background-size: cover;
+        padding: 0;
+        height: 300px;
+        display: table;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.16);
+    }
+
+    /*去掉诗歌的背景图片*/
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        background-image: none !important;
+        background-color: rgba(255, 248, 220, 0.5);
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) h2,
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
+    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        letter-spacing: 1px;
+        color: #fff;
+        margin-top: 0;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
+        font-size: .9em;
+        font-weight: 300;
+        margin-top: 0;
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
+        letter-spacing: 6px;
+        font-size: 18px;
+        font-family: unset;
+        font-weight: 400;
+        color: rgba(0, 0, 0, .75)
+    }
+
+    /*不显示摘要*/
+    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
+        display: none
+    }
+
+    /*只第一个显示背景图片*/
+    .custom-haojen-container .post-preview:not(:nth-child(1)) {
+        background-image: none !important;
+    }
+
+    /*第一个分界线去掉*/
+    .custom-haojen-container hr:nth-of-type(1) {
+        display: none;
+    }
+
+    /*主题*/
+    .custom-haojen-container .post-preview:nth-of-type(1) > a {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    /*诗词标题*/
+    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+        font-size: 35px;
+        font-family: STKaiti;
+        color: rgba(0, 0, 0, .8);
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
+        color: #0e2231;
+    }
+
+    @media (max-width: 768px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 240px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 28px !important;
+            margin-top: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-of-type(1) > a {
+            padding: 20px
+        }
+    }
+
+    /*手机屏幕*/
+    @media (max-width: 400px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 195px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 20px !important;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 16px;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) a {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<!-- Page Header -->
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
+    <div class="row">
+        <header class="intro-header">
+            <div class="container">
+                <div class="site-heading text-center">
+                    <div class="about-me">
+                        <!--移动端头部显示-->
+                        <img src="http://t1.aixinxi.net/o_1cchpsvrgg7hsdi11bq11ngvjea.png-j.jpg"/>
+                        <h5><a href="/about/">Elapse</a></h5>
+                        <p>比我优秀的人都在努力，我觉得我努力也没啥用</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+</div>
+<!-- Main Content -->
+<div class="container custom-haojen-container">
+    <!-- Post Container -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+            <!-- Main Content -->
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/12/22/Web条件竞争利用/">
+        <h2 class="post-title">
+            Web条件竞争利用
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-12-22
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                类似前言一样的东西条件竞争是真的好玩，佛了
+解释先上例子123456789&lt;?php	print("Hello,This is test server");	if(isset($_GET['src']))&#123;		copy($_GET['src'],$_GET['dst']);		u..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/12/11/Python3栅栏密码解密/">
+        <h2 class="post-title">
+            Python3栅栏密码解密
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-12-11
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                类似前言一样的东西栅栏密码关于加密的栅栏数，可以不整除字符串长度，但是我只会整除的，所以没有考虑不能整除的解密方法
+作用自动根据字符串长度破解栅栏密码
+环境
+python3
+
+栅栏密码解密栅栏密码是一种简单的移动字符位置的加密方法，规则简单，但是难点在于，不知道字符串的”分割线”在哪里先来解释一..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/11/28/macos虚拟机安装/">
+        <h2 class="post-title">
+            虚拟机安装MacOS
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-11-28
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                环境
+Vmware Workstation任意版本
+MacOS 10.11(下载地址:链接：https://pan.baidu.com/s/1iYLYVelaBaJuCpwCqkUhBg 提取码：c8y5 )
+unlocker(下载地址：链接：https://pan.baidu.com/s/1R..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/11/22/Python爬取steam优惠/">
+        <h2 class="post-title">
+            Python爬取steam优惠
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-11-22
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                类似前言一样的东西妈妈再也不用担心我不知道那些游戏没有打折了，一键爬取steam优惠名单，就是写到钱的部分程序崩溃了，以至于只有游戏名
+环境环境需要Python 3.5.4的版本需要的运行库有
+
+BeautifulSoup(解析html，安装方法:(pip install BeautifulSo..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/11/13/Python3调用Google翻译/">
+        <h2 class="post-title">
+            Python3调用Google翻译
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-11-13
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                类似前言一样的东西想弄一个批量翻译的东西，奈何百度翻译别人根本不研究，所以只能看谷歌翻译的了；这份代码的作者写的太聪明了，是真的很棒，思路很好，看到这样的代码简直年轻10岁
+环境这翻译的环境需要
+
+Python 3.5.4:
+urllib (安装方法: pip install urllib5)
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/09/18/2018kali更新源/">
+        <h2 class="post-title">
+            2018Kali可用更新源
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-09-18
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                
+源文件路径：/etc/apt/sources.list
+
+1234567891011121314151617181920212223#中科大deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contribdeb-src..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/09/12/CH4INRULZ_v1.0.1靶机攻略/">
+        <h2 class="post-title">
+            CH4INRULZ_v1.0.1靶机攻略
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-09-12
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                前言这个靶机难度中等，主要是后期进入靶机后提权的操作，前期只要留心，基本上都能操作出来
+下载地址
+链接: https://www.vulnhub.com/entry/ch4inrulz-101,247
+
+信息收集惯例，这种靶机都是dhcp分配的地址，所以先扫描网段查找主机123456789101..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/07/31/“深海迷航” 为期两个星期的深海探险 完结/">
+        <h2 class="post-title">
+            “深海迷航” 为期两个星期的深海探险 完结
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-31
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                
+“没有了海洋的波浪算什么，没有结局的开始又算什么，他们虽然完全不同，但是又紧密相连，现在你即将进入星际，而我将归于尘土，我们尽然不同，但我们，曾经相聚”  —-海皇
+
+PDA数据内容：“我的孩子们正在游往安全区十分感谢你他们的自由就是我生命的终结死亡是什么样子呢？我常常在想，是不是堕入虚无，从..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/07/13/basci-pentesting2靶机渗透/">
+        <h2 class="post-title">
+            Basic-pentesting2靶机渗透
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-13
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                前言这篇靶机属于普通难度吧，主要是坑有点多，再加上之前没有碰过tomcat，所以有些难度，但是还好解决了，所需的时间也不多
+下载地址
+https://www.vulnhub.com/entry/basic-pentesting-2,241/
+
+信息收集国际惯例，先来扫描一下这个服务器开放了什么服..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://t1.aixinxi.net/o_1cchlilvgu2c1fvalg1nur1drsa.jpg-j.jpg')">
+    <a href="/2018/07/11/Vulnhub TrollCave CTF靶机渗透/">
+        <h2 class="post-title">
+            JIS-CTF Vulnhub TrollCave CTF靶机渗透
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2018-07-11
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                前言这个系列我总共是弄了3台靶机，每完成一个就写一篇，按顺序排依次是简单普通困难，这篇就算是困难难度的了，因为不管是思路还是什么都很考验，有一些点会让你不自觉的在上面耗掉大量的时间，不得不说还是很好玩的，文章流程都是一步到位，我日后会在结尾单独在写一些我失败的操作，走哪哪正确是不存在的除非是你弄..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    
+    <li class="next">
+        <a href="/page/2/">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
+
+
+        </div>
+        <!-- Sidebar Container -->
+        <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+
+            <!-- About Me -->
+            <section class="visible-md visible-lg" style="padding: 0 18px">
+                <div class="short-about">
+                    <!--侧边栏头像-->
+                    
+                    <img src="http://t1.aixinxi.net/o_1cchpsvrgg7hsdi11bq11ngvjea.png-j.jpg"/>
+                    
+                    <h5><a href="/about/">Elapse</a></h5>
+                    
+                    <p>比我优秀的人都在努力，我觉得我努力也没啥用</p>
+                    
+                    <hr>
+                    <!-- SNS Link 社交 -->
+                    <ul class="list-inline">
+                        
+                        
+                        
+
+                        
+
+                        
+
+                        
+
+                        
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Featured Tags  标签 -->
+            
+
+            
+            <hr>
+            <h5 style="text-align: center;">Friends</h5>
+            <ul class="list-inline" style="text-align: center;">
+                
+                <li><a href="http://hanq.top/" target="_blank">Han&#39;s blog</a></li>
+                
+                <li><a href="http://qinwangipc.top/" target="_blank">秦王IPC</a></li>
+                
+                <li><a href="http://xuqing666.xyz/" target="_blank">Xu&#39;s Blog</a></li>
+                
+                <li><a href="http://blog.asolmn.top/" target="_blank">A神的博客</a></li>
+                
+                <li><a href="http://blog.hsojo.com/" target="_blank">梁Dalao的博客</a></li>
+                
+            </ul>
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Elapse 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">网页浏览量: <span id="busuanzi_value_site_pv"></span> 次</span>
+                    <br>
+                    遇事不决先<a href="https://www.baidu.com/">百度</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://Ernket.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-118664165-1';
+    var _gaDomain = 'ernket.top';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://t1.aixinxi.net/o_1cchpsvrgg7hsdi11bq11ngvjea.png-j.jpg">
+<!--恭喜你发现了这条消息，那么去https://pan.baidu.com/s/1QA4agvTD1b6Dhy52HiiisA中，找到下一步的线索吧-->
+<script type="text/javascript" src="/js/crash_cheat.js"></script>
+</body>
+
+</html>

@@ -80,7 +80,7 @@
                         
 							
                         <li>
-                            <a href="/about/">关于</a>
+                            <a href="/tags/">标签</a>
                         </li>
 							
 						
@@ -88,7 +88,7 @@
                         
 							
                         <li>
-                            <a href="/tags/">标签</a>
+                            <a href="/about/">关于</a>
                         </li>
 							
 						
@@ -185,10 +185,9 @@
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>条件竞争是真的好玩，佛了</p>
-<p>#解释<br>先上例子<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">	<span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php">	<span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">		copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">		unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php">	<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<h1 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h1><p>先上例子<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">	<span class="keyword">print</span>(<span class="string">"Hello,This is test server"</span>);</span></span><br><span class="line"><span class="php">	<span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'src'</span>]))&#123;</span></span><br><span class="line"><span class="php">		copy($_GET[<span class="string">'src'</span>],$_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">		unlink($_GET[<span class="string">'dst'</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php">	<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">print</span>(<span class="string">"Error!"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p>
 <p>这是典型的条件竞争利用的点，正常的服务器操作，是copy参数src的文件名和参数dst的文件名，复制完毕后，立马unlink删除，那么条件竞争呢，就是利用复制完毕，卡还没来得及删除的时间点，访问文件，执行恶意代码，而恶意代码已经执行完成了，那么文件删不删除都不重要了，具体的流程如下图<br><img src="http://t1.aixinxi.net/o_1cvb5umk7lo14bt1ibc1bb1tn5a.jpg-j.jpg" alt=""><br>一目了然，小天才说的就是我吧</p>
-<p>#环境搭建</p>
-<ul>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><ul>
 <li>靶机: CentOS6.5</li>
 <li>PHP</li>
 </ul>
@@ -222,7 +221,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#类似前言一样的东西"><span class="toc-text">类似前言一样的东西</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#类似前言一样的东西"><span class="toc-text">类似前言一样的东西</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解释"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境搭建"><span class="toc-text">环境搭建</span></a></li></ol>
                 </div>
             </div>
         </div>

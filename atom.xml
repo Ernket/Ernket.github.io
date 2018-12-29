@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2018-12-29T10:36:54.969Z</updated>
+  <updated>2018-12-29T10:42:04.819Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -17,23 +17,24 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>Python3多线程</title>
     <link href="https://Ernket.github.io/2018/12/29/Python3%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     <id>https://Ernket.github.io/2018/12/29/Python3多线程/</id>
-    <published>2018-12-29T10:39:01.262Z</published>
-    <updated>2018-12-29T10:36:54.969Z</updated>
+    <published>2018-12-29T10:41:36.000Z</published>
+    <updated>2018-12-29T10:42:04.819Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="Python3多线程"><a href="#Python3多线程" class="headerlink" title="Python3多线程"></a>Python3多线程</h1><p>在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东西太多def了，看的就很乱，思考了几秒钟决定自己写上一篇，不喜勿喷</p><p><img src="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg" alt=""></p><h2 id="开始正题"><a href="#开始正题" class="headerlink" title="开始正题"></a>开始正题</h2><p>按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来，毕竟距离2019也没几天了，我要用这种方法小抗议一下</p><p>那么何为多线程呢，多线程，英文<code>multithreading</code>，指的是从软件或者硬件上实现多个线程并发执行的技术</p><p>翻译成人话就是，可以通过软件或者硬件上，实现同时干几件事情</p><p>那么为什么今天要说Python的多线程呢<br><del>因为其他的我不会</del></p><p>下面说一下咋整<br>首先，写好步骤，我这里省时间，就随便弄个print就完事了</p><pre><code>#coding: utf-8import threading#创建步骤def printf(name):    for i in range(5):        print(&quot;My name is :&quot;+name)#定义namename1=&quot;Elapse&quot;name2=&quot;Ernket&quot;threads = []#创建进程thread1 = threading.Thread(target=printf,args=(name1,))thread2 = threading.Thread(target=printf,args=(name2,))threads.append(thread1)threads.append(thread2)#开启线程for t in threads:    t.start()print(&#39;Done&#39;)</code></pre><p>首先，导入模块，最重要的一步</p><pre><code>import threading</code></pre><p>接着，定义一个操作，我这里是print</p><pre><code>...def printf(name):    for i in range(5):        print(&quot;My name is :&quot;+name)</code></pre><p>然后，可以开始创建线程了</p><pre><code>...#定义namename1=&quot;Elapse&quot;name2=&quot;Ernket&quot;threads = []#创建进程thread1 = threading.Thread(target=printf,args=(name1,))thread2 = threading.Thread(target=printf,args=(name2,))threads.append(thread1)threads.append(thread2)</code></pre><p>因为我需要把进程都保存起来，所以一开始得创建一个空的函数，<code>threads=[]</code><br>接着创建两个线程<code>target</code>设置的是指定def，args指的是内容<br>把这两个线程都append到threads中</p><p>然后开启线程吧</p><pre><code>...#开启线程for t in threads:    t.start()print(&#39;Done&#39;)</code></pre><p>运行完后，输出一个Done庆祝一下<br>到了这一步，你能理解完，那么恭喜你，浪费了人生宝贵的几十分钟，因为我都不知道多线程到底有啥用，它同时做的我不同的写法也能写出来</p><p>最后的最后，距离2018年也快结束了，没啥好感慨的，也没啥好祝福的，那么就留一个小彩蛋</p><p>看到这条消息的在公众号后台留言”Elapse是真的帅”，过年那天我会随机一个人，发个不大不小的小红包</p>]]></content>
+    <content type="html"><![CDATA[<p>在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东西太多def了，看的就很乱，思考了几秒钟决定自己写上一篇，不喜勿喷</p><p><img src="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg" alt=""></p><h2 id="开始正题"><a href="#开始正题" class="headerlink" title="开始正题"></a>开始正题</h2><p>按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来，毕竟距离2019也没几天了，我要用这种方法小抗议一下</p><p>那么何为多线程呢，多线程，英文<code>multithreading</code>，指的是从软件或者硬件上实现多个线程并发执行的技术</p><p>翻译成人话就是，可以通过软件或者硬件上，实现同时干几件事情</p><p>那么为什么今天要说Python的多线程呢<br><del>因为其他的我不会</del></p><p>下面说一下咋整<br>首先，写好步骤，我这里省时间，就随便弄个print就完事了</p><pre><code>#coding: utf-8import threading#创建步骤def printf(name):    for i in range(5):        print(&quot;My name is :&quot;+name)#定义namename1=&quot;Elapse&quot;name2=&quot;Ernket&quot;threads = []#创建进程thread1 = threading.Thread(target=printf,args=(name1,))thread2 = threading.Thread(target=printf,args=(name2,))threads.append(thread1)threads.append(thread2)#开启线程for t in threads:    t.start()print(&#39;Done&#39;)</code></pre><p>首先，导入模块，最重要的一步</p><pre><code>import threading</code></pre><p>接着，定义一个操作，我这里是print</p><pre><code>...def printf(name):    for i in range(5):        print(&quot;My name is :&quot;+name)</code></pre><p>然后，可以开始创建线程了</p><pre><code>...#定义namename1=&quot;Elapse&quot;name2=&quot;Ernket&quot;threads = []#创建进程thread1 = threading.Thread(target=printf,args=(name1,))thread2 = threading.Thread(target=printf,args=(name2,))threads.append(thread1)threads.append(thread2)</code></pre><p>因为我需要把进程都保存起来，所以一开始得创建一个空的函数，<code>threads=[]</code><br>接着创建两个线程<code>target</code>设置的是指定def，args指的是内容<br>把这两个线程都append到threads中</p><p>然后开启线程吧</p><pre><code>...#开启线程for t in threads:    t.start()print(&#39;Done&#39;)</code></pre><p>运行完后，输出一个Done庆祝一下<br>到了这一步，你能理解完，那么恭喜你，浪费了人生宝贵的几十分钟，因为我都不知道多线程到底有啥用，它同时做的我不同的写法也能写出来</p><p>最后的最后，距离2018年也快结束了，没啥好感慨的，也没啥好祝福的，18年有很多感动，很多成就，但是也走了许多伟人，一个时代的结束，一个时代的开始</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h1 id=&quot;Python3多线程&quot;&gt;&lt;a href=&quot;#Python3多线程&quot; class=&quot;headerlink&quot; title=&quot;Python3多线程&quot;&gt;&lt;/a&gt;Python3多线程&lt;/h1&gt;&lt;p&gt;在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东
-      
+      &lt;!--more--&gt;
     
     </summary>
     
+      <category term="Python" scheme="https://Ernket.github.io/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="https://Ernket.github.io/tags/Python/"/>
     
   </entry>
   

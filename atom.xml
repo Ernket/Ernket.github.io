@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2018-12-29T10:44:54.016Z</updated>
+  <updated>2019-01-01T04:27:32.895Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2018的一个小总结</title>
+    <link href="https://Ernket.github.io/2019/01/01/2018%E6%80%BB%E7%BB%93/"/>
+    <id>https://Ernket.github.io/2019/01/01/2018总结/</id>
+    <published>2019-01-01T04:27:36.000Z</published>
+    <updated>2019-01-01T04:27:32.895Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>度过了一个咸鱼般的2018年，感觉还是有点不真实的，觉得应该总结一下一个18年了</p><h1 id="正题"><a href="#正题" class="headerlink" title="正题"></a>正题</h1><p>能从中职到深职院，我觉得这对于我来说是很不可思议的一件事情了，当时深职院把官方文件发出来的时候还很蒙，到现在在深职院比完了三场小赛，也渐渐熟悉了这个学校，先总结一下18年我做了什么吧</p><p>我的高中生涯似乎是被比赛占满了，就连我的高三也是，18年也算是学校最辉煌的一年吧，国一的数量创造了校历史</p><p>全国职业院校技能大赛”网络空间安全”赛项一等奖</p><p>2018年南山区职业技能竞赛网络安全项目三等奖</p><p>不仅是网络安全，也算是入门了编程，有事没事的时候总是会写上一个小爬虫，开心一下 这个是我的github，<a href="https://github.com/Ernket" target="_blank" rel="noopener">https://github.com/Ernket</a> 当然肯定没有大佬们的有用，毕竟我还很菜嘛</p><h2 id="时间线"><a href="#时间线" class="headerlink" title="时间线"></a>时间线</h2><p>2018年3月26日，算是我的个人博客诞生日，也是我的学弟Cdone教我的哈哈，我也是那个时候，才开始觉得，应该记录些什么，放在网上了</p><p>2018年3月30日，很惊喜，上午9:30收到了深职院的短信，告知我们中职生免试资格面试4月1日开始</p><p>2018年4月13日，比完市赛，比赛中因为我个人原因的失误，导致了不该发生的局面发生了，有点小难受</p><p>2018年5月30日，和我的队友一起，拿下了全国一等奖，真的很感谢他</p><p>2018年7月6日，信息的伟林大学长毕业，深信息的优秀毕业生，到底是不一样，很感谢他一直以来都愿意听我吐槽、分享一些技术上的难点，也愿意帮我一起想办法解决，就是他守望没到过3000分以上，有点难受哈哈哈</p><p>2018年10月18日，我微信公众号的诞生</p><h2 id="个人感想"><a href="#个人感想" class="headerlink" title="个人感想"></a>个人感想</h2><p>两年半的竞赛，导致了现在文化课努力追赶，专业方面丝毫不慌的局面，很难受，还好还有人教，但是至少不用担心钱的事，这几年的比赛，奖金使我富裕哈哈，从第一年比赛奖金到了后，就一直都是经济独立的状态，在大学不用管他们要钱还是很舒心的，就是专业课有些无聊，还好组到了Nice型宿友，就是”吃饭要紧”（id）吃不起饭了有点搞笑</p><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>有一个属于自己的私人CTF平台可以玩 </p><p>再去一次国赛 </p><p>挖一个还过得去的网站的漏洞 </p><p>emmmm，其他的没想好</p><p>最后，夸一下，运维大佬，全国总冠军灏神-Asolmn，假装不会写代码实则厉害的一批的胖虎（许大佬），还有同时编程小能手的梁大佬，预定HCIE的苏神，什么设备都会配置，以及同为安全的老王，秀就完事了</p><p>元旦快乐</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--more--&gt;
+    
+    </summary>
+    
+      <category term="总结" scheme="https://Ernket.github.io/categories/%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="总结" scheme="https://Ernket.github.io/tags/%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
   
   <entry>
     <title>Python3多线程</title>
@@ -435,28 +457,6 @@
     
     
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SQL注入Bypass技巧</title>
-    <link href="https://Ernket.github.io/2018/03/05/SQLBypass%E6%8A%80%E5%B7%A7/"/>
-    <id>https://Ernket.github.io/2018/03/05/SQLBypass技巧/</id>
-    <published>2018-03-05T03:30:48.000Z</published>
-    <updated>2018-04-10T08:45:51.980Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="SQL注入Bypass技巧"><a href="#SQL注入Bypass技巧" class="headerlink" title="SQL注入Bypass技巧"></a>SQL注入Bypass技巧</h1><h2 id="注入点识别"><a href="#注入点识别" class="headerlink" title="注入点识别"></a>注入点识别</h2><p>SQL注入的第一步就是判断是不是注入点，一般都是在参数后面简单的and 1=1和and 1=2等来判断是否有注入点或者是否有WAF拦截，如果简单的and 1=1这种被WAF拦截了，可以使用如下方法绕过:<br>1.使用一些字符串来进行识别:</p><blockquote><p>+，-，*，%，/，&lt;&lt;，&gt;&gt;，||，|，&amp;，&amp;&amp;，也可以将and换成or，&amp;&amp;， ||等</p></blockquote><p>2.不使用and或者or，直接使用异或截断：</p><blockquote><p>1^1^0，1^0^0</p></blockquote><p><img src="http://t1.aixinxi.net/o_1c7q22pcjjhah5j141g1lda9uda.jpg-j.jpg" alt="enter description here"></p><p>  3.使用{``operation}来识别注入点：<br>  <img src="http://t1.aixinxi.net/o_1c7q2758g1luf1g4ga182f6up3a.jpg-j.jpg" alt="enter description here"></p><p>  4.也可以使用注释符,主要为：#， –+， /<em>xxx</em>/， /<em>!xxx</em>/， /<em>!50000xxx</em>/<br>  <img src="http://t1.aixinxi.net/o_1c7q2b1nb12s61vq417tga7p1jqva.jpg-j.jpg" alt="enter description here"></p><p>  (此方法目前可以绕过很多WAF）<br>  5.特殊符号，在SQL注入时使用一些特殊符号即可绕过很多WAF规则，比如~， !， <code>， @</code>， {x key}， 1.1， 1e1， ()， emoji表情符号， @:=等，在实际场景中将这些符号灵活应用就可以绕过很多WAF:<br>  <img src="http://t1.aixinxi.net/o_1c7q2grjo1bcl1md51idl4sv4eka.jpg-j.jpg" alt="enter description here"></p><p>  6.Like和regexp<br>  在通过盲注获取数据时需要使用MySQL自带函数，比如substring()等这些处理字符串的函数，但是如果WAF过滤了()时，这些函数就无法使用了导致无法猜测数据，这时可以使用like或者regexp获取数据:<br>  <img src="http://t1.aixinxi.net/o_1c7q2j5n715t4cjsqbh1klq2eqa.jpg-j.jpg" alt="enter description here"></p><p><img src="http://t1.aixinxi.net/o_1c7q2ngr5bqj12tf1kkp60a13tpa.jpg-j.jpg" alt="enter description here"></p><h2 id="爆库名、表名、字段名"><a href="#爆库名、表名、字段名" class="headerlink" title="爆库名、表名、字段名"></a>爆库名、表名、字段名</h2><p>通常情况下我们在手工注入数据库内容的时候都是使用MySQL自带的表名等:</p><h3 id="爆库"><a href="#爆库" class="headerlink" title="爆库"></a>爆库</h3><p><img src="http://t1.aixinxi.net/o_1c7q2pitc1nv75pm65c1o7f9rfa.jpg-j.jpg" alt="enter description here"></p><h3 id="爆表单"><a href="#爆表单" class="headerlink" title="爆表单"></a>爆表单</h3><p> <img src="http://t1.aixinxi.net/o_1c7q340ap1k5o175ijpjies121a.jpg-j.jpg" alt="enter description here"></p><h3 id="爆字段"><a href="#爆字段" class="headerlink" title="爆字段"></a>爆字段</h3><p><img src="http://t1.aixinxi.net/o_1c7q353a4okf4knud114h111ema.jpg-j.jpg" alt="enter description here"></p><p>  (上图不同点在数据库名称那)</p><h3 id="爆内容"><a href="#爆内容" class="headerlink" title="爆内容"></a>爆内容</h3><p><img src="http://t1.aixinxi.net/o_1c7q35j2b44lcjg1d48tdoe2la.jpg-j.jpg" alt="enter description here"></p><hr><p>  参考文章:<a href="https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg</a><br>  微信公众号：逢魔安全实验室<br>  本文所有内容皆参考与此，还有部分内容未打出来，可以自行去原文观看，侵删</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;!--more--&gt;
-    
-    </summary>
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
     
       <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
     

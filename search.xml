@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Machine_matrix靶机渗透]]></title>
+    <url>%2F2019%2F01%2F25%2FMachine_matrix%20%E6%B8%97%E9%80%8F%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[环境: 攻击机: 192.168.8.128 靶机: 192.168.8.133 —优秀的分割线— 打开网站后，看到只是一个很简单的html而已，源文件中也没有多余的字符 用nmap -sV扫描靶机后，发现开放了31337端口，而且还是python开启的simplehttp其实这里图片的文件名已经给了端口的提示了 打开31337端口后的页面，特效变多了，而且多出了新的提示（靶机里面的所有梗都是来自黑客帝国) 查看源代码，发现一串base64编码过的东西 拎去解码看 echo &quot;Then you&#39;ll see, that it is not the spoon that bends, it is only yourself. &quot; &gt; Cypher.matrix 忽略echo的内容，这串东西是&gt;到了Cypher.matrix这个文件，所以这个文件是存在的，直接下载下来看看一开始拿去浏览器的console中尝试运行了一下，发现不行，Google查询了一下这个字符串，发现是Brainfuck这个编码 解码后可得到 You can enter into matrix as guest, with password k1ll0rXXNote: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password. 这里挺坑的。他说密码是k1ll0rXX，首先，你在网页上看1和l差不多，就很绝望，而且XX他忘记了，所以你得写一个脚本来爆破 我这里先用kali生成两位数的密码然后再用FTP将文件传出来，再写一个python脚本生成完整的密码 f = open(&quot;pass.txt&quot;) pass_file = open(&quot;new_pass.txt&quot;,&quot;r+&quot;) line = f.readline() while line: print (line,) #后面跟,忽略换行符 pass_file.write(&quot;k1ll0r&quot;+line) line = f.readline() pass_file.close() f.close() 接着放到kali里面用hydra爆破ssh获得用户guest的密码k1ll0r7nSSH上去后，发现这个用户是什么命令都用不了，很给力所以可以用export查看系统变量，看是哪里的问题可以看到，是/bin/rbash这个文件限制了权限 稍微尝试了一下，发现echo是可以用的，可以利用echo 来输出目录文件在/home/guest/prog/目录下，找到了vi，现在可以通过vi来绕过rbash的限制了 打开vi编辑器，输入:!/bin/bash 现在可以使用ls这些命令了接着利用find命令，查找系统上运行的所有SUID可执行文件找到了sudo这个命令是可以用的guest是可以直接变成root的，但是没有su命令（也许改名了），所以直接sudo去看root目录下flag名为什么找到后，直接用vi打开查看完成]]></content>
+      <categories>
+        <category>网络安全</category>
+      </categories>
+      <tags>
+        <tag>网络安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[2018的一个小总结]]></title>
     <url>%2F2019%2F01%2F01%2F2018%E6%80%BB%E7%BB%93%2F</url>
     <content type="text"><![CDATA[类似前言一样的东西度过了一个咸鱼般的2018年，感觉还是有点不真实的，觉得应该总结一下一个18年了 正题能从中职到深职院，我觉得这对于我来说是很不可思议的一件事情了，当时深职院把官方文件发出来的时候还很蒙，到现在在深职院比完了三场小赛，也渐渐熟悉了这个学校，先总结一下18年我做了什么吧 我的高中生涯似乎是被比赛占满了，就连我的高三也是，18年也算是学校最辉煌的一年吧，国一的数量创造了校历史 全国职业院校技能大赛”网络空间安全”赛项一等奖 2018年南山区职业技能竞赛网络安全项目三等奖 不仅是网络安全，也算是入门了编程，有事没事的时候总是会写上一个小爬虫，开心一下 这个是我的github，https://github.com/Ernket 当然肯定没有大佬们的有用，毕竟我还很菜嘛 时间线2018年3月26日，算是我的个人博客诞生日，也是我的学弟Cdone教我的哈哈，我也是那个时候，才开始觉得，应该记录些什么，放在网上了 2018年3月30日，很惊喜，上午9:30收到了深职院的短信，告知我们中职生免试资格面试4月1日开始 2018年4月13日，比完市赛，比赛中因为我个人原因的失误，导致了不该发生的局面发生了，有点小难受 2018年5月30日，和我的队友一起，拿下了全国一等奖，真的很感谢他 2018年7月6日，信息的伟林大学长毕业，深信息的优秀毕业生，到底是不一样，很感谢他一直以来都愿意听我吐槽、分享一些技术上的难点，也愿意帮我一起想办法解决，就是他守望没到过3000分以上，有点难受哈哈哈 2018年10月18日，我微信公众号的诞生 个人感想两年半的竞赛，导致了现在文化课努力追赶，专业方面丝毫不慌的局面，很难受，还好还有人教，但是至少不用担心钱的事，这几年的比赛，奖金使我富裕哈哈，从第一年比赛奖金到了后，就一直都是经济独立的状态，在大学不用管他们要钱还是很舒心的，就是专业课有些无聊，还好组到了Nice型宿友，就是”吃饭要紧”（id）吃不起饭了有点搞笑 目标有一个属于自己的私人CTF平台可以玩 再去一次国赛 挖一个还过得去的网站的漏洞 emmmm，其他的没想好 最后，夸一下，运维大佬，全国总冠军灏神-Asolmn，假装不会写代码实则厉害的一批的胖虎（许大佬），还有同时编程小能手的梁大佬，预定HCIE的苏神，什么设备都会配置，以及同为安全的老王，秀就完事了 元旦快乐]]></content>

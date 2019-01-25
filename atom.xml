@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2019-01-01T05:03:08.561Z</updated>
+  <updated>2019-01-25T06:26:56.778Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Machine_matrix靶机渗透</title>
+    <link href="https://Ernket.github.io/2019/01/25/Machine_matrix%20%E6%B8%97%E9%80%8F%E7%AC%94%E8%AE%B0/"/>
+    <id>https://Ernket.github.io/2019/01/25/Machine_matrix 渗透笔记/</id>
+    <published>2019-01-25T06:26:43.000Z</published>
+    <updated>2019-01-25T06:26:56.778Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="环境"><a href="#环境" class="headerlink" title="环境:"></a>环境:</h2><ul><li>攻击机: 192.168.8.128</li><li>靶机: 192.168.8.133</li></ul><p>—优秀的分割线—</p><p>打开网站后，看到只是一个很简单的html而已，源文件中也没有多余的字符<br><img src="http://t1.aixinxi.net/o_1d21i7108quj1eot19875ng7kka.png-j.jpg" alt=""></p><p>用nmap -sV扫描靶机后，发现开放了31337端口，而且还是python开启的simplehttp<br><img src="http://t1.aixinxi.net/o_1d21i50nmtkk1pjslut7ah1612a.png-j.jpg" alt=""><br>其实这里图片的文件名已经给了端口的提示了<br><img src="http://t1.aixinxi.net/o_1d21ij5ptdnlhl3nps15tr15bqa.png-j.jpg" alt=""></p><p>打开31337端口后的页面，特效变多了，而且多出了新的提示（靶机里面的所有梗都是来自黑客帝国)<br><img src="http://t1.aixinxi.net/o_1d21ik0nga4f1utk1fcj1u3n11gta.png-j.jpg" alt=""></p><p>查看源代码，发现一串base64编码过的东西<br><img src="http://t1.aixinxi.net/o_1d21idm5qdi15gr1368b941fjha.png-j.jpg" alt=""></p><p>拎去解码看<br><img src="http://t1.aixinxi.net/o_1d21im3ul14lif2v10ajeni1gr0a.png-j.jpg" alt=""></p><pre><code>echo &quot;Then you&#39;ll see, that it is not the spoon that bends, it is only yourself. &quot; &gt; Cypher.matrix</code></pre><p>忽略echo的内容，这串东西是&gt;到了Cypher.matrix这个文件，所以这个文件是存在的，直接下载下来看看<br><img src="http://t1.aixinxi.net/o_1d21ioqv45c11tuq1clk1oub93ga.png-j.jpg" alt=""><br>一开始拿去浏览器的console中尝试运行了一下，发现不行，Google查询了一下这个字符串，发现是<code>Brainfuck</code>这个编码<br><img src="http://t1.aixinxi.net/o_1d21irf0casb1vdj1cdu126kr5aa.png-j.jpg" alt=""></p><p>解码后可得到</p><blockquote><p>You can enter into matrix as guest, with password k1ll0rXX<br>Note: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password.</p></blockquote><p><img src="http://t1.aixinxi.net/o_1d21j4n641ot51o1pfre1uga1mqla.png-j.jpg" alt=""><br>这里挺坑的。他说密码是k1ll0rXX，首先，你在网页上看1和l差不多，就很绝望，而且XX他忘记了，所以你得写一个脚本来爆破</p><p>我这里先用kali生成两位数的密码<br><img src="http://t1.aixinxi.net/o_1d21mpqdu1bsgir1tisea71a1ia.png-j.jpg" alt=""><br>然后再用FTP将文件传出来，再写一个python脚本生成完整的密码<br><img src="http://t1.aixinxi.net/o_1d21mt2ut1a0ng5168vqmj1te8a.png-j.jpg" alt=""></p><pre><code>f = open(&quot;pass.txt&quot;)pass_file = open(&quot;new_pass.txt&quot;,&quot;r+&quot;)line = f.readline()while line:    print (line,) #后面跟,忽略换行符    pass_file.write(&quot;k1ll0r&quot;+line)    line = f.readline()pass_file.close()f.close()</code></pre><p>接着放到kali里面用hydra爆破ssh<br><img src="http://t1.aixinxi.net/o_1d21pr35h2dp4ib1ep19d5p9oa.png-j.jpg" alt=""><br>获得用户<code>guest</code>的密码<code>k1ll0r7n</code><br>SSH上去后，发现这个用户是什么命令都用不了，很给力<br><img src="http://t1.aixinxi.net/o_1d21ptf7hm47i3m1n2oot51bi9a.png-j.jpg" alt=""><br>所以可以用export查看系统变量，看是哪里的问题<br><img src="http://t1.aixinxi.net/o_1d21q927f1d7a1cg8kq6d0bggoa.png-j.jpg" alt=""><br>可以看到，是/bin/rbash这个文件限制了权限<br><img src="http://t1.aixinxi.net/o_1d21qaclnsg0rru1d3tq5jicaa.png-j.jpg" alt=""></p><p>稍微尝试了一下，发现echo是可以用的，可以利用echo 来输出目录文件<br><img src="http://t1.aixinxi.net/o_1d21qdi49g4nou013vb1kdg1qgja.png-j.jpg" alt=""><br>在<code>/home/guest/prog/</code>目录下，找到了vi，现在可以通过vi来绕过rbash的限制了</p><p>打开vi编辑器，输入<code>:!/bin/bash</code></p><p><img src="http://t1.aixinxi.net/o_1d21qglti103j1823egi4ke25oa.png-j.jpg" alt=""><br><img src="http://t1.aixinxi.net/o_1d21qhh6r1gf2kv06td1sc2m5ca.png-j.jpg" alt=""><br>现在可以使用ls这些命令了<br>接着利用find命令，查找系统上运行的所有SUID可执行文件<br><img src="http://t1.aixinxi.net/o_1d21qldr8q5us651vh6l9i1hcla.png-j.jpg" alt=""><br>找到了sudo这个命令是可以用的<br>guest是可以直接变成root的，但是没有su命令（也许改名了），所以直接sudo去看root目录下flag名为什么<br><img src="http://t1.aixinxi.net/o_1d21qs2f31nk01jlgmdn1r6d1qg5a.png-j.jpg" alt=""><br>找到后，直接用vi打开查看<br><img src="http://t1.aixinxi.net/o_1d21qt3lf1j0kbrru2skd57rla.png-j.jpg" alt=""><br>完成</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--more--&gt;
+    
+    </summary>
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>2018的一个小总结</title>
@@ -435,30 +457,6 @@
     
     
       <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MS15-034漏洞模块利用</title>
-    <link href="https://Ernket.github.io/2018/03/07/MS15-034%E6%BC%8F%E6%B4%9E%E6%A8%A1%E5%9D%97%E5%88%A9%E7%94%A8/"/>
-    <id>https://Ernket.github.io/2018/03/07/MS15-034漏洞模块利用/</id>
-    <published>2018-03-07T00:21:31.000Z</published>
-    <updated>2018-04-12T06:13:43.467Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h2><p>在kali中自带的msf由于版本太低，有的模块是没有的，所以我们先更新源<br><img src="http://t1.aixinxi.net/o_1c7usp0vr1ul21ohp8p21j1ca6ca.jpg-j.jpg" alt=""></p><p>  源的文件位置:/etc/apt/sources.list<br>  下面是更新源:<br>官方的：deb <a href="http://http.kali.org/kali" target="_blank" rel="noopener">http://http.kali.org/kali</a> kali-rolling main non-free contrib<br>中科大：deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>deb-src <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>将上面的源添加进/etc/apt/sources.list后，执行apt-get update即可<br>更新完后，执行apt-get install metasploit-framework更新msf<br><img src="http://t1.aixinxi.net/o_1c7usscih1d6abo1enoigj1u1va.jpg-j.jpg" alt=""></p><p>  更新完后，输入msfconsole打开软件<br>  <img src="http://t1.aixinxi.net/o_1c7ustd3k16ga181ni1d1c9gr9na.jpg-j.jpg" alt=""></p><p>  可以看到已经更新为v4.16.32了</p><h2 id="查找-利用模块"><a href="#查找-利用模块" class="headerlink" title="查找/利用模块"></a>查找/利用模块</h2><p>进来后，不清楚ms15-034的利用模块在哪，我们可以执行search ms15-034来查找<br><img src="http://t1.aixinxi.net/o_1c7ut03dgkak1qsa15g5bf31ucsa.jpg-j.jpg" alt=""></p><p>  然后use auxiliary/scanner/http/ms15_034_http_sys_memory_dump后，show options来查看需要配置的<br>  <img src="http://t1.aixinxi.net/o_1c7ut28i111td1da1f5f12kgvifa.jpg-j.jpg" alt=""></p><p>  设置好对方ip及目标url后，exploit执行<br>  <img src="http://t1.aixinxi.net/o_1c7ut446g1dh49tpe1urshlka.jpg-j.jpg" alt=""></p><p><img src="http://t1.aixinxi.net/o_1c7ut4v1er0v1k9p1unq1kf161oa.jpg-j.jpg" alt=""></p><p>  完成</p>]]></content>
-    
-    <summary type="html">
-    
-      Metasploit是一款开源的安全漏洞检测工具，可以帮助安全和IT专业人士识别安全性问题，验证漏洞的缓解措施
-    
-    </summary>
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-    
-      <category term="网络安全" scheme="https://Ernket.github.io/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
     
   </entry>
   

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Elapse&#39;s Blog</title>
-  <icon>https://www.gravatar.com/avatar/9bc04837569c80e4c3e5bf4f88011282</icon>
-  <subtitle>Welcome to Elapse&#39;s Blog</subtitle>
+  
+  <subtitle>生命的质感和构造，即存在本身</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
@@ -11,7 +11,7 @@
   
   <author>
     <name>Elapse</name>
-    <email>elap_se@yahoo.com</email>
+    
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>

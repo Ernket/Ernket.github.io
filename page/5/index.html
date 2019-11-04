@@ -297,10 +297,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>sqlmap是一个自动化的SQL注入工具，其主要功能是扫描，发现并利用给定的URL的SQL注入漏洞，日前支持的数据库是MS-SQL,,MYSQL,ORACLE和POSTGRESQL。SQLMAP采用四种独特的SQL注入技术，分别是盲推理SQL注入，UNION查询SQL注入，堆查询和基于时间的SQL盲注入。其广泛的功能和选项包括数据库指纹，枚举，数据库提取，访问目标文件系统，并在获取完全操作权限时实行任意命令。<br>SqlMap连接的方式有两种，一种是-u url来连接，一种是-d mysql://用户名:密码@IP地址:端口/数据库 来连接，这里使用的是-d，用数据库来连接</p>
-<hr>
-<p><code>Sqlmap -d mysql://用户名:密码@IP地址:端口/数据库</code><br>后面加–os-shell来系统交互shell<br><img src="http://i2.51cto.com/images/blog/201801/29/899e9bbf8d46ea2314763c5472fac64f.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>对方主机是64位的，所以这里选择2<br><img src="http://i2.51cto.com/images/blog/201801/29/3ac02d8cbe805a6942d155bb27e3d283.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -313,6 +311,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/01/29/利用SqlMap系统交互shell/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -431,29 +433,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源</p>
-<p>国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：</p>
-<pre><code>//更新为阿里云的源
-
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
-
-//更新为163的源
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS6-Base-163.repo
-
-//更新为搜狐的源
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.sohu.com/help/CentOS-Base-sohu.repo
-</code></pre><p>1.进入yum源配置目录</p>
-<pre><code> cd /etc/yum.repos.d
-</code></pre><p>2.做什么改动前最后都做个备份 以防出错 还能恢复</p>
-<pre><code>mv CentOS-Base.repo CentOS-Base.repo.bak
-</code></pre><p>3.下载新的CentOS-Base.repo 到/etc/yum.repos.d/</p>
-<pre><code>wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
-</code></pre><p>4.运行yum makecache生成缓存</p>
-<pre><code>yum clean all
-yum makecache
-</code></pre><hr>
-<p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -466,6 +447,10 @@ yum makecache
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/01/28/为各版本linux添加yum源/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

@@ -297,29 +297,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="Linux目录"><a href="#Linux目录" class="headerlink" title="Linux目录"></a>Linux目录</h1><p>第一节课没啥重要的，最重要的我觉得就是对于LInux系统的目录的一些讲解</p>
-<p>那么，首先先看一下根目录下的目录<br><img src="https://Ernket.github.io/post-images/1571905988758.webp" alt=""></p>
-<pre><code>[root@Elapse ~]cd /
-[root@server0 /]# ls
-bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys tmp  usr  var
-[root@server0 /]#
-</code></pre><p>按顺序一个一个安排一下</p>
-<p>/boot: 存放内核</p>
-<p>这个文件夹比较有意思，是存放内核的地方，内核是啥我也看不懂</p>
-<p>/var：保存可变的文件</p>
-<p>可变的文件有日志， 数据库文件， ftp文件， 邮件队列， 缓存文件 ，其实就是一些服务器所需要的文件，比如网页服务器的页面这类文件，就是存放在/var/的www目录下的</p>
-<p>/home 家目录</p>
-<p>保存普通用户的家目录，就是给普通用户用来放地方的，就好比windows不同用户的不同桌面一样</p>
-<p>/tmp 临时文件夹</p>
-<p>任何人也可写入的公共文件。临时目录 不要保存生产数据 每10天清除一次 /var/tmp 每30天清除一次。</p>
-<p>swap</p>
-<p>虚拟内存， 当内存不足时，将内存中的Cache移到磁盘中。空间出物理内存。当然你可以设置他的积极性，何为积极性呢，积极的话，不管电脑有没有内存他都去干活，而不积极的话，只有当电脑内存不足时，他才会干活，帮助电脑置换数据</p>
-<p>/dev 设备</p>
-<p>字面意思，用来存放磁盘、光驱这些设备的地方</p>
-<p>/etc ：配置文件</p>
-<p>保存你LInux中的配置文件的地方，其中分两种，sysconfig 和 服务配置文件，sysconfig就是passwd这类文件，是管理linux账户的文件，还有shadow，服务配置文件的话，就是httpd.conf这类服务配置文件（httpd.conf为http服务器的配置文件）</p>
-<p>sysconfig 除了passwd这类，还有一堆防火墙、网络的配置文件，如下图<br><img src="https://Ernket.github.io/post-images/1571906101958.webp" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -332,6 +311,10 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/10/24/rhcenotescollation/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -508,27 +491,8 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="0x01-Enjoy-the-Game"><a href="#0x01-Enjoy-the-Game" class="headerlink" title="0x01 Enjoy the Game."></a>0x01 Enjoy the Game.</h1><p><img src="https://Ernket.github.io/post-images/1565871417948.png" alt=""></p>
-<p>打开网页是一个老虎机</p>
-<p><img src="https://Ernket.github.io/post-images/1565871444119.png" alt=""></p>
-<p>通过子目录爆破找到<code>/js/cqg.js</code>文件，发现包含利用点</p>
-<p><img src="https://Ernket.github.io/post-images/1565871447028.png" alt=""></p>
-<p>去<code>score.php</code>，发送数据即可获得flag</p>
-<p><img src="https://Ernket.github.io/post-images/1565871450738.png" alt=""></p>
-<h1 id="0x02-who-are-you"><a href="#0x02-who-are-you" class="headerlink" title="0x02 who_are_you?"></a>0x02 who_are_you?</h1><p><img src="https://Ernket.github.io/post-images/1565871480234.png" alt=""></p>
-<p>打开界面发现个输入框</p>
-<p><img src="https://Ernket.github.io/post-images/1565871484806.png" alt=""></p>
-<p>随便输入点东西，然后用开发者工具监控一下流量<br><img src="https://Ernket.github.io/post-images/1565871487755.png" alt=""></p>
-<p>一看就是XXE实体注入，构造语句</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE feedback [
-&lt;!ENTITY author SYSTEM &quot;php://filter/convert.base64-encode/resource=index.php&quot;&gt;
-]&gt;
-&lt;feedback&gt;&lt;author&gt;&amp;author;&lt;/author&gt;&lt;/feedback&gt;
-</code></pre><p><img src="https://Ernket.github.io/post-images/1565871493777.png" alt=""></p>
-<p>base64解码可得flag</p>
-<p><img src="https://Ernket.github.io/post-images/1565871755860.png" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -537,6 +501,10 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
       
 
       
+      
+        <p class="article-more-link">
+          <a   href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -783,75 +751,8 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>在很多CTF题目上或者一些实际环境中都有碰到过反序列化漏洞，但是看到那些乱七八糟的就感觉学不进去，趁着暑假时间多的时候，研究一番，这篇也算是学习笔记，主要内容有：</p>
-<blockquote>
-<p>什么是序列化和反序列化</p>
-<p>为什么要用到序列化</p>
-<p>产生这个漏洞的原因</p>
-</blockquote>
-<h1 id="什么是序列化和反序列化"><a href="#什么是序列化和反序列化" class="headerlink" title="什么是序列化和反序列化"></a>什么是序列化和反序列化</h1><p>在PHP中，实现序列化和反序列化，主要是靠<code>serialize()</code>和<code>unserialize()</code>这两个函数，序列化做的工作就是，将一个一个对象变成一个可传输字符串，json就是一种序列化，而反序列化的工作就是将字符串再变回对象</p>
-<p>序列化和反序列化有点像Python中的<code>encode()</code>和<code>decode()</code>，编码和解码，只不过这两个处理的都是字符串</p>
-<p>举一个例子：</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token keyword">class</span> <span class="token class-name">test</span><span class="token punctuation">{</span>
-<span class="token keyword">public</span> <span class="token variable">$name</span> <span class="token operator">=</span> <span class="token string">"Elapse"</span><span class="token punctuation">;</span>
-<span class="token keyword">public</span> <span class="token variable">$age</span> <span class="token operator">=</span> <span class="token string">"18"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token variable">$example</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$t</span> <span class="token operator">=</span> <span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$example</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">echo</span> <span class="token variable">$t</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p>$example实例化test对象<br><img src="https://Ernket.github.io/post-images/1563977620686.png" alt=""><br>内容为<code>{&quot;name&quot;:&quot;Elapse&quot;,&quot;age&quot;:&quot;18&quot;}</code><br><img src="https://Ernket.github.io/post-images/1563977659010.png" alt=""><br>在实际环境中，可能需要对内容进行修改，如下：</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token keyword">class</span> <span class="token class-name">test</span><span class="token punctuation">{</span>
-<span class="token keyword">public</span> <span class="token variable">$name</span> <span class="token operator">=</span> <span class="token string">"Elapse"</span><span class="token punctuation">;</span>
-<span class="token keyword">public</span> <span class="token variable">$age</span> <span class="token operator">=</span> <span class="token string">"18"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token variable">$example</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$example</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">name</span><span class="token operator">=</span><span class="token string">"Ernket"</span><span class="token punctuation">;</span>
-<span class="token variable">$t</span> <span class="token operator">=</span> <span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$example</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">echo</span> <span class="token variable">$t</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p>如果我们想要将内容传输出去的话，则需要将内容序列化，变成一串字符串后才可发送<br>也可以将变量储存，有需要的时候在拿出来使用，而不是二次调用，浪费系统资源<br><img src="https://Ernket.github.io/post-images/1563977677180.png" alt=""></p>
-<p>PHP中可以通过<code>unserialize()</code>来将字符串转为对象，然后调出内容</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token keyword">class</span> <span class="token class-name">test</span><span class="token punctuation">{</span>
-<span class="token keyword">public</span> <span class="token variable">$name</span> <span class="token operator">=</span> <span class="token string">"Elapse"</span><span class="token punctuation">;</span>
-<span class="token keyword">public</span> <span class="token variable">$age</span> <span class="token operator">=</span> <span class="token string">"18"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token variable">$example</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$example</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">name</span><span class="token operator">=</span><span class="token string">"Ernket"</span><span class="token punctuation">;</span>
-<span class="token variable">$t</span> <span class="token operator">=</span> <span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$example</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token variable">$a</span><span class="token operator">=</span><span class="token function">unserialize</span><span class="token punctuation">(</span><span class="token variable">$t</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">echo</span> <span class="token variable">$a</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">name</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p><img src="https://Ernket.github.io/post-images/1563977698609.png" alt=""></p>
-<h1 id="产生漏洞的原因"><a href="#产生漏洞的原因" class="headerlink" title="产生漏洞的原因"></a>产生漏洞的原因</h1><p>那么上面清楚了序列化和反序列化后，这里就讲一哈反序列化漏洞产生的原因</p>
-<p>PHP中，会产生这个漏洞的一大问题，在于PHP的魔法函数，魔法函数会因为某些条件的触发而自动执行某些指定的操作</p>
-<blockquote>
-<p>__construct()当一个对象创建时被调用</p>
-<p>__destruct()当一个对象销毁时被调用</p>
-<p>__toString()当一个对象被当作一个字符串使用</p>
-<p>__sleep() 在对象在被序列化之前运行</p>
-<p>__wakeup将在序列化之后立即被调用</p>
-</blockquote>
-<p>举一个任意命令执行的例子</p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-<span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
-    <span class="token keyword">var</span> <span class="token variable">$test</span> <span class="token operator">=</span> <span class="token string">"ls"</span><span class="token punctuation">;</span>
-    <span class="token keyword">function</span> <span class="token function">__destruct</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            <span class="token function">system</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">test</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token variable">$a</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'test'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token variable">$a_unser</span> <span class="token operator">=</span> <span class="token function">unserialize</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p><code>__destruct()</code>为当一个对象销毁时被调用，而我们可以通过反序列化的时候，调用A对象，因为PHP魔法函数的缘故，他会自动执行__destruct()的内容，接着就是system()部分<br><img src="https://Ernket.github.io/post-images/1563977724215.png" alt=""><br>所以通过反序列化，就可以做到控制test这个变量,从而达到任意命令执行</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -864,6 +765,10 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/07/24/php-serialize/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -912,142 +817,8 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  s
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>起点小说的爬虫是我写的第一个程序，但是之前的那个写的是真的太垃圾了，爬下来的东西也不是人能看的，所以就趁着自己有时间，重新写了一个，稍微优化了一下下</p>
-<h1 id="爬虫开始"><a href="#爬虫开始" class="headerlink" title="爬虫开始"></a>爬虫开始</h1><p>按流程来吧，首先先导入所需要的库</p>
-<pre class=" language-Python"><code class="language-Python">from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import time
-</code></pre>
-<p>打开起点中文网中，免费专区，F12一下查看源码</p>
-<p>上一个版本中，我写的爬虫是需要用户来给定URL的，但是想了想这一点都不爬虫，于是我就把爬虫获取书籍url的部分写上去了</p>
-<p>首先先看看小说名和URL在哪个元素下</p>
-<p><img src="https://Ernket.github.io/post-images/1563457938152.png" alt=""></p>
-<p>发现在div下的h4下的a元素，是链接地址和小说名。</p>
-<p>Python中利用Bs4查找的方法有很多种，怎么用看个人喜好，这里给个url供参考就好了</p>
-<blockquote>
-<p> <a href="https://www.cnblogs.com/gl1573/p/9480022.html" target="_blank" rel="noopener">https://www.cnblogs.com/gl1573/p/9480022.html</a></p>
-</blockquote>
-<p>如果不是特别奇怪的那种，我一般都是一级一级的方式来查找的</p>
-<pre class=" language-python"><code class="language-python"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-url<span class="token operator">=</span><span class="token string">"https://www.qidian.com/free"</span> <span class="token comment" spellcheck="true">#免费区的url</span>
-html<span class="token operator">=</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
-bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#分析源码</span>
-fname<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">'div > h4 > a'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#查找div下的h4下的a</span>
-</code></pre>
-<p>因为查找出来的结果不只有一个，所以得通过循环来将内容输出出来</p>
-<pre class=" language-python"><code class="language-python"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-fname<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">'div > h4 > a'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#查找div下的h4下的a</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> fname<span class="token punctuation">:</span>
-    a<span class="token operator">=</span>i<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    b<span class="token operator">=</span>i<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token operator">+</span>b<span class="token punctuation">)</span>
-</code></pre>
-<p>有了名字和url后，当然不能只是print这么简单，我这里采用的方法是，添加进列表里</p>
-<p>先在上面创建两个列表，一个是存名字的，一个是存url的</p>
-<pre class=" language-python"><code class="language-python">book_name<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
-book_url<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
-</code></pre>
-<p>接着，用进for循环中.</p>
-<pre class=" language-python"><code class="language-python"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> 
-<span class="token comment" spellcheck="true">#改动后</span>
-book_name<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
-book_url<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
-num<span class="token operator">=</span><span class="token number">1</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> fname<span class="token punctuation">:</span>
-    <span class="token keyword">if</span> num<span class="token operator">==</span><span class="token number">7</span><span class="token punctuation">:</span>
-        <span class="token keyword">break</span>
-    a<span class="token operator">=</span>i<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"["</span><span class="token operator">+</span>str<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"]: "</span><span class="token operator">+</span>a<span class="token punctuation">)</span>
-    b<span class="token operator">=</span>i<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span>
-    book_name<span class="token punctuation">.</span>append<span class="token punctuation">(</span>a<span class="token punctuation">)</span>
-    book_url<span class="token punctuation">.</span>append<span class="token punctuation">(</span>b<span class="token punctuation">)</span>
-    num<span class="token operator">+=</span><span class="token number">1</span>
-</code></pre>
-<p>上面的num，是用来给用户选择所需要爬取的书籍，用户输入ID对应ID就可以选择了，效果图是这样的</p>
-<p><img src="https://Ernket.github.io/post-images/1563457998849.png" alt=""></p>
-<p>有了书的URL后，打开来就到这个页面了，因为这里还不是小说正文部分，所以还需要进一步的获取URL，还是老套路，找到<code>免费试读</code>所在的部分<br><img src="https://Ernket.github.io/post-images/1563458037665.png" alt=""></p>
-<p>发现是在id叫做<code>redBtn</code>下，安排</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_url</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    html<span class="token operator">=</span>urlopen<span class="token punctuation">(</span><span class="token string">"https:"</span><span class="token operator">+</span>url<span class="token punctuation">)</span>
-    bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span>
-    neir<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>select<span class="token punctuation">(</span><span class="token string">'#readBtn'</span><span class="token punctuation">)</span> #井号可代替id<span class="token punctuation">,</span>#readBtn就等于id<span class="token operator">=</span>readBtn
-    nurl<span class="token operator">=</span>neir<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#因为是列表的属性，所以得[]</span>
-    <span class="token keyword">return</span> nurl
-</code></pre>
-<p>这个时候，打开来才是小说的正文部分，这里首先考虑三个点</p>
-<ul>
-<li>保存的文件名</li>
-<li>章节</li>
-<li>正文</li>
-</ul>
-<p>第一得先知道我爬取的小说名叫什么，这个是后面作为保存的文件名，你可以从这里获取</p>
-<p><img src="https://Ernket.github.io/post-images/1563458056324.png" alt=""></p>
-<p>当然也可以直接从前面获取的<code>book_name</code>保存来用</p>
-<pre class=" language-python"><code class="language-python">whichbook<span class="token operator">=</span>int<span class="token punctuation">(</span>input<span class="token punctuation">(</span><span class="token string">"请选择书籍ID："</span><span class="token punctuation">)</span>
-bkname<span class="token operator">=</span>book_name<span class="token punctuation">[</span>whichbook<span class="token number">-1</span><span class="token punctuation">]</span>
-</code></pre>
-<p>因为给人看的话，从1开始会比较好，但是python中的索引是从0开始，所以在选择的时候，得减去1，这样才是正确的</p>
-<p>第一点解决了，现在来看看第二点，小说章节名，章节名可以说比文件名重要，毕竟如果没了章节名，看到第几章都不知道，没有一个分隔的地方了<br><img src="https://Ernket.github.io/post-images/1563458095812.png" alt=""></p>
-<p>我这里的写法比较懒，因为在开发者工具中，直接就看到了<code>title</code>是章节名，就直接拿来用了（也算标明出处？）</p>
-<pre class=" language-python"><code class="language-python">html<span class="token operator">=</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#获取源码</span>
-bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#分析</span>
-bt<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">'title'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#获取章节名</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>bt<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#获取文本内容</span>
-</code></pre>
-<p>第二点倒是很简单就按排上了，下面就是第三点了，小说正文</p>
-<p>我第一次写的时候的效果是这样的</p>
-<p><img src="https://Ernket.github.io/post-images/1563458084721.png" alt=""></p>
-<p>这排版。。老实说。就是屎。。</p>
-<p>于是乎，稍微改动了一下，原本是一整个正文当作一个部分来处理，现在拆开来，每一句后面都加一个<code>\n</code>，改动后得效果就是这样了</p>
-<p><img src="https://Ernket.github.io/post-images/1563458102552.png" alt=""></p>
-<p>写是这样写的</p>
-<p>先找到<code>div class=&quot;read-content&quot;&gt;</code></p>
-<pre class=" language-python"><code class="language-python">bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span>
-chapter<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token string">"class"</span><span class="token punctuation">,</span><span class="token string">"read-content"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-</code></pre>
-<p>接着在写一个利用<code>find_all()</code>的，将里面的p全部获取一遍，然后每一个，后面都加上一个<code>\n</code>就好了</p>
-<pre class=" language-python"><code class="language-python"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-chapter<span class="token operator">=</span>chapter<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> chapter<span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
-</code></pre>
-<p>“replace是用来删除空格的，感觉没啥用”</p>
-<p>文件名，章节名，正文都有了，接下来就是怎么把“下一章”的内容给爬取出来的问题了<br>开发者工具中查看位置<br><img src="https://Ernket.github.io/post-images/1563458134424.png" alt=""><br>然后python中 .find()查找</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-    html<span class="token operator">=</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
-    bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span>
-    bsoup<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token string">"id"</span><span class="token punctuation">:</span><span class="token string">"j_chapterNext"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-    url<span class="token operator">=</span><span class="token string">"http:"</span><span class="token operator">+</span>bsoup<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span>
-</code></pre>
-<p>这样就能一直下一页，直到结束了，为什么url前面要加一个<code>http:</code>呢，因为他获取下来的<code>href</code>，是没有这玩意的，如果拿这个直接去请求的话，会提示url不存在，所以得拼接一下，除此之外，这里还有个问题，怎么判断小说结束了，毕竟我是无限循环<br><img src="https://Ernket.github.io/post-images/1563458162045.png" alt=""></p>
-<p>如果你是最后一章的话，那么就不存在正文和标题这两个玩意了，那么在获取的时候，便是空内容，这时，程序会报错，所以只需要写多一个异常处理就好了，写入文件这部分，整合一下就变成了</p>
-<pre class=" language-python"><code class="language-python">url<span class="token operator">=</span><span class="token string">"xxx"</span>
-<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-html<span class="token operator">=</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
-<span class="token keyword">try</span><span class="token punctuation">:</span>
-    bsObj<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>html<span class="token punctuation">,</span><span class="token string">"html5lib"</span><span class="token punctuation">)</span>
-    bt<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">'title'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#查找章节名字</span>
-    chapter<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token string">"class"</span><span class="token punctuation">,</span><span class="token string">"read-content"</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#查找小说</span>
-    chapter<span class="token operator">=</span>chapter<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">)</span>
-    fo<span class="token operator">=</span>open<span class="token punctuation">(</span>bkname<span class="token operator">+</span><span class="token string">".txt"</span><span class="token punctuation">,</span><span class="token string">"a"</span><span class="token punctuation">,</span>encoding<span class="token operator">=</span><span class="token string">'UTF-8'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#保存txt文件，并将名字设置为小说名</span>
-    fo<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token operator">+</span>bt<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"\n"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#内容写入</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> chapter<span class="token punctuation">:</span>
-    fo<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token operator">+</span>i<span class="token punctuation">.</span>get_text<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#内容写入</span>
-    fo<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#关闭文件</span>
-    bsoup<span class="token operator">=</span>bsObj<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token punctuation">{</span><span class="token string">"id"</span><span class="token punctuation">:</span><span class="token string">"j_chapterNext"</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#获取下一章的url</span>
-    url<span class="token operator">=</span><span class="token string">"http:"</span><span class="token operator">+</span>bsoup<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">".html"</span> <span class="token comment" spellcheck="true">#拼接语句</span>
-<span class="token keyword">except</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"抓取完毕....."</span><span class="token punctuation">)</span>
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
-    <span class="token keyword">break</span>
-</code></pre>
-<p>如果报错了，就说明是到尾章了，认为抓取完毕，休息两秒，退出循环</p>
-<p>到这里整个程序就全部都写完了</p>
-<p>源码我放在了<code>github</code>，有需要的自行下载就好了</p>
-<blockquote>
-<p><a href="https://github.com/Ernket/qidianpachong/tree/master" target="_blank" rel="noopener">https://github.com/Ernket/qidianpachong/tree/master</a> </p>
-</blockquote>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1060,6 +831,10 @@ html<span class="token operator">=</span>urlopen<span class="token punctuation">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/07/18/python3-qi-dian-zhong-wen-wang-pa-chong/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -1108,19 +883,8 @@ html<span class="token operator">=</span>urlopen<span class="token punctuation">
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="类似前言一样的废话"><a href="#类似前言一样的废话" class="headerlink" title="类似前言一样的废话"></a>类似前言一样的废话</h2><p>Untiy的游戏逆向破解其实都没什么难度，就跟打开个txt然后ctrl+f搜索指定字符串接着改个数值封装而已，做到这一步也不需要什么”基础”。 <del>逆向这个游戏主要是因为不想充钱</del></p>
-<h2 id="逆向过程"><a href="#逆向过程" class="headerlink" title="逆向过程"></a>逆向过程</h2><p>首先得先百度下载一个里面没有什么乱七八糟内容的游戏，我推荐九游</p>
-<p><img src="https://Ernket.github.io/post-images/1558439698952.png" alt=""></p>
-<p>下载完之后，复制多一份当个备份，然后将后缀<code>.apk</code>改为<code>.zip</code>，解压缩就好了<br><img src="https://Ernket.github.io/post-images/1558439812609.png" alt=""><br>去到<code>\assets\bin\Data\Managed</code>目录下查找<code>Assembly-CSharp.dll</code>这个文件</p>
-<p><img src="https://Ernket.github.io/post-images/1558439882965.png" alt=""></p>
-<p>把这个文件拖去<code>dnSpy</code>反编译，就可以开始逆向这个游戏了<br><img src="https://Ernket.github.io/post-images/1558440352347.png" alt=""></p>
-<p>从上图可以分析出我们需要改的几个点，金钱、粉丝数、rank分、钻石，所以我们先在反编译的文件夹里搜索程序集，内容为<code>money</code>，我们可以找到一堆命名中带有money的类或者其他<br><img src="https://Ernket.github.io/post-images/1558440821966.png" alt=""></p>
-<p>第一个名字为<code>&quot;AddDayMoney&quot;</code>，推断是每过一天所增加\减少的金钱数，双击点进去会跳转到这个类的地方<br><img src="https://Ernket.github.io/post-images/1558440998909.png" alt=""><br>在这个类使用的时候发现了<code>PlayerData</code><br><img src="https://Ernket.github.io/post-images/1558441087140.png" alt=""><br>点进去后发现是开始游戏时，初始化的数据<br><img src="https://Ernket.github.io/post-images/1558441295429.png" alt=""></p>
-<p>金钱这部分倒是一开始就写在里面了，所以不客气的右键编辑类，把数字稍微改大一点<br><img src="https://Ernket.github.io/post-images/1558441424244.png" alt=""></p>
-<p>接着想一下怎么更改钻石，搜索程序集，内容为<code>diamond</code> （钻石），找到以下内容<br><img src="https://Ernket.github.io/post-images/1558441541588.png" alt=""><br>右键<code>dimond</code>，点击分析，看一下它的值从哪里来的<br><img src="https://Ernket.github.io/post-images/1558441803439.png" alt=""><br>打开来后，点击被赋值，找到一个<code>isClickAd</code>，推测为看广告送钻石的功能<br><img src="https://Ernket.github.io/post-images/1558441816343.png" alt=""><br>点进去，找到看完广告后相对应送的钻石数量为10，右键编辑方法，稍微改大一点后，点击右下角编译<br><img src="https://Ernket.github.io/post-images/1558442054185.png" alt=""><br>解决了金钱、钻石后，想一下如何更改粉丝数和天梯rank分，尝试性的搜索一下<code>tianti</code><br><img src="https://Ernket.github.io/post-images/1558442408162.png" alt=""><br>发现还真能找到，看一眼名字，再对比一下游戏内容<br><img src="https://Ernket.github.io/post-images/1558443194944.png" alt=""><br>右键分析SoloWinTianTi，然后找到被赋值，于是就找到了赢一把solo赛后能得到的天梯分，还是老方法，右键编辑方法，然后稍微改大一点，编译<br><img src="https://Ernket.github.io/post-images/1558443420305.png" alt=""><br>更改粉丝数量的操作也一样（虽然没什么必要，鼠标多点击几次的事而已），找到BuyFans这个类，然后分析被赋值，更改值<br><img src="https://Ernket.github.io/post-images/1558443577277.png" alt=""><br>更改完后，保存，封装成APK，安装就完事了</p>
-<p>效果图（粉丝和天梯懒得刷了，反正是可以的）<br><img src="https://Ernket.github.io/post-images/1558444012149.png" alt=""></p>
-<h1 id="多余操作"><a href="#多余操作" class="headerlink" title="多余操作"></a>多余操作</h1><p>在旁人指点了一番后，也觉得鼠标点这么多次太麻烦，但是研究点数又缺，所以就顺手把一次性增加的研究点数改一下好了<br>搜索<code>Research</code>后，找到BuyResearch，然后更改下面那个BuyResearchNum，因为上面那个是所需要的金钱，而下面那个才是购买后增加的数量<br><img src="https://Ernket.github.io/post-images/1558443712955.png" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1133,6 +897,10 @@ html<span class="token operator">=</span>urlopen<span class="token punctuation">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向破解/">逆向破解</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2019/05/21/untiy-yin-qing-you-xi-dian-jing-da-heng-ni-xiang/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

@@ -297,103 +297,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="SQL-injection-9-ways-to-bypass-Web-Application-Firewall"><a href="#SQL-injection-9-ways-to-bypass-Web-Application-Firewall" class="headerlink" title="SQL injection: 9 ways to bypass Web Application Firewall"></a>SQL injection: 9 ways to bypass Web Application Firewall</h1><blockquote>
-<p>本文转载至 <a href="https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/" target="_blank" rel="noopener">https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/</a> ，为翻译作品，限于我的英语水平有限，所以文章将保留英文，侵删</p>
-</blockquote>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>A web application firewall (or WAF) filters, monitors, and blocks HTTP traffic to and from a web application. A WAF is differentiated from a regular firewall in that a WAF is able to filter the content of specific web applications while regular firewalls serve as a safety gate between servers. By inspecting HTTP traffic, it can prevent attacks stemming from web application security flaws, such as SQL injection, cross-site scripting (XSS), file inclusion, and security misconfigurations.</p>
-<blockquote>
-<p>Web应用防护系统(也称:网站应用级入侵防御系统)能过滤、监视和阻止Web应用程序之间的HTTP通信。WAF跟常规的防火墙是有区别的，因为WAF能够过滤特定Web应用程序的内容，而常规防火墙则是服务器之间的安全门。通过检查HTTP流量等，它可以防止源自Web应用程序安全漏洞（如SQL注入，跨站点脚本（XSS），文件包含和安全性错误配置）的攻击。</p>
-</blockquote>
-<h2 id="WAF是如何工作的"><a href="#WAF是如何工作的" class="headerlink" title="WAF是如何工作的"></a>WAF是如何工作的</h2><ul>
-<li>Exception Detection Protocol: Denies requests that do not meet HTTP standards<blockquote>
-<p>检测异常的协议:拒绝不符合HTTP标准的请求</p>
-</blockquote>
-</li>
-<li>Enhanced input validation: Proxy and server-side validation, not just client-side validation<blockquote>
-<p>加强了输入验证:在代理和服务器端验证，而不仅仅只是在客户端验证</p>
-</blockquote>
-</li>
-<li>WhiteList &amp; Blacklist<blockquote>
-<p>白名单和黑名单</p>
-</blockquote>
-</li>
-<li>Rule-based and exception-based protection: more black-based mechanisms based on rules, more flexible based on exceptions<blockquote>
-<p>不同于一般规则的规则可能会比一般规则更加灵活有用，如黑名单规则</p>
-</blockquote>
-</li>
-<li>State management: focus on session protectionThere are also: Cookies protection, anti-intrusion avoidance technology, response monitoring and information disclosure protection.<blockquote>
-<p>状态管理:会话保护，Cookie保护，反入侵规避技术，响应监控和信息披露保护。</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="如何绕过WAF"><a href="#如何绕过WAF" class="headerlink" title="如何绕过WAF"></a>如何绕过WAF</h2><p>1.Mixed CaseChange case of malicious input triggering WAF protections. union may become uNIoN, If the WAF is using a case sensitive blacklist, changing case may bypass that filter.</p>
-<blockquote>
-<p>将恶意语句大小写混合，如果WAF使用区分大小写的黑名单，则更改大小写可能会绕过该过滤器。</p>
-</blockquote>
-<p>例如：<a href="http://test.com/index.php?page_id=-15" target="_blank" rel="noopener">http://test.com/index.php?page_id=-15</a> uNIoN sELecT 1,2,3,4<br>2.Replace the keyword(Insert special characters that will be removed by WAF) – SELECT may become SEL&lt;ECT which would be passed on as SELECT once the offending character is removed.</p>
-<blockquote>
-<p>替换掉关键字（在中间插入一些会被WAF删除掉的特殊字符，例如&lt;&gt;之类的）就像是SELECT，如果在中间插入&lt;就变成了SEL&lt;ECT，一旦WAF删除掉违规的字符，就变成了select，它将作为select来传递</p>
-</blockquote>
-<p>例如:<a href="http://test.com/index.php?page_id=-15&nbsp;UNIunionON" target="_blank" rel="noopener">http://test.com/index.php?page_id=-15&nbsp;UNIunionON</a> SELselectECT 1,2,3,4<br>3.Encode(编码)<br>  +URL encode(加网址编码)<br>  例如:page.php?id=1%252f%252a<em>/UNION%252f%252a /SELECT<br>  +Hex encode(加16进制编码)<br>  例如:target.com/index.php?page_id=-15 /</em>!u%6eion<em>/ /</em>!se%6cect<em>/ 1,2,3,4…<br>  　    SELECT(extractvalue(0x3C613E61646D696E3C2F613E,0x2f61))<br>  +Unicode encode(加Unicode编码)<br>  例如:?id=10%D6‘%20AND%201=2%23　<br>  　　SELECT ‘Ä’=’A’; #1<br>4.use comments(使用注释)<br>Insert comments in middle of attack strings. For instance, /</em>!SELECT*/ might be overlooked by the WAF but passed on to the target application and processed by a mysql database.</p>
-<blockquote>
-<p>在攻击字符串中插入注释。 例如/ <em>！SELECT </em> /可能被WAF忽略，但传递给目标应用程序并由mysql数据库处理。</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h36jq29th120e1ksi1fp41ffna.png-j.jpg" alt="enter description here"></p>
-<ol>
-<li>Equivalent functions and commands(相等的函数和命令)<br>Some functions or commands can not be used because this keywords are detected, but in many cases we can be used with equivalent or similar code of them.<blockquote>
-<p>某些函数或命令不能使用，因为检测到这些关键字，但在很多情况下，我们可以使用它们的等效，功能一样的或类似的代码。</p>
-</blockquote>
-</li>
-</ol>
-<p><img src="http://t1.aixinxi.net/o_1c8h2t2o81q2d1hqpmi7g0t1n6va.png-j.jpg" alt="enter description here"></p>
-<p>6.Special symbolsHere I have non-alphanumeric characters in the special symbols of a class, special symbols have a special meaning and usage.</p>
-<blockquote>
-<p>使用非字母数字字符,特殊符号具有特殊的含义和用法。(看不懂，等一个大佬)</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h41s3k6tuo5e3901s393mla.png-j.jpg" alt="enter description here"></p>
-<p>7.HTTP parameter controlSupply multiple parameter= value sets of the same name to confuse the WAF. Given the example <a href="http://example.com?id=1&amp;?id=’" target="_blank" rel="noopener">http://example.com?id=1&amp;?id=’</a> or ‘1’=’1′ — ‘ in some circumstances such as with Apache/PHP, the application will only parse the last (second) instance of id= while the WAF only parses the first. It appears to be a legitimate request but the application still receives and process malicious input. Most WAF’s today are not vulnerable to HTTP Parameter Pollution (HPP) but it is still worth a try when building bypasses.<br>+HPP (HTTP Parameter Polution)</p>
-<blockquote>
-<p>利用HTTP参数控制具有相同名称的多个参数集以混淆WAF。例如<a href="http://example.com?id=1&amp;?id=’" target="_blank" rel="noopener">http://example.com?id=1&amp;?id=’</a> or ‘1’=’1′ — ‘ ，在某些情况下，如Apache / PHP，应用程序将仅解析id =的最后一个（第二个）实例，而WAF仅解析第一个实例。这看起来是一个合法的请求，但应用程序仍然接收并处理这些恶意代码。今天的大多数WAF都不容易受到HTTP参数污染（HPP）的影响，但测试时仍然值得一试。</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h5m2ob1cfd222151m161i11k1a.png-j.jpg" alt="enter description here"></p>
-<p>HPP is also known as repeated parameter contamination, the simplest is: uid = 1 &amp; uid = 2 &amp; uid = 3, for this case, different Web server processing as follows:</p>
-<blockquote>
-<p>HPP也被称为重复参数污染，最简单的是：uid = 1＆uid = 2＆uid = 3，对于这种情况，不同的Web服务器处理如下：<br><img src="http://t1.aixinxi.net/o_1c8h5rr6s4up4fnn41rdm1guba.png-j.jpg" alt="enter description here"></p>
-</blockquote>
-<p>+HPF (HTTP Parameter Fragment  翻译:HTTP参数片段)</p>
-<p>This method is HTTP segmentation injection, similar to CRLF (using control characters% 0a,% 0d, etc. to perform line breaks)</p>
-<blockquote>
-<p>此方法是HTTP分段注入，与CRLF类似（使用控制字符％0a，％0d等执行换行符）</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h63pqq3minu518t81ekdqofa.png-j.jpg" alt="enter description here"></p>
-<p>+HPC (HTTP Parameter Contamination 翻译:HTTP参数污染)<br>RFC2396 defines the following characters:</p>
-<blockquote>
-<p>RFC2396定义了以下字符：</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h6apj715cb14r9on3lja6kba.png-j.jpg" alt="enter description here"></p>
-<p>Different Web server processing processes have different logic when constructing special requests:</p>
-<blockquote>
-<p>构建特殊请求时，不同的Web服务器处理进程具有不同的逻辑</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h6enuaitr901j3qktfklfa.png-j.jpg" alt="enter description here"></p>
-<p>In the case of the magic character %, Asp / Asp.net will be affected</p>
-<blockquote>
-<p>在字符％的情况下，Asp / Asp.net将受到影响</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h7lb961qjukij1q0nu1stota.png-j.jpg" alt="enter description here"></p>
-<p>8.Buffer overflowWAF’s are, afterall, applications and vulnerable to the same software flaws as any other application. If a buffer overflow condition can create a crash, even if it does not result in code execution, this may result in a WAF failing open. In other words, a bypass.</p>
-<blockquote>
-<p>缓冲区溢出WAF,WAF同样也容易受到与任何其他应用程序相同的软件缺陷的影响。 如果缓冲区溢出导致崩溃，即使它不会导致代码执行。这可能会导致WAF“故障”，从而绕过，这也是一种方法</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8h81n0b1rqe1boi1od3k0efofa.png-j.jpg" alt="enter description here"></p>
-<p>9.Integration means the use of a variety of bypass technology, a single technology may not be able to bypass the filtering mechanism, but the use of a variety of technologies with the possibility of success will increase a lot.</p>
-<blockquote>
-<p>整合指的是利用各样的绕过技巧，单一方式可能无法绕过过滤机制，但使用各种不同的方法成功的可能性会增加很多。</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c8hb5kj110242jo17g217k24dna.png-j.jpg" alt="enter description here"></p>
-<hr>
-<p>本文部分内容@butters帮忙翻译，文章为译文，原文章地址：<a href="https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/" target="_blank" rel="noopener">https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/</a>  文章翻译若是有不流畅或者不正确的，欢迎指出，我会尽快更改</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -406,6 +311,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/03/14/SQL injection/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -454,16 +363,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h2><p>在kali中自带的msf由于版本太低，有的模块是没有的，所以我们先更新源<br><img src="http://t1.aixinxi.net/o_1c7usp0vr1ul21ohp8p21j1ca6ca.jpg-j.jpg" alt=""></p>
-<p>  源的文件位置:/etc/apt/sources.list<br>  下面是更新源:<br>官方的：deb <a href="http://http.kali.org/kali" target="_blank" rel="noopener">http://http.kali.org/kali</a> kali-rolling main non-free contrib<br>中科大：deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>deb-src <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>将上面的源添加进/etc/apt/sources.list后，执行apt-get update即可<br>更新完后，执行apt-get install metasploit-framework更新msf<br><img src="http://t1.aixinxi.net/o_1c7usscih1d6abo1enoigj1u1va.jpg-j.jpg" alt=""></p>
-<p>  更新完后，输入msfconsole打开软件<br>  <img src="http://t1.aixinxi.net/o_1c7ustd3k16ga181ni1d1c9gr9na.jpg-j.jpg" alt=""></p>
-<p>  可以看到已经更新为v4.16.32了</p>
-<h2 id="查找-利用模块"><a href="#查找-利用模块" class="headerlink" title="查找/利用模块"></a>查找/利用模块</h2><p>进来后，不清楚ms15-034的利用模块在哪，我们可以执行search ms15-034来查找<br><img src="http://t1.aixinxi.net/o_1c7ut03dgkak1qsa15g5bf31ucsa.jpg-j.jpg" alt=""></p>
-<p>  然后use auxiliary/scanner/http/ms15_034_http_sys_memory_dump后，show options来查看需要配置的<br>  <img src="http://t1.aixinxi.net/o_1c7ut28i111td1da1f5f12kgvifa.jpg-j.jpg" alt=""></p>
-<p>  设置好对方ip及目标url后，exploit执行<br>  <img src="http://t1.aixinxi.net/o_1c7ut446g1dh49tpe1urshlka.jpg-j.jpg" alt=""></p>
-<p><img src="http://t1.aixinxi.net/o_1c7ut4v1er0v1k9p1unq1kf161oa.jpg-j.jpg" alt=""></p>
-<p>  完成</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -476,6 +377,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/03/07/MS15-034漏洞模块利用/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -524,29 +429,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="SQL注入Bypass技巧"><a href="#SQL注入Bypass技巧" class="headerlink" title="SQL注入Bypass技巧"></a>SQL注入Bypass技巧</h1><h2 id="注入点识别"><a href="#注入点识别" class="headerlink" title="注入点识别"></a>注入点识别</h2><p>SQL注入的第一步就是判断是不是注入点，一般都是在参数后面简单的and 1=1和and 1=2等来判断是否有注入点或者是否有WAF拦截，如果简单的and 1=1这种被WAF拦截了，可以使用如下方法绕过:<br>1.使用一些字符串来进行识别:</p>
-<blockquote>
-<p>+，-，*，%，/，&lt;&lt;，&gt;&gt;，||，|，&amp;，&amp;&amp;，也可以将and换成or，&amp;&amp;， ||等</p>
-</blockquote>
-<p>2.不使用and或者or，直接使用异或截断：</p>
-<blockquote>
-<p>1^1^0，1^0^0</p>
-</blockquote>
-<p><img src="http://t1.aixinxi.net/o_1c7q22pcjjhah5j141g1lda9uda.jpg-j.jpg" alt="enter description here"></p>
-<p>  3.使用{``operation}来识别注入点：<br>  <img src="http://t1.aixinxi.net/o_1c7q2758g1luf1g4ga182f6up3a.jpg-j.jpg" alt="enter description here"></p>
-<p>  4.也可以使用注释符,主要为：#， –+， /<em>xxx</em>/， /<em>!xxx</em>/， /<em>!50000xxx</em>/<br>  <img src="http://t1.aixinxi.net/o_1c7q2b1nb12s61vq417tga7p1jqva.jpg-j.jpg" alt="enter description here"></p>
-<p>  (此方法目前可以绕过很多WAF）<br>  5.特殊符号，在SQL注入时使用一些特殊符号即可绕过很多WAF规则，比如~， !， <code>， @</code>， {x key}， 1.1， 1e1， ()， emoji表情符号， @:=等，在实际场景中将这些符号灵活应用就可以绕过很多WAF:<br>  <img src="http://t1.aixinxi.net/o_1c7q2grjo1bcl1md51idl4sv4eka.jpg-j.jpg" alt="enter description here"></p>
-<p>  6.Like和regexp<br>  在通过盲注获取数据时需要使用MySQL自带函数，比如substring()等这些处理字符串的函数，但是如果WAF过滤了()时，这些函数就无法使用了导致无法猜测数据，这时可以使用like或者regexp获取数据:<br>  <img src="http://t1.aixinxi.net/o_1c7q2j5n715t4cjsqbh1klq2eqa.jpg-j.jpg" alt="enter description here"></p>
-<p><img src="http://t1.aixinxi.net/o_1c7q2ngr5bqj12tf1kkp60a13tpa.jpg-j.jpg" alt="enter description here"></p>
-<h2 id="爆库名、表名、字段名"><a href="#爆库名、表名、字段名" class="headerlink" title="爆库名、表名、字段名"></a>爆库名、表名、字段名</h2><p>通常情况下我们在手工注入数据库内容的时候都是使用MySQL自带的表名等:</p>
-<h3 id="爆库"><a href="#爆库" class="headerlink" title="爆库"></a>爆库</h3><p><img src="http://t1.aixinxi.net/o_1c7q2pitc1nv75pm65c1o7f9rfa.jpg-j.jpg" alt="enter description here"></p>
-<h3 id="爆表单"><a href="#爆表单" class="headerlink" title="爆表单"></a>爆表单</h3><p> <img src="http://t1.aixinxi.net/o_1c7q340ap1k5o175ijpjies121a.jpg-j.jpg" alt="enter description here"></p>
-<h3 id="爆字段"><a href="#爆字段" class="headerlink" title="爆字段"></a>爆字段</h3><p><img src="http://t1.aixinxi.net/o_1c7q353a4okf4knud114h111ema.jpg-j.jpg" alt="enter description here"></p>
-<p>  (上图不同点在数据库名称那)</p>
-<h3 id="爆内容"><a href="#爆内容" class="headerlink" title="爆内容"></a>爆内容</h3><p><img src="http://t1.aixinxi.net/o_1c7q35j2b44lcjg1d48tdoe2la.jpg-j.jpg" alt="enter description here"></p>
-<hr>
-<p>  参考文章:<a href="https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg</a><br>  微信公众号：逢魔安全实验室<br>  本文所有内容皆参考与此，还有部分内容未打出来，可以自行去原文观看，侵删</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -559,6 +443,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/03/05/SQLBypass技巧/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -607,51 +495,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="游戏旅行青蛙逆向破解"><a href="#游戏旅行青蛙逆向破解" class="headerlink" title="游戏旅行青蛙逆向破解"></a>游戏旅行青蛙逆向破解</h1><blockquote>
-<p>《旅行青蛙》原名旅かえる，是由游戏公司HIT-POINT研发的休闲小游戏，是一款放置类型手游，支持Android/iOS运行。</p>
-</blockquote>
-<ul>
-<li>许多玩家都碍于三叶草等消耗性道具而“不能享受游戏体验“，那么今天就来将这些消耗性道具破解了.</li>
-</ul>
-<blockquote>
-<p>百度网盘链接:<a href="https://pan.baidu.com/s/1kVU10J9" target="_blank" rel="noopener">https://pan.baidu.com/s/1kVU10J9</a> 密码：9xg7</p>
-</blockquote>
-<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><p>我这里使用的旅行青蛙版本为v1.0.4，Android版（ios不会啊），百度下载了之后，就可以进行下一步了。</p>
-<blockquote>
-<p>百度网盘链接:<a href="https://pan.baidu.com/s/1nxj6GTr" target="_blank" rel="noopener">https://pan.baidu.com/s/1nxj6GTr</a> 密码：0uu1</p>
-</blockquote>
-<h2 id="下载反编译工具-dnSpy"><a href="#下载反编译工具-dnSpy" class="headerlink" title="下载反编译工具:dnSpy"></a>下载反编译工具:dnSpy</h2><blockquote>
-<p>百度网盘链接:<a href="https://pan.baidu.com/s/1eUaX5T4" target="_blank" rel="noopener">https://pan.baidu.com/s/1eUaX5T4</a> 密码：tuxl</p>
-</blockquote>
-<h2 id="开始破解"><a href="#开始破解" class="headerlink" title="开始破解"></a>开始破解</h2><p>1.先将下载好的旅行青蛙的apk文件改名为zip文件后，用解压工具打开，找到Assembly-Csharp.dll<br><img src="http://t1.aixinxi.net/o_1c7fk6r8fui8tn71q94skb8gqa.jpg-j.jpg" alt=""></p>
-<p>  2.用dnspy来打开dll文件，就可以看到内容了<br>  <img src="http://t1.aixinxi.net/o_1c7fk8f6i1n8labp1e52dt7oh7a.jpg-j.jpg" alt=""></p>
-<p>  3.找到关于抽奖券的位置<br>  <img src="http://t1.aixinxi.net/o_1c7fkaiu31ess18f11kr4s0l9ga.jpg-j.jpg" alt=""></p>
-<p>  4.日文没关系，这不还是有个汉字嘛，去dnspy上搜索“足”字，点开PushRoolButton就可以看到相关的内容了<br> <img src="http://t1.aixinxi.net/o_1c7fkf0k91p6f155s198j1it0cala.jpg-j.jpg" alt=""></p>
-<p> 可以看到这里有和抽奖券类似的判断，点击即可跳转到相关方法<br> <img src="http://t1.aixinxi.net/o_1c7fkhspk1nmfhmojutamjhdba.jpg-j.jpg" alt=""></p>
-<p>  猜测这里表示奖券的库存<br>  <img src="http://t1.aixinxi.net/o_1c7fkkeg8jf87251lhv75v102pa.jpg-j.jpg" alt=""></p>
-<p>  点击ticket后，Ctrl+F继续搜索ticket即可看到奖券开始的默认值<br>  <img src="http://t1.aixinxi.net/o_1c7fkmhov4jj1vvg7fb14ov19era.jpg-j.jpg" alt=""></p>
-<p>5.开始修改数值<br>右键点击编辑IL指令，将ldc.i4.0换成ldc.i4，然后就可以看到后面出现了个0，将0改为你想要的（奖券）数值即可<br><img src="http://t1.aixinxi.net/o_1c7fkr8gauh512nk1kprp9c3l7a.jpg-j.jpg" alt=""></p>
-<p>  点击确定，就可以看到数值变化了<br>  <img src="http://t1.aixinxi.net/o_1c7fks97derm1rv33pn1kmr26fa.jpg-j.jpg" alt=""></p>
-<p>  6.但是奖卷总有一天还是会抽完的，从下图也可以看出来判断内容，小于5就会提示抽奖券不足<br>  <img src="http://t1.aixinxi.net/o_1c7fl0bddv07qbauqjarnbhra.jpg-j.jpg" alt=""></p>
-<p>  所以我们要让它抽奖不会减少奖券的数量,点击TicketStock来查看相关内容，可以看到return的值为99999，将数值改为9000即可（我这里已经更改了）<br>  <img src="http://t1.aixinxi.net/o_1c7fl57022q819cc1tgj38um93a.jpg-j.jpg" alt=""></p>
-<p>  抽奖券就算是修改完了，但是还有另外一个消耗品，那就是三叶草，同理，用上面修改抽奖券的方法，修改CloverPointStock()<br>  <img src="http://t1.aixinxi.net/o_1c7fl9kpip9r1qf03ds17rpqr8a.jpg-j.jpg" alt=""></p>
-<p>  然后将其返回值(return)修改为8888,就可以随心所欲的买买买了<br>  <img src="http://t1.aixinxi.net/o_1c7flcolg22m1jc31opsed31kvfa.jpg-j.jpg" alt=""></p>
-<p>  打包后安装即可完成<br>  <img src="http://t1.aixinxi.net/o_1c7fleisu8j7gfc1bvv13u2b4aa.jpg-j.jpg" alt=""></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>  这个游戏修改起来比较简单，首先判断为该游戏为Unity3d。然后使用dnSpy来对Assembly-CSharp.dll文件进行修改。根据特定的字符串找到需要修改的位置，修改后进行打包安装后即可</p>
-<blockquote>
-<p>参考文章:<a href="https://paper.seebug.org/519/" target="_blank" rel="noopener">https://paper.seebug.org/519/</a></p>
-</blockquote>
-<h2 id="3月2日更新：修改掉落概率"><a href="#3月2日更新：修改掉落概率" class="headerlink" title="3月2日更新：修改掉落概率"></a>3月2日更新：修改掉落概率</h2><p>上面是已经将消耗性道具都修改为无限了，但是碍于“血统问题”，还是抽不到自己想要的东西，那么今天就把概率也给修改了</p>
-<h2 id="分析控制概率的代码"><a href="#分析控制概率的代码" class="headerlink" title="分析控制概率的代码"></a>分析控制概率的代码</h2><p>右键点击一下PrizeBallName查看在哪里被使用了<br><img src="http://t1.aixinxi.net/o_1c7i8l07o2am1p9ap8j1kbsio3a.jpg-j.jpg" alt=""></p>
-<p>  可以看到在PushRollButton里面被读取了，单击进入，找到代码<br>  <img src="http://t1.aixinxi.net/o_1c7i9086nq451q9mvgj11ui49ma.jpg-j.jpg" alt=""></p>
-<p>  this.result这个result决定了抽到的是什么颜色的球，分析代码可以看出PrizeBalls中定义了不同颜色的球摇出概率,所以单击PrizeBalls来查看<br>  接着就会跳到这里，分别定义了不同颜色的球的概率<br>  <img src="http://t1.aixinxi.net/o_1c7i9dau61dodke9du5hr1559a.jpg-j.jpg" alt=""></p>
-<p>   然后右键单击编辑方法，随心所欲更改概率即可<br>   <img src="http://t1.aixinxi.net/o_1c7i9c2qp3eri141npv1k1p16aia.jpg-j.jpg" alt=""></p>
-<p>  我这里将白色和蓝色的调成打死都不出，然后将黄玉改为最高了<br>  <img src="http://t1.aixinxi.net/o_1c7i9j4urqamndn1g9fm91k0ta.jpg-j.jpg" alt=""></p>
-<p>  接着，打包签名安装即可<br>  <img src="http://t1.aixinxi.net/o_1c7i9l75tgjg1kdi1il087ke9ca.jpg-j.jpg" alt=""></p>
-<blockquote>
-<p>百度网盘链接：<a href="https://pan.baidu.com/s/1kWmI0Gf" target="_blank" rel="noopener">https://pan.baidu.com/s/1kWmI0Gf</a> 密码：6b56</p>
-</blockquote>
-
+              <!--more-->
+          
       
     </div>
     
@@ -664,6 +509,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向破解/">逆向破解</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/03/01/游戏旅行青蛙逆向破解/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -712,12 +561,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="突破web系统登录（一）"><a href="#突破web系统登录（一）" class="headerlink" title="突破web系统登录（一）"></a>突破web系统登录（一）</h1><p>在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法</p>
-<h3 id="登录绕过"><a href="#登录绕过" class="headerlink" title="登录绕过"></a>登录绕过</h3><ul>
-<li>登录绕过，无疑是最轻松，最省时间的方法了，目前的主要方法有:<br>1.SQL万能密码登录，语句：admin’ or ‘1’=’1’ –<br>2.XSS获取别的用户的Cookie后，替换登录系统<br>3.通过爆破目录、Google Hacking、目录文件扫描等方法，找到没有授权、做防护的页面，直接进行绕过<br>4.通过别人留下来的后门文件或这默认的管理员密码等，直接登录<h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3></li>
-<li>除去登录绕过，还可以尝试用工具进行爆破，但是猜解一个用户的管理员密码则需要成千上万条密码来尝试。<br>1.用BurpSuite进行密码爆破<br>2.利用Python脚本进行爆破，例如htpwdScan(<a href="https://github.com/lijiejie/htpwdScan" target="_blank" rel="noopener">https://github.com/lijiejie/htpwdScan</a>)<br>3.利用一些网上别人整理好的密码字典进行爆破，也可做到高效。例如一些TOP500、TOP1000(<a href="https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords</a>)<br>4.如果还是没有猜解成功的话，那可以根据对方的信息（例如邮箱、姓名、生日）等构造一个字典进行爆破（kali工具推荐cupp，安装命令apt-get install cupp,github链接:<a href="https://github.com/Mebus/cupp）" target="_blank" rel="noopener">https://github.com/Mebus/cupp）</a></li>
-</ul>
-
+              <!--more-->
+          
       
     </div>
     
@@ -730,6 +575,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/02/27/突破WEB登陆/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -925,32 +774,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案"></a>OWASP Juice Shop v6.4.1部分题目答案</h1><blockquote>
-<p>OWASP Juice Shop是一个专门用于安全技能训练的靶场环境</p>
-</blockquote>
-<p>安装完成后的界面:<br><img src="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<ol>
-<li>Score Board<br>这题的意思是找到一个隐藏的计分界面，通过查看网页源代码可查出<br><img src="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>之后打开页面即可<br><img src="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Admin Section&amp;Error Handling<br>访问商店管理部分。这个网站一用工具爆破就会崩溃，所以这里采用手工，在试了admin和administrator之后皆不成功，百度找了一下还有administration,尝试，成功<br><img src="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>登陆管理员用户，点击登陆,构造语句<br><img src="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功登陆<br><img src="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Five-Star Feedback<br>将所有5星反馈全部删除即可<br><img src="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成<br><img src="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>XSS Tier 1<br>往页面插入恶意代码,随意找一个框，构造语句<br><code>&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>Enter,完成<br><img src="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Zero Stars<br>最简单的一个，随意登陆一个用户，在”联系我们”处，随意发一个反馈，然后将数据包内容更改<br><img src="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将“2”改为0即可<br><img src="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Basket Access<br>进入别人的购物篮，很简单，只需要改包即可<br><img src="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将”1”改为其他数字，发送即可<br><img src="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>规定使用密码登陆，不用语句。打开工具密码爆破，得出密码为admin123，在回到登陆界面，登陆即可完成<br><img src="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li><p>Reset Jim’s Password<br>通过上一道题可以得出邮箱是”@juice-sh.op”,打开登陆界面，点击忘记密码，输入邮箱<br><img src="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<blockquote>
-<p>这里面的Samuel来自于星战梗</p>
-</blockquote>
-</li>
-<li><p>Login Jim<br>上面改了用户Jim的密码后直接登陆即可</p>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>总结<br>这个渗透环境包含了许多有代表性的漏洞，在许多漏洞上也需要通过抓取数据包来分析，由于自身的技术不够，所以只解决了上面这些题目，不得不说这个环境对于初入这方面的人来说是不错的</p>
-</blockquote>
-
+              <!--more-->
+          
       
     </div>
     
@@ -963,6 +788,10 @@
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -1093,14 +922,8 @@ $ systemctl start docker
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>pip 是一个现代的，通用的 Python 包管理工具。提供了对Python 包的查找、下载、安装、卸载的功能。</p>
-<hr>
-<p>Python想要用pip来安装，得先安装pip模块<br><code>https://pypi.python.org/pypi/pip#downloads</code><br><img src="http://i2.51cto.com/images/blog/201801/29/e3fac557dbaac02444526d3b4358569a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>下载完成后，解压到python同个目录下<br><img src="http://i2.51cto.com/images/blog/201801/29/fa059851016faf06d0706ac195ea9148.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>用命令来安装<br><code>python setup.py install</code><br><img src="http://i2.51cto.com/images/blog/201801/29/5b279b38ab61a2effceddb8b087e9bc1.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/29/9156d8497edbc02ea8912c1140c3711d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>安装完成</p>
-<hr>
-<p>若安装过程中出现”No module named setuptools”这个错误,则需要单独再去下载一个setuptools<br><code>https://pypi.python.org/pypi/setuptools</code><br>下载后解压到和python同目录下，cd进入，用python setup.py install安装<br><img src="http://i2.51cto.com/images/blog/201801/29/beb89cf9a7abea06fc7e14ebb563de5d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成后再回到前面，重复一遍就行了</p>
-<hr>
-<p>若出现”‘pip’ 不是内部或外部命令，也不是可运行的程序<br>或批处理文件。”<br><img src="http://i2.51cto.com/images/blog/201801/31/619a45b1675218c92912ee82f798b828.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>只需要将Python目录下的Scripts添加进环境变量里就OK了<br><img src="http://i2.51cto.com/images/blog/201801/31/1c220edc5fbfd3512fa41d36e71d34b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/6abf02a787011e5363a4a5a757170a85.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -1113,6 +936,10 @@ $ systemctl start docker
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/01/29/python安装pip模块/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

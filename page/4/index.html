@@ -761,28 +761,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>系统要求：<br>Docker支持 64 位版本的 <code>CentOS 7</code>，并且要求内核版本不低于 3.10。 CentOS 7 满足最低内核的要求，但由于内核版本比较低，部分功能（如 overlay2 存储层驱动）无法使用，并且部分功能可能不太稳定。</p>
-<blockquote>
-<p>环境：CentOS7</p>
-</blockquote>
-<ul>
-<li>使用yum安装docker：<br><code>$ yum install docker-io -y</code></li>
-<li>启动：<pre><code>$ systemctl enable docker
-$ systemctl start docker
-</code></pre></li>
-<li>测试 Docker 是否安装正确:<br><code>$ docker run hello-world</code><br><img src="http://i2.51cto.com/images/blog/201801/30/eec9c47383ebd9d7517245be924f2a18.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li><p>运行:<br>有了镜像后，我们就能够以这个镜像为基础启动并运行一个容器。以上面的 ubuntu:16.04 为例，如果我们打算启动里面的 bash 并且进行交互式操作的话，可以执行下面的命令。<br>$ docker run -it –rm ubuntu:16.04 bash<br><img src="http://i2.51cto.com/images/blog/201801/30/df10e7e1e7a3c9642ac2748afd6bac11.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<blockquote>
-<p>-it：这是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。<br>–rm：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。<br>ubuntu:16.04：这是指用 ubuntu:16.04 镜像为基础来启动容器。<br>bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash。</p>
-</blockquote>
-</li>
-<li><p>查看镜像:<br><code>$ docker images</code></p>
-</li>
-<li>删除容器：<br>列出最近使用的容器<br><code>$ docker ps -a</code><br>删除<br><code>$ docker rm &lt;container ID&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/30/87921bcad03d08df28574733837f063e.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-</ul>
-<hr>
-<p>若想要在容器中导入文件<br>那么，在docker容器启动的时候，挂载到宿主机的一个目录，可以用-v参数来指定。<br>例如我要启动一个Ubuntu容器，将宿主机的/etc/Elapse目录挂载到容器的/etc/eee目录，可通过以下方式指定：<br><code>$ docker run -it -v /etc/Elapse:/etc/eee ubuntu:16.04 bash</code><br>这样启动后，容器内就会自动创建或使用目录。通过这种方式，想导入文件直接cp即可</p>
-
+              <!--more-->
+          
       
     </div>
     
@@ -795,6 +775,10 @@ $ systemctl start docker
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
     </div>
 
+      
+        <p class="article-more-link">
+          <a   href="/2018/01/30/CentOS7安装Docker/#more">查看更多 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

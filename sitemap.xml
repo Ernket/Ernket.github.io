@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://Ernket.github.io/about/index.html</loc>
+    
+    <lastmod>2020-02-11T07:41:50.429Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://Ernket.github.io/2019/10/24/rhcenotescollation/</loc>
+    
+    <lastmod>2020-02-11T07:35:36.175Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://Ernket.github.io/2020/02/06/%E9%AB%98%E7%BA%A7SQL%E6%B3%A8%E5%85%A5%EF%BC%9A%E6%B7%B7%E6%B7%86%E5%92%8C%E7%BB%95%E8%BF%87/</loc>
     
     <lastmod>2020-02-06T07:25:31.431Z</lastmod>
@@ -117,13 +131,6 @@
     <loc>https://Ernket.github.io/2018/03/14/SQL%20injection/</loc>
     
     <lastmod>2019-11-04T04:44:38.069Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://Ernket.github.io/2019/10/24/rhcenotescollation/</loc>
-    
-    <lastmod>2019-11-04T04:44:34.782Z</lastmod>
     
   </url>
   
@@ -334,13 +341,6 @@
     <loc>https://Ernket.github.io/2018/03/20/python%E6%97%A5%E5%BF%97/</loc>
     
     <lastmod>2018-06-14T11:07:14.050Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://Ernket.github.io/about/index.html</loc>
-    
-    <lastmod>2018-05-03T01:24:28.737Z</lastmod>
     
   </url>
   

@@ -37,7 +37,20 @@
 <meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/659.webp">
 <meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/660.webp">
 <meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/661.webp">
-<meta property="og:updated_time" content="2020-02-11T08:04:32.466Z">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/662.gif">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/663.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/664.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/665.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/666.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/667.gif">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/668.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/669.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/670.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/671.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/672.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/673.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/rhcepeixunbiji/674.gif">
+<meta property="og:updated_time" content="2020-02-11T10:17:00.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RHCE培训笔记">
 <meta name="twitter:image" content="https://Ernket.github.io/post-images/1571905988758.webp">
@@ -595,7 +608,60 @@ brltty.service                              disabled
 <p>使用mask参数来禁用某服务，反之用umask取消禁用<br><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/661.webp" alt=""></p>
 <p>10.查看服务的依赖关系：</p>
 <pre><code>[root@server0 ~]# systemctl list-dependencies sshd.service
-</code></pre>
+</code></pre><h1 id="归档与系统之间文件复制"><a href="#归档与系统之间文件复制" class="headerlink" title="归档与系统之间文件复制"></a>归档与系统之间文件复制</h1><ol>
+<li>tar:归档工具 ，不带压缩 调用第三方压缩软件 压缩 tar 目标文件 使用相对路径</li>
+</ol>
+<ol>
+<li>将/etc/ 目录归档到/tmp/etc.tar</li>
+</ol>
+<pre><code>[root@localhost /]# tar -cvf /tmp/etc.tar etc
+命令用法: tar -&lt;参数&gt; &lt;保存路径&gt; &lt;归档的目录&gt;
+</code></pre><p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/662.gif" alt=""></p>
+<p>cvf为打包成一个tar文件</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/663.png" alt=""></p>
+<p>查看一下原本 <code>/etc/</code>目录的大小和归档(也可以理解为压缩)后的 <code>etc.tar</code>的大小比较，小了3MB</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/664.png" alt=""></p>
+<p>题外话一下，其实也可以这么看</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/665.png" alt=""></p>
+<ol>
+<li>调用压缩：</li>
+</ol>
+<p>上面用了一种方法来压缩，但众所周知不止一种，所以这里又要多演示几个</p>
+<ul>
+<li><p>tar + gzip : .tar.gz 将/etc 目录归档到/tmp/etc.tar.gz</p>
+<p><code>tar-czvf&lt;压缩后的路径&gt;&lt;需要压缩的玩意&gt;</code></p>
+</li>
+</ul>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/666.png" alt=""></p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/667.gif" alt=""></p>
+<ul>
+<li>tar + bzip2 ：.tar.bz2 将/etc 目录归档到/tmp/etc.tar.bz2</li>
+</ul>
+<pre><code>tar-cjf&lt;压缩后的路径&gt;&lt;需要压缩的玩意&gt;
+</code></pre><p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/668.png" alt=""></p>
+<ul>
+<li>tar + xz : .tar.xz 将/etc 目录归档到/tmp/etc.tar.xz</li>
+</ul>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/669.png" alt=""></p>
+<p>对比一下压缩效果</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/670.png" alt=""></p>
+<h1 id="远程安全文件复制"><a href="#远程安全文件复制" class="headerlink" title="远程安全文件复制"></a>远程安全文件复制</h1><ul>
+<li>SCP: 基于ssh加密， 22/tcp</li>
+</ul>
+<p>做个实验：将/tmp/etc.tar.gz 通过scp复制到 server1:/root/</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/671.png" alt=""></p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/672.png" alt=""></p>
+<ul>
+<li>sftp基于ssh的一种文件传输，类似ftp客户端访问，sftp进行交互</li>
+</ul>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/673.png" alt=""></p>
+<p>这其中，可以看到我打了cd和lcd，这两个都是一样的，只不过cd是用于服务端的，lcd是用来更改你本地的目录的</p>
+<ul>
+<li><p>rsync: 异步远程文件安全，基于ssh服务，实现增量同步</p>
+<p><img src="https://Ernket.github.io/post-images/rhcepeixunbiji/674.gif" alt=""></p>
+</li>
+</ul>
+
       
     </div>
     
@@ -606,7 +672,7 @@ brltty.service                              disabled
         <p><span>本文标题:</span><a  href="/2019/10/24/rhcenotescollation/">RHCE培训笔记</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
         <p><span>发布时间:</span>2019年10月24日 - 16时28分</p>
-        <p><span>最后更新:</span>2020年02月11日 - 16时04分</p>
+        <p><span>最后更新:</span>2020年02月11日 - 18时17分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/10/24/rhcenotescollation/" title="RHCE培训笔记">https://Ernket.github.io/2019/10/24/rhcenotescollation/</a>
             <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2019/10/24/rhcenotescollation/　　作者: Elapse" title=""></span>
@@ -643,7 +709,7 @@ brltty.service                              disabled
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux目录"><span class="toc-number">1.</span> <span class="toc-text">Linux目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#绝对路径与相对路径"><span class="toc-number">2.</span> <span class="toc-text">绝对路径与相对路径</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#软链接与硬链接"><span class="toc-number">3.</span> <span class="toc-text">软链接与硬链接</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SHELL-变量"><span class="toc-number">4.</span> <span class="toc-text">SHELL:变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#uniq-去重"><span class="toc-number">5.</span> <span class="toc-text">uniq: 去重</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境变量"><span class="toc-number">6.</span> <span class="toc-text">环境变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反掩码"><span class="toc-number">7.</span> <span class="toc-text">反掩码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#修改用户umask值"><span class="toc-number">7.1.</span> <span class="toc-text">修改用户umask值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#setuid权限"><span class="toc-number">8.</span> <span class="toc-text">setuid权限</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进程管理"><span class="toc-number">9.</span> <span class="toc-text">进程管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#服务管理"><span class="toc-number">10.</span> <span class="toc-text">服务管理</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux目录"><span class="toc-number">1.</span> <span class="toc-text">Linux目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#绝对路径与相对路径"><span class="toc-number">2.</span> <span class="toc-text">绝对路径与相对路径</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#软链接与硬链接"><span class="toc-number">3.</span> <span class="toc-text">软链接与硬链接</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SHELL-变量"><span class="toc-number">4.</span> <span class="toc-text">SHELL:变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#uniq-去重"><span class="toc-number">5.</span> <span class="toc-text">uniq: 去重</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境变量"><span class="toc-number">6.</span> <span class="toc-text">环境变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反掩码"><span class="toc-number">7.</span> <span class="toc-text">反掩码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#修改用户umask值"><span class="toc-number">7.1.</span> <span class="toc-text">修改用户umask值</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#setuid权限"><span class="toc-number">8.</span> <span class="toc-text">setuid权限</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进程管理"><span class="toc-number">9.</span> <span class="toc-text">进程管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#服务管理"><span class="toc-number">10.</span> <span class="toc-text">服务管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#归档与系统之间文件复制"><span class="toc-number">11.</span> <span class="toc-text">归档与系统之间文件复制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#远程安全文件复制"><span class="toc-number">12.</span> <span class="toc-text">远程安全文件复制</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {

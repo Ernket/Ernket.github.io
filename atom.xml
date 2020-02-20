@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://Ernket.github.io/"/>
-  <updated>2020-02-06T07:25:31.431Z</updated>
+  <updated>2020-02-20T05:49:18.394Z</updated>
   <id>https://Ernket.github.io/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python-SSH日志审计</title>
+    <link href="https://Ernket.github.io/2020/02/20/Python-SSH%E6%97%A5%E5%BF%97%E5%AE%A1%E8%AE%A1/"/>
+    <id>https://Ernket.github.io/2020/02/20/Python-SSH日志审计/</id>
+    <published>2020-02-20T05:48:17.000Z</published>
+    <updated>2020-02-20T05:49:18.394Z</updated>
+    
+    <content type="html"><![CDATA[<p>日常开头先扯点什么，最近有本<code>内网安全攻防</code>的书到了，质量确实不错，看着看着突然想了一下自己在进入内网机器后的一些信息收集的操作，然后就联想到了我服务器上的SSH日志上，众所周知，公网上的机器有事没事就会挨一顿扫，所以就想趁着疫情闲的发慌，整一个审计的脚本，当然说是审计，但级别还远远不够，只是更直观的来看哪些IP登录成功，哪些IP登录失败，登录失败的用户名又是什么</p><p>这个jio本呢，是用<code>re</code>和<code>sys</code>两个内置库来完成的</p><p>不得不说，这个正则匹配确实是一大痛点，说是学，学了这么久也只会个<code>(.*?)</code>，</p><p><code>sys</code>库主要是用来获取文件名的，文件名你也可以用str(input())来获取，不是非得用这个方法，但看起来确实牛批多了</p><pre><code>import reimport sys#获取文件名filename = sys.argv[1]</code></pre><p>解释一下，SSH日志中，记录登录失败和成功</p><p>SSH日志文件，一般都存在<code>/var/log</code>目录下，我是<code>Ubuntu</code>系统，文件名叫做<code>auth.log</code></p><p>登录失败是有分两种情况</p><ul><li>已有的用户名登录，但是密码错误</li><li>无效的用户名登录</li></ul><p>第二种情况很明显，就是公网里有人在尝试SSH用户名爆破，这种报错呢，记录在SSH日志中，是长这个样的</p><pre><code>Feb 16 18:26:21 xxxxx sshd[20958]: Failed password for invalid user admina from xx.xx.xx.xx port 57609 ssh2</code></pre><p>无效的用户<code>admina</code></p><p>第一种情况的话，记录的内容差不多，只不过没有<code>invalid user</code></p><p>我们先建立两个空数组，用来储存成功、失败后的记录</p><pre><code>...success_record=[]failed_record=[]</code></pre><p>接着利用<code>re</code>来一条一条的匹配SSH日志内容</p><pre class=" language-Python"><code class="language-Python">...def search(filename):    global success_record,failed_record #全局变量    pattern=re.compile(r': (.*?) password for (.*?) from (.*?) port (\d+)') #正则规则    file=open(filename,'r') #打开文件    for i in file:        check_login=pattern.search(i) # 正则匹配        if check_login: # 检查是否匹配到内容，如果没有就下一条            if check_login.group(1)=="Accepted": # 成功登录            #这里的.group(0)是原文，.group(2)为用户名，.group(3)为登录的IP地址，.group(4)为对方的端口                success_record.append([check_login.group(2),check_login.group(3),check_login.group(4)])            elif check_login.group(1)=="Failed": # 失败登录                if "invalid user" in check_login.group(2):  #用户名会因为黑客测试无效用户而变得多余，所以删掉多余的部分                    failed_record.append([check_login.group(2)[13:],check_login.group(3),check_login.group(4)])                else:                    failed_record.append([check_login.group(2),check_login.group(3),check_login.group(4)])        else:            continue</code></pre><p>一轮for循环后，成功和失败的结果都保存下来了，然后将结果统一输出就好了</p><pre class=" language-Python"><code class="language-Python">...def printdata():    global success_record,failed_record    if success_record: #先判断是否存在内容        print("[+] 已找到成功的记录"+str(len(success_record))+"条")        for i in success_record:            print("        用户名: "+i[0]+" 登录IP: "+i[1]+" 连接端口: "+i[2])    else:        print("[-] 无SSH登录成功的记录...")    if failed_record:        print("\n[+] 已找到失败的记录"+str(len(failed_record))+"条")        for i in failed_record:            print("        用户名: "+i[0]+" 登录IP: "+i[1]+" 连接端口: "+i[2])    else:        print("\n[-] 无SSH登录失败的记录...")</code></pre><p>写完后，调用即可</p><pre><code>...search(filename)printdata()</code></pre><p>运行后的效果是这样的</p><p><img src="https://Ernket.github.io/post-images/202022013.png" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--more--&gt;
+    
+    </summary>
+    
+    
+      <category term="Python" scheme="https://Ernket.github.io/tags/Python/"/>
+    
+  </entry>
   
   <entry>
     <title>高级SQL注入：混淆和绕过</title>
@@ -397,26 +417,6 @@
     
     
       <category term="linux" scheme="https://Ernket.github.io/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python爬取steam优惠</title>
-    <link href="https://Ernket.github.io/2018/11/22/Python%E7%88%AC%E5%8F%96steam%E4%BC%98%E6%83%A0/"/>
-    <id>https://Ernket.github.io/2018/11/22/Python爬取steam优惠/</id>
-    <published>2018-11-22T05:48:30.000Z</published>
-    <updated>2019-11-04T04:44:26.996Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="类似前言一样的东西"><a href="#类似前言一样的东西" class="headerlink" title="类似前言一样的东西"></a>类似前言一样的东西</h1><p>妈妈再也不用担心我不知道那些游戏没有打折了，一键爬取steam优惠名单，就是写到钱的部分程序崩溃了，以至于只有游戏名</p><h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>环境需要<code>Python 3.5.4</code>的版本<br>需要的运行库有</p><ul><li>BeautifulSoup(解析html，安装方法:(pip install BeautifulSoup)</li><li>requests(请求url，安装方法:(pip install requests)</li></ul><h1 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h1><p>首先看一下，steam的网站结构<br><img src="http://t1.aixinxi.net/o_1cst3kl4iacc77p1v3t1p55eoga.png-j.jpg" alt=""></p><p>发现游戏名字是存在<code>&lt;div class=&quot;responsive_search_name_combined&quot;&gt;</code>下的<br>再去看url链接，<code>https://store.steampowered.com/search/?specials=1&amp;page=1</code><br>其中page=1就是第一页的意思，所以整体思路就有了，先写一个页面的循环</p><pre><code>pageid = 1while pageid&lt;599:    url = &quot;https://store.steampowered.com/search/?specials=1&amp;page=&quot; + str(pageid)    res = requests.get(url)    soup = bs4.BeautifulSoup(res.text)    contents = soup.select(&#39;div[class=&quot;responsive_search_name_combined&quot;]&#39;)</code></pre><p>这样，599页的steam游戏优惠的界面都会被requests请求一遍，并查找指定的元素,也就是存放游戏名的元素<br>接下来把游戏名抓取下来</p><pre><code>for content in contents:    name = content.find(&quot;span&quot;,class_=&quot;title&quot;).string.strip()    print(name)</code></pre><p>运行一下<br><img src="http://t1.aixinxi.net/o_1cst4vojd1rcb1ml1nsi1dbh176aa.png-j.jpg" alt=""><br>成功，右边，游戏名出来了，接下来把名字都保存成txt<br><img src="http://t1.aixinxi.net/o_1cst5573e17m3ekam256f81uhva.png-j.jpg" alt=""><br>要注意的是，有的游戏名很奇怪，有特殊符号，写不进去，那么就会报错，所以，添加一个异常处理就好了<br>下面贴出完整代码<br><img src="http://t1.aixinxi.net/o_1cstgb3d3sjr1vqprkm1hmulbaa.png-j.jpg" alt=""><br>爬虫的主要问题，基本就是字符串的编码问题，现在整理出来的，最好的方法应该就是直接把url编码的当作正常内容输入就好了</p><p>完整代码<a href="https://github.com/Ernket/steam-discount-game" target="_blank" rel="noopener">下载</a></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;!--more--&gt;
-    
-    </summary>
-    
-    
-      <category term="Python" scheme="https://Ernket.github.io/tags/Python/"/>
     
   </entry>
   

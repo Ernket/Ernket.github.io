@@ -7,35 +7,19 @@
   
   
   
-  <title>OWASP Juice Shop v6.4.1部分题目答案 | Elapse&#39;s Blog</title>
+  <title>Python-SSH日志审计 | Elapse&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="linux,网络安全">
+  <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OWASP Juice Shop v6.4.1部分题目答案">
-<meta property="og:url" content="https://Ernket.github.io/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/index.html">
+<meta property="og:title" content="Python-SSH日志审计">
+<meta property="og:url" content="https://Ernket.github.io/2020/02/20/Python-SSH日志审计/index.html">
 <meta property="og:site_name" content="Elapse&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:image" content="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
-<meta property="og:updated_time" content="2019-11-04T04:44:06.185Z">
+<meta property="og:image" content="https://Ernket.github.io/post-images/202022013.png">
+<meta property="og:updated_time" content="2020-02-20T05:49:18.394Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OWASP Juice Shop v6.4.1部分题目答案">
-<meta name="twitter:image" content="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
+<meta name="twitter:title" content="Python-SSH日志审计">
+<meta name="twitter:image" content="https://Ernket.github.io/post-images/202022013.png">
   
     <link rel="alternative" href="/atom.xml" title="Elapse&#39;s Blog" type="application/atom+xml">
   
@@ -282,11 +266,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-OWASP Juice Shop v6.4.1部分题目答案" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Python-SSH日志审计" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/" class="article-date">
-      <time datetime="2018-01-31T05:31:36.000Z" itemprop="datePublished">2018-01-31</time>
+      <a  href="/2020/02/20/Python-SSH日志审计/" class="article-date">
+      <time datetime="2020-02-20T05:48:17.000Z" itemprop="datePublished">2020-02-20</time>
 </a>
 
     </div>
@@ -300,7 +284,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      OWASP Juice Shop v6.4.1部分题目答案
+      Python-SSH日志审计
     </h1>
   
 
@@ -312,7 +296,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络安全/">网络安全</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -322,31 +306,73 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="OWASP-Juice-Shop-v6-4-1部分题目答案"><a href="#OWASP-Juice-Shop-v6-4-1部分题目答案" class="headerlink" title="OWASP Juice Shop v6.4.1部分题目答案"></a>OWASP Juice Shop v6.4.1部分题目答案</h1><blockquote>
-<p>OWASP Juice Shop是一个专门用于安全技能训练的靶场环境</p>
-</blockquote>
-<p>安装完成后的界面:<br><img src="http://i2.51cto.com/images/blog/201801/31/01a22ba974bd92cfdc2a97447ffd46ef.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<ol>
-<li>Score Board<br>这题的意思是找到一个隐藏的计分界面，通过查看网页源代码可查出<br><img src="http://i2.51cto.com/images/blog/201801/31/baf8f6a12bbb9be28be97aee1aa37f80.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>之后打开页面即可<br><img src="http://i2.51cto.com/images/blog/201801/31/adc848d569348d601731b5fb53b0192a.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Admin Section&amp;Error Handling<br>访问商店管理部分。这个网站一用工具爆破就会崩溃，所以这里采用手工，在试了admin和administrator之后皆不成功，百度找了一下还有administration,尝试，成功<br><img src="http://i2.51cto.com/images/blog/201801/31/e026d3565a0fdfa9bca7580c0f6ce18d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>登陆管理员用户，点击登陆,构造语句<br><img src="http://i2.51cto.com/images/blog/201801/31/c527dd45be4abff6e781e4c3a3ac83a2.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>成功登陆<br><img src="http://i2.51cto.com/images/blog/201801/31/277aee7092c11b3ee786366340d58cc7.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Five-Star Feedback<br>将所有5星反馈全部删除即可<br><img src="http://i2.51cto.com/images/blog/201801/31/a751d3f265cd922fa4411f81e2b27e76.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>完成<br><img src="http://i2.51cto.com/images/blog/201801/31/a5124bc5980c0179aa02a570cb18ec74.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>XSS Tier 1<br>往页面插入恶意代码,随意找一个框，构造语句<br><code>&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;</code><br><img src="http://i2.51cto.com/images/blog/201801/31/81096a672de1d5128e0bd7ead732de39.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>Enter,完成<br><img src="http://i2.51cto.com/images/blog/201801/31/5b10b1d6062be6052b3efa27d73f4eea.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Zero Stars<br>最简单的一个，随意登陆一个用户，在”联系我们”处，随意发一个反馈，然后将数据包内容更改<br><img src="http://i2.51cto.com/images/blog/201801/31/b8d230c5886fa8781dbabe79c45eef43.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将“2”改为0即可<br><img src="http://i2.51cto.com/images/blog/201801/31/5e1d5fe0b5ed2d93fe8f38063f0b2026.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Basket Access<br>进入别人的购物篮，很简单，只需要改包即可<br><img src="http://i2.51cto.com/images/blog/201801/31/4f33887b5b705d6a7c0048f057d9746d.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br>将”1”改为其他数字，发送即可<br><img src="http://i2.51cto.com/images/blog/201801/31/228f2b3bbf3b22450254d4c06d7e47b6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li>Password Strength<br>规定使用密码登陆，不用语句。打开工具密码爆破，得出密码为admin123，在回到登陆界面，登陆即可完成<br><img src="http://i2.51cto.com/images/blog/201801/31/00b27824afa6b8f246f6c715e68b67d6.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""><br><img src="http://i2.51cto.com/images/blog/201801/31/4292144c5ef467f611e1d7d2f2383a38.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></li>
-<li><p>Reset Jim’s Password<br>通过上一道题可以得出邮箱是”@juice-sh.op”,打开登陆界面，点击忘记密码，输入邮箱<br><img src="http://i2.51cto.com/images/blog/201801/31/6d62d3dc17433a004f8e2573f5837cb5.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt=""></p>
-<blockquote>
-<p>这里面的Samuel来自于星战梗</p>
-</blockquote>
-</li>
-<li><p>Login Jim<br>上面改了用户Jim的密码后直接登陆即可</p>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>总结<br>这个渗透环境包含了许多有代表性的漏洞，在许多漏洞上也需要通过抓取数据包来分析，由于自身的技术不够，所以只解决了上面这些题目，不得不说这个环境对于初入这方面的人来说是不错的</p>
-</blockquote>
+        <p>日常开头先扯点什么，最近有本<code>内网安全攻防</code>的书到了，质量确实不错，看着看着突然想了一下自己在进入内网机器后的一些信息收集的操作，然后就联想到了我服务器上的SSH日志上，众所周知，公网上的机器有事没事就会挨一顿扫，所以就想趁着疫情闲的发慌，整一个审计的脚本，当然说是审计，但级别还远远不够，只是更直观的来看哪些IP登录成功，哪些IP登录失败，登录失败的用户名又是什么</p>
+<p>这个jio本呢，是用<code>re</code>和<code>sys</code>两个内置库来完成的</p>
+<p>不得不说，这个正则匹配确实是一大痛点，说是学，学了这么久也只会个<code>(.*?)</code>，</p>
+<p><code>sys</code>库主要是用来获取文件名的，文件名你也可以用str(input())来获取，不是非得用这个方法，但看起来确实牛批多了</p>
+<pre><code>import re
+import sys
+
+#获取文件名
+filename = sys.argv[1]
+</code></pre><p>解释一下，SSH日志中，记录登录失败和成功</p>
+<p>SSH日志文件，一般都存在<code>/var/log</code>目录下，我是<code>Ubuntu</code>系统，文件名叫做<code>auth.log</code></p>
+<p>登录失败是有分两种情况</p>
+<ul>
+<li>已有的用户名登录，但是密码错误</li>
+<li>无效的用户名登录</li>
+</ul>
+<p>第二种情况很明显，就是公网里有人在尝试SSH用户名爆破，这种报错呢，记录在SSH日志中，是长这个样的</p>
+<pre><code>Feb 16 18:26:21 xxxxx sshd[20958]: Failed password for invalid user admina from xx.xx.xx.xx port 57609 ssh2
+</code></pre><p>无效的用户<code>admina</code></p>
+<p>第一种情况的话，记录的内容差不多，只不过没有<code>invalid user</code></p>
+<p>我们先建立两个空数组，用来储存成功、失败后的记录</p>
+<pre><code>...
+success_record=[]
+failed_record=[]
+</code></pre><p>接着利用<code>re</code>来一条一条的匹配SSH日志内容</p>
+<pre class=" language-Python"><code class="language-Python">...
+def search(filename):
+    global success_record,failed_record #全局变量
+    pattern=re.compile(r': (.*?) password for (.*?) from (.*?) port (\d+)') #正则规则
+    file=open(filename,'r') #打开文件
+    for i in file:
+        check_login=pattern.search(i) # 正则匹配
+        if check_login: # 检查是否匹配到内容，如果没有就下一条
+            if check_login.group(1)=="Accepted": # 成功登录
+            #这里的.group(0)是原文，.group(2)为用户名，.group(3)为登录的IP地址，.group(4)为对方的端口
+                success_record.append([check_login.group(2),check_login.group(3),check_login.group(4)])
+            elif check_login.group(1)=="Failed": # 失败登录
+                if "invalid user" in check_login.group(2):  #用户名会因为黑客测试无效用户而变得多余，所以删掉多余的部分
+                    failed_record.append([check_login.group(2)[13:],check_login.group(3),check_login.group(4)])
+                else:
+                    failed_record.append([check_login.group(2),check_login.group(3),check_login.group(4)])
+        else:
+            continue
+</code></pre>
+<p>一轮for循环后，成功和失败的结果都保存下来了，然后将结果统一输出就好了</p>
+<pre class=" language-Python"><code class="language-Python">...
+def printdata():
+    global success_record,failed_record
+    if success_record: #先判断是否存在内容
+        print("[+] 已找到成功的记录"+str(len(success_record))+"条")
+        for i in success_record:
+            print("        用户名: "+i[0]+" 登录IP: "+i[1]+" 连接端口: "+i[2])
+    else:
+        print("[-] 无SSH登录成功的记录...")
+    if failed_record:
+        print("\n[+] 已找到失败的记录"+str(len(failed_record))+"条")
+        for i in failed_record:
+            print("        用户名: "+i[0]+" 登录IP: "+i[1]+" 连接端口: "+i[2])
+    else:
+        print("\n[-] 无SSH登录失败的记录...")
+</code></pre>
+<p>写完后，调用即可</p>
+<pre><code>...
+search(filename)
+printdata()
+</code></pre><p>运行后的效果是这样的</p>
+<p><img src="https://Ernket.github.io/post-images/202022013.png" alt=""></p>
 
       
     </div>
@@ -355,13 +381,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/">OWASP Juice Shop v6.4.1部分题目答案</a></p>
+        <p><span>本文标题:</span><a  href="/2020/02/20/Python-SSH日志审计/">Python-SSH日志审计</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
-        <p><span>发布时间:</span>2018年01月31日 - 13时31分</p>
-        <p><span>最后更新:</span>2019年11月04日 - 12时44分</p>
+        <p><span>发布时间:</span>2020年02月20日 - 13时48分</p>
+        <p><span>最后更新:</span>2020年02月20日 - 13时49分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/" title="OWASP Juice Shop v6.4.1部分题目答案">https://Ernket.github.io/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2018/01/31/OWASP Juice Shop v6.4.1部分题目答案/　　作者: Elapse" title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2020/02/20/Python-SSH日志审计/" title="Python-SSH日志审计">https://Ernket.github.io/2020/02/20/Python-SSH日志审计/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2020/02/20/Python-SSH日志审计/　　作者: Elapse" title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -372,18 +398,9 @@
 
 <nav id="article-nav">
   
-    <a  href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          OWASP Juice Shop v6.4.1部分题目答案（二）
-        
-      </div>
-    </a>
   
-  
-    <a  href="/2018/01/30/CentOS7安装Docker/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">CentOS7安装Docker</div>
+    <a  href="/2020/02/06/高级SQL注入：混淆和绕过/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">高级SQL注入：混淆和绕过</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -395,7 +412,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OWASP-Juice-Shop-v6-4-1部分题目答案"><span class="toc-number">1.</span> <span class="toc-text">OWASP Juice Shop v6.4.1部分题目答案</span></a></li></ol>
+    
 </div>
 <style>
     .left-col .switch-btn {
@@ -468,13 +485,11 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2018/02/02/OWASP Juice Shop v6.4.1部分题目答案（二）/" title="上一篇: OWASP Juice Shop v6.4.1部分题目答案（二）">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2018/01/30/CentOS7安装Docker/" title="下一篇: CentOS7安装Docker">
+            <a  href="/2020/02/06/高级SQL注入：混淆和绕过/" title="下一篇: 高级SQL注入：混淆和绕过">
                 <i class="fa fa-angle-right"></i>
             </a>
         

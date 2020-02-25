@@ -7,19 +7,20 @@
   
   
   
-  <title>Python3多线程 | Elapse&#39;s Blog</title>
+  <title>Python-SSH日志分析2 | Elapse&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python3多线程">
-<meta property="og:url" content="https://Ernket.github.io/2018/12/29/Python3多线程/index.html">
+<meta property="og:title" content="Python-SSH日志分析2">
+<meta property="og:url" content="https://Ernket.github.io/2020/02/26/Python-SSH日志分析/index.html">
 <meta property="og:site_name" content="Elapse&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg">
-<meta property="og:updated_time" content="2019-11-04T04:44:15.305Z">
+<meta property="og:image" content="https://Ernket.github.io/post-images/202022602211.png">
+<meta property="og:image" content="https://Ernket.github.io/post-images/202022602212.png">
+<meta property="og:updated_time" content="2020-02-25T18:24:27.992Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python3多线程">
-<meta name="twitter:image" content="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg">
+<meta name="twitter:title" content="Python-SSH日志分析2">
+<meta name="twitter:image" content="https://Ernket.github.io/post-images/202022602211.png">
   
     <link rel="alternative" href="/atom.xml" title="Elapse&#39;s Blog" type="application/atom+xml">
   
@@ -266,11 +267,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-Python3多线程" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Python-SSH日志分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2018/12/29/Python3多线程/" class="article-date">
-      <time datetime="2018-12-29T10:41:36.000Z" itemprop="datePublished">2018-12-29</time>
+      <a  href="/2020/02/26/Python-SSH日志分析/" class="article-date">
+      <time datetime="2020-02-25T18:23:17.000Z" itemprop="datePublished">2020-02-26</time>
 </a>
 
     </div>
@@ -284,7 +285,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Python3多线程
+      Python-SSH日志分析2
     </h1>
   
 
@@ -306,65 +307,51 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>在网上看了python多线程的教程，但是基本都不讲为什么要这么写，而且写的东西太多def了，看的就很乱，思考了几秒钟决定自己写上一篇，不喜勿喷</p>
-<p><img src="http://t1.aixinxi.net/o_1cvsks3ck16f71qt0lrk2q89kta.jpg-j.jpg" alt=""></p>
-<h2 id="开始正题"><a href="#开始正题" class="headerlink" title="开始正题"></a>开始正题</h2><p>按照惯例一般都会先上个代码，照着代码来讲，所以我今天就不按照惯例来，毕竟距离2019也没几天了，我要用这种方法小抗议一下</p>
-<p>那么何为多线程呢，多线程，英文<code>multithreading</code>，指的是从软件或者硬件上实现多个线程并发执行的技术</p>
-<p>翻译成人话就是，可以通过软件或者硬件上，实现同时干几件事情</p>
-<p>那么为什么今天要说Python的多线程呢<br><del>因为其他的我不会</del></p>
-<p>下面说一下咋整<br>首先，写好步骤，我这里省时间，就随便弄个print就完事了</p>
-<pre><code>#coding: utf-8
-import threading
-
-#创建步骤
-def printf(name):
-    for i in range(5):
-        print(&quot;My name is :&quot;+name)
-#定义name
-name1=&quot;Elapse&quot;
-name2=&quot;Ernket&quot;
-
-threads = []
-#创建进程
-thread1 = threading.Thread(target=printf,args=(name1,))
-thread2 = threading.Thread(target=printf,args=(name2,))
-threads.append(thread1)
-threads.append(thread2)
-#开启线程
-for t in threads:
-    t.start()
-
-print(&#39;Done&#39;)
-</code></pre><p>我们一步一步分析，首先，导入模块，最重要的一步</p>
-<pre><code>import threading
-</code></pre><p>接着，定义一个操作，我这里是print</p>
+        <p>由于最近找到了款新游戏，叫<code>星际拓荒</code>，于是加新功能的计划被稍微延长了那么几天，导致写这段文字的时候已经是凌晨1:45了，不得不说啊这游戏是真好玩   <del>当废人真爽</del></p>
+<p>那么为啥我不继续玩游戏，突然间又良心发现的来写新玩意呢，主要是因为<del>(良心痛了)</del>我有一个美国IP的服务器，最近把新东西整到上面去的时候，突发奇想的试试这上面的SSH日志，于是把文件拖下来拿去分析了一下，运行的时候停顿了十秒左右吧，当时还以为是程序出问题了，万万没想到</p>
+<p><img src="https://Ernket.github.io/post-images/202022602211.png" alt=""></p>
+<p>这玩意居然有14MB？！我SSH日志是7天合一起，但也不应该这么多啊</p>
+<p>当时就，惊了，这什么玩意，我的服务器在记录SSH日志的时候顺手写了本小说给我吗</p>
+<p>最后分析的结果，因为内容太多，导致终端运行后，上面的内容看不到了，生活所迫，才不得已的加了”新功能”</p>
+<ul>
+<li>前面加上了时间，更直观的查看这条记录的时间了</li>
+<li>结果给覆盖了？没事，现在运行后本地会保存一个<code>result.txt</code>，你自己点开来就可以了</li>
+<li>总有SB爆破SSH，于是加上了次数统计，让我看看哪个弱智爆破了我</li>
+</ul>
+<p><img src="https://Ernket.github.io/post-images/202022602212.png" alt=""></p>
+<p>。。。</p>
+<p>这什么人啊。我是用了你家口罩吗。这个日志运行后的效果是这样的</p>
+<p>![](<a href="https://Ernket.github.io/post-images/202022602211.gif">https://Ernket.github.io/post-images/202022602211.gif</a></p>
+<p>吓得我当时就插上了我的XBOX手柄打了一把游戏</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>不扯了，这次加完功能后总感觉写的有点奇怪</p>
+<p>我成功的结果，是一个列表嵌套，这导致了我在做IP统计的时候，不得不先将结果for循环到一个新的列表里，然后再去统计次数，希望有大哥有方法能指点一下，怎么提取所有列表中的列表的第几个元素</p>
+<p>首先是，导出文件的功能，这个其实没啥，就是<code>open</code>和<code>write</code>而已</p>
 <pre><code>...
-def printf(name):
-    for i in range(5):
-        print(&quot;My name is :&quot;+name)
-</code></pre><p>然后，可以开始创建线程了</p>
+    wfile=open(&quot;result.txt&quot;,&quot;w&quot;)
+    wfile.write(xxxxxxx)
+</code></pre><p>前面加上时间呢，也很简单，首先将十二个月的所有缩写安排成一个字典</p>
+<pre><code>month={&quot;Jan&quot;:&quot;一月&quot;,&quot;Feb&quot;:&quot;二月&quot;,&quot;Mar&quot;:&quot;三月&quot;,&quot;Apr&quot;:&quot;四月&quot;,&quot;May&quot;:&quot;五月&quot;,&quot;Jun&quot;:&quot;六月&quot;,&quot;Jul&quot;:&quot;七月&quot;,&quot;Aug&quot;:&quot;八月&quot;,&quot;Sept&quot;:&quot;九月&quot;,&quot;Oct&quot;:&quot;十月&quot;,&quot;Nov&quot;:&quot;十一月&quot;,&quot;Dec&quot;:&quot;十二月&quot;}
+</code></pre><p>然后，</p>
+<p>改一下正则匹配的规则</p>
+<pre><code>pattern=re.compile(r&#39;(.*?) (\d+) (.*?) .*?: (.*?) password for (.*?) from (.*?) port (\d+)&#39;) #正则规则
+</code></pre><p>把前面的三个，月 日 小时分钟这些都给匹配了</p>
+<p>如果单<code>Feb</code>这样，像我这种英语一窍不通的文盲，肯定看都看不懂，所以拿去字典替换了就好了</p>
 <pre><code>...
-#定义name
-name1=&quot;Elapse&quot;
-name2=&quot;Ernket&quot;
-
-threads = []
-#创建进程
-thread1 = threading.Thread(target=printf,args=(name1,))
-thread2 = threading.Thread(target=printf,args=(name2,))
-threads.append(thread1)
-threads.append(thread2)
-</code></pre><p>因为我需要把进程都保存起来，所以一开始得创建一个空的函数，<code>threads=[]</code><br>接着创建两个线程<code>target</code>设置的是指定def，args指的是内容<br>把这两个线程都append到threads中</p>
-<p>然后开启线程吧</p>
+    for i in success_record:
+        print(&quot;        登录时间: &quot;+month[i[0].rstrip()]+i[1]+&quot;号 &quot;+i[2]+&quot; 用户名: &quot;+i[3]+&quot; 登录IP: &quot;+i[4]+&quot; 连接端口: &quot;+i[5])
+#运行结果实例：登录时间: 二月21号 11:21:32 用户名: root 登录IP: 222.186.42.7 连接端口: 62606
+</code></pre><p>也许是我大晚上的脑子不太好使，这玩意我愣是搞了好久</p>
+<pre><code>from collections import Counter # 统计的库
+...
+    for i in success_record:
+        ...
+        success_ip.append(i[4])
+</code></pre><p>我先将IP导入新的列表中，然后在外面统计，输出</p>
 <pre><code>...
-#开启线程
-for t in threads:
-    t.start()
-
-print(&#39;Done&#39;)
-</code></pre><p>运行完后，输出一个Done庆祝一下<br>到了这一步，你能理解完，那么恭喜你，浪费了人生宝贵的几十分钟，因为我都不知道多线程到底有啥用，它同时做的我不同的写法也能写出来</p>
-<p>最后的最后，距离2018年也快结束了，没啥好感慨的，也没啥好祝福的，18年有很多感动，很多成就，但是也走了许多伟人，一个时代的结束，一个时代的开始</p>
-
+    scst=Counter(success_ip)
+    for i in scst.keys():
+        print(&quot;IP地址: &quot;+i+&quot; 找到的记录有&quot;+str(scst[i])+&quot;次&quot;)
+</code></pre>
       
     </div>
     
@@ -372,13 +359,13 @@ print(&#39;Done&#39;)
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2018/12/29/Python3多线程/">Python3多线程</a></p>
+        <p><span>本文标题:</span><a  href="/2020/02/26/Python-SSH日志分析/">Python-SSH日志分析2</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Elapse 的个人博客">Elapse</a></p>
-        <p><span>发布时间:</span>2018年12月29日 - 18时41分</p>
-        <p><span>最后更新:</span>2019年11月04日 - 12时44分</p>
+        <p><span>发布时间:</span>2020年02月26日 - 02时23分</p>
+        <p><span>最后更新:</span>2020年02月26日 - 02时24分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/29/Python3多线程/" title="Python3多线程">https://Ernket.github.io/2018/12/29/Python3多线程/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2018/12/29/Python3多线程/　　作者: Elapse" title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2020/02/26/Python-SSH日志分析/" title="Python-SSH日志分析2">https://Ernket.github.io/2020/02/26/Python-SSH日志分析/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://Ernket.github.io/2020/02/26/Python-SSH日志分析/　　作者: Elapse" title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -389,18 +376,9 @@ print(&#39;Done&#39;)
 
 <nav id="article-nav">
   
-    <a  href="/2019/01/01/2018总结/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          2018的一个小总结
-        
-      </div>
-    </a>
   
-  
-    <a  href="/2018/12/22/Web条件竞争利用/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Web条件竞争利用</div>
+    <a  href="/2020/02/20/Python-SSH日志审计/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Python-SSH日志审计</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -412,7 +390,7 @@ print(&#39;Done&#39;)
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开始正题"><span class="toc-number">1.</span> <span class="toc-text">开始正题</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#正文"><span class="toc-number">1.</span> <span class="toc-text">正文</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -485,13 +463,11 @@ print(&#39;Done&#39;)
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2019/01/01/2018总结/" title="上一篇: 2018的一个小总结">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2018/12/22/Web条件竞争利用/" title="下一篇: Web条件竞争利用">
+            <a  href="/2020/02/20/Python-SSH日志审计/" title="下一篇: Python-SSH日志审计">
                 <i class="fa fa-angle-right"></i>
             </a>
         

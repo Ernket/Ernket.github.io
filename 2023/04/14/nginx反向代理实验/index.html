@@ -6,17 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="这里需要密码">
+    <meta name="description" content="环境配置安装nginx，先配置yum源 12cd &#x2F;etc&#x2F;yum.repos.d&#x2F;vim nginx.conf  nginx.conf文件的内容如下： 1234567[nginx-stable]name&#x3D;nginx stable repobaseurl&#x3D;http:&#x2F;&#x2F;nginx.org&#x2F;packages&#x2F;centos&#x2F;$releasever&#x2F;$basearch&#x2F;gpgcheck&#x3D;1enabled">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx反向代理实验（仅ip）">
 <meta property="og:url" content="https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/index.html">
 <meta property="og:site_name" content="Elapse&#39;s Blog">
-<meta property="og:description" content="这里需要密码">
+<meta property="og:description" content="环境配置安装nginx，先配置yum源 12cd &#x2F;etc&#x2F;yum.repos.d&#x2F;vim nginx.conf  nginx.conf文件的内容如下： 1234567[nginx-stable]name&#x3D;nginx stable repobaseurl&#x3D;http:&#x2F;&#x2F;nginx.org&#x2F;packages&#x2F;centos&#x2F;$releasever&#x2F;$basearch&#x2F;gpgcheck&#x3D;1enabled">
 <meta property="og:locale">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094022987.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094110517.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094132839.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094150932.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094209872.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094316976.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094334952.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094401468.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094416042.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094705540.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094455249.png">
 <meta property="article:published_time" content="2023-04-14T01:28:00.000Z">
-<meta property="article:modified_time" content="2023-04-14T01:49:57.164Z">
+<meta property="article:modified_time" content="2023-04-14T01:52:02.298Z">
 <meta property="article:author" content="Elapse">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094022987.png">
     
     
       
@@ -99,13 +111,13 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&name=nginx反向代理实验（仅ip）&description=这里需要密码"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&name=nginx反向代理实验（仅ip）&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&t=nginx反向代理实验（仅ip）"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E9%94%99"><span class="toc-number">2.</span> <span class="toc-text">排错</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -144,18 +156,69 @@
   
 
   <div class="content" itemprop="articleBody">
-    <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="密码不正确，禁止访问。" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="afa809929b5cc951230655d62cdf79e7cf0fff6f8c47b57a2649894a73dc0069">9dc62c55d0bfee4ad81a0e591710b6a2b79bdf0cdc77688258bff254ad33c1dbb1f2e32a6566bbe5d62da85dc1df730e5b4e5cac134d5f904fc3709458ccf4c7eedef078f871f062b92ec41e7d87f12ec70cefc7a3cb8350ca9c3d62d592bb66fef3ab7fb21caffca8621b21cf145cca7ac2eba9c98797569ea3c5d6f70685d94f17fe0b7809326ee96b2b0347a21653650134e776e905433e106cbdc86717c0dfe783b927b2d6789354863bf9b6b163554771a3eb8ea0d78c3d3e666e09bfc0d6dcf98b6fddbf0948f01b5a11def025c024a1374c192656a7fc6b3b8b19d99959e6892b48b72b14b6cd1b625026845513d5309c68be15357b8a0f47a740e48a910d8097e037fbaeb7eb4f977430b6971a07ba33adfcf6489e9d3fa9a9dcb0b463f70913546394261e4afa202723b96225fa0b84dd6ad1c46f6816c35363680d18f04616a498a945cbb20879cd2c25e5a3c41f8256fa7dee9bd53f66a2f49f43482ec74ac5d85e152fa7d15e5753d55ccf3eeb92735db0dfe56c57c0628396ac4347afc75d5ac9665eb5fe1b23c914fa2ff2452a958940471d764bf73b6fd516dc6b6b83ed48f1030d43f85eb196909f4f3cb5d9a2e977b6d601545067f5bce85adc7f79cf0aece494e8cca0e57c23ce3ed550c80c778c02fdebf34bf56ea35e3b184a74c768ced1de9ba7f5e4ed774ba3ee85fd2086a1bd102692287eafa3d506ca0b0f573c6641770ba156dad1d274d0200f505b9150d0afa9df9486e87da4d4aa5e5e4bf4fcd3625fe8e93790f07b07d6c507ee6bd201ae493ca050e0e9112ffc09fc43125c44e04d1386fadbe2728b8e92f914066b2ee80c573060e8cc51313e70a9d3463d8b040190b45bf057b8db3e8d05af05eae917377de5e0cb26a389f787406501cc3ff84f38d7f4d79ae2c38425ef69d76dd058189fe4f1c812c0935021dec308b3ea3a59e8fb400d94ed3af03287817ae83168d47578a18e348d0e581cb1f4e0576703be020b6b578f7c33a9418c85fb6134c717e7a80c46f69b69dfc4fff23468b3fa85383738c1614d83943eb1bd34c2d21dd568160532bca3edb7bddf011f02254c42cc22aaba2272d5cdc3becf77f32e80833dc3514905df491f7e08595d5460d1d1a1d001f03769bf66ee3f4ac14338c59ca5d1d1975d1454cc51d3dea9b1f6d713240b2da03c503b5c5506ba4a3dfd0be5b508597f4342b60ac383aeb82f38d3cfd8c2523feb48c40faab4fde7403cb2c856ef585a01acad453374592ae25f5a8d1c38bb7f0b753f4333e376d26b03c4c2eb42e3be7dad22682654eefbaf38e42f7269a7c26693ee1bbf7e36ea6e8c3850d8e237dc75d5a2f3086b9013a3d91be405052b121b844a258e97eefe320a8b7dc1fae85e0aa03488f49505c7f6c4c6fd2b1883e6b39e9e0b93f3e21e0bb7a82b7bd8fb724351e50e8ccfb973a926743c96e7ef6661dce71e524478ad3de616ce5fdd2c41de615fa683ce16acba287b9e50bfc3d169849fd390c31d1e6c92aedae184347ef8c56ffb2ca0c684c6db11ba0e39917d3d5625f5c933b1a1c05d8396ad897c2f5f2758d687d222056c23aa81586128a086c0a53156b37f957104fbe949745d9971c8ed8bfa033c9a91a4e0ff08ea34a5f1b6677cdbf22ba073c760bb6c54baf503161fcf0d7e89675dcdde2854cad57823ae9564f5ede5041d3a62d1cd2f4f8696f7b849c526b0635a907001a6ca5d9f38995a392b214801d989ccb4239c9ba30d258fe22d996d94dd252f073214222f8d5895024272890ed8aef5fe8c61167ad354d627cf9b20d1477a45dfaeec22b83a5ad69be5b7d51d3fbfea65ac655a9da47c1aba788b94fd5cdc23958e5b02f0ea343469d4bd85ef61929436fc0fa38beeb72c98fb0b73a7eaa72865a278a327bda410a7237add6c4c3bd3d01d57a30164fe136a82cb370f20ba0602fc40b9af96dbed0672b3e48938876d9c3543759aa6956fc020daac11e14286a9a8fbaadf2d105918571dad50df17c6de042f4697f55c0a56f6c6966d069206c3728b8744c0efe957dd408bd9f3fd8937cd31ffb6c46b130b3b51e3c4ca0d37dbae77e604a09f186061b6b33624648448a9e76c47ca022473b1269189f257f43921d7070ec6b140b5a25b99016fab44a2f0726481e0a95cf17fde846e81ee895c3a270cc0d599fb6411edc793378111b849210ad2ed1c5e47f020f2dce787fb8db0b4df82e596ab045cb2fa77ffe315e1258dfac73741e140b4bc247420ea5cb0c4edc04f3c96e6d56556446eb462cc21b80f13b64cdf0bc67d15529f0fc3194ced4c8d7c8abc617ec68626dc2b65a52153275ac467630decee5e2ccc6992f21fc232e545fab2941c41800609df31cb2d864a72b6b9fabdb8ed0c6076ce0303c67bd10fe3caaac02be2e4486561a70d094413f274d6f3174e63165dfdf49e1909696ba03b9d353fbb46a478e19e6375212954600042467947228266acfe7d54a40af143d71afa0b1f472cccf2ee7e6f88392361240b284ef8a5f098e7dade04f5d68af10fe47f56e69d07891acc26035b61566b4774f0b7a13176092f2064b7351cd196b7304ed6db83b4098ebf6ae850b4536f54b4d532a6b6c542b478807f1e291bfd44a5ad30cd0422ea2386dc98f7693aa05c9ec943af6f0d68bc2f394b907abd20f22e5f47ff67b91821cddf89f66748b440622f27c66ac91c59d97e131d974879f20fe0317aee29ae00dd5c1c060999ce8bb32d446df0d970d160f4c6f9fb45338f9a7bc634b2ec3818b9b60630482d833034e125d30f9ad6044cad9349ec2dc75da13683ff4f4b9ffe49040dc33161c10e002c7cb69455e223ccf2133b642c83262f33a236fa99d872ed50382dd4c9ec5522995e627ac305af66c3c3a18816f13e6a6e1f173cb2115ae88d0669a281ab65cda8ffc3bf9140084f3e512585f06910879c4a49ecc487eaa72c88979dc41be35a2ab883d6e4ed2bde51842623ab3607cec6df3a32ef59553a76a31cbce4c18c727ededc7bfb6ab8b3970c05f1d4a0e7271a3fa4c7a7fead3ef5d328bf9fe91cdaf9b5ae5d4ab64b988355cb57f393d343f630ec3f42a4cd8d09f694b87ea5df42dac0be52e48968add0a96f0df605e1df424665ac391877169c44b6e7cfd0dcc582b6e77f2aa7fa7e87fc66f4a800c3ea584446a10f83a8eef4f3557ede14ff02b80a3a4b3cb19480bf838075918279931c668728f5bd6104d14ce4205dacdc423c419ab106f27bcfc126eb848cb3ed05c0075f724eb5d9faf2aef2bb48fc5dc632aaa65c7fb78910be296abf70500860dfbb298fec11b54569656ae16964a6282ec5f391d5dca3ff1453e20c63fe9798ae491746d0873525c6b13ee606b600688b7842ce03e82974b2e8d3f6d730c8f5fd808d6640f730ce2d2181e17674f6b4f39d9297706c1734bf61ee4833da099eff79ecd66ce8e1460d215158cef7ae7369ada5f82893c1c0c09b625ccf0551ca10820c89b320e71e6b615e078f1c84c02e37ee042a17c112ee47f61d235b4817bbaa03ab2a33f61e861ebf3ba81ed23fe20e701ccf855352402a5e629b3eed4b0e56670e6fd3d7162cf59dcd7c6db5a5207ba6443e07fa24ab52a086ed176add193e1662320cb688a8dae75ce78b5202064224bf6611a3bd5b6e593899f482774c3c6fbc829beac9f9dd5e966731695fffc5f4eddac37f71c993ffc5e2c0849de23969df9251bff4f1491d6876ac67b07371fdd331de4daf6c8b43a6a9e7fc7396a8a2fba419ef748f4e072efe62b4d148725e6b709a23a27574cfa97f59b91c232b1d49c8255308d46540cb6bff75ca1284a470cc3b5adf2f11dd88b42a11332da606fb787b5f33ea968e1de7875d2d40a28c1080822a4655ebf1c6e045c90e628c0562fe2b22ca0e938f4e35ff6403dc5a76134ddcc5ff07a5fb1ca069e1621c13a86f61bd4a4db8537d233e388af8582cbfaf98403d0497a73a1d2f858e331ac3927f49c8c02ebfce81f07c1e3f0dee5128c482e95ee3619b7ea53a75038e79b777845c74392f38b1cbdb6ac7bbd1f83a56a7801234c780da104350fa43d32fa5797bd090b9341b2bed17a3e732339773a0a473e4529d8a79051dd7a6e99310702516ff9aaeb4d9bec6408ed5a3ca5aefaa541233f7bb80c6c67cba8fad418440e26226769d8dbfd2af4d30c64df1613b1c97c64a49159c16d5843ed74338fa4f1e4cbd8549417cbf5d6d3ec3fec1e63e1f45d3d32858e16a438a275c575f725c2d915db978c1aad1791b2c8897d9a4bf49f604941919b913932c11721e90d9b5b9539ce0965fecb7af70cb89271fe4b28485e9dc0c960f536bc3edb829d35d209076022f352baf06cb6a9ea9ad102c31eec6f6888b97ad0cc788b3dd95b8609c2397d827064052d6474765e0467270887a83640be5c4095ceab3657570b8f49e44fa42a9b365f25318ecb40bcfc7d3a9e3d4087a097abdc67e80edfdbbd32f2ad401276592a69d934be1f88972a81c4ffd5c597611b4795ec1cd0456a4fb5c2691f04e54d8d01565e773468f195da59c52114398fe66abef7d5c3254192708fe64360841bc55cc498aa40bd699e3499ca35e83f27445d53883c09393aae6a4574ceb9fdb79c5a61612154599226ae9483fd015697eda22b68c0d64b7e53714ddf7e25889944eb33ac20a841dc55be1b0dba733b1d0c23464dcadfafadc376ebf5dfa4d6f33b816bb9ebabb23c4b412853503af2c584753c131f4635ff77468e56f9bf2f3f2c964944f6b2c8c1668f8cccde3ca726d03d3e9a1213e94b92e48761a702d02c937fbfa3dc10c7d42c6228a510eb0e5b1c678782e9bcd92810d383b7dd920e2068ba64d29134cd90cef727092415f545c1c99be5354bfbc71d525e3839294f823a97ea557e4c5e5b0930b30e7323ff48f8bbfce2e1851eaef8c5895126db474e9910e3b8d6462c466deb7e2f186fe9254641d2b38f57b371a602f5dac4993ec0e0d5e2e9cf0646ef4830d8df85088e04f205454c8bfa2e9477c44286da8758a1b53580e15d9e51585bb7a3eda80d0d3bbf766feba20997076befda6e4f4dbaf57e9045958e5a792a92859738009ac54f3f65656b366c3eb0e4a050c87c03b8d717aac3f442a08da860c6fac390e843058d0f1f3005c8b31897c451662f66917a14c791e91b547871705c9bfd009602ab600df4be8cd6c644124439f1eb8b666d806fe86e02dad57948916ffaeb8a57f2633ac5a4417a984a09484b3c215f2e2554c239e63a8abc4b4bf458244888e1dc20be31f52a41ca74e6aa71cf51dc5f282f0bc1c9c8e5734faa95ce9acf0d79159ad268a0f2f4aebfcdd9741e2785a1750b9fb91295bf8f2a6401c1d3eefb263fe5ccf79e4f3867e4f759a1f00d93b297fa7f2c6b31e3b70130241a6a35b2b3d747f72b5280f577aa89b091532309332b4956ab15c40d68cfa31fccc6c32ed6265bfd3f7ebceb2e60cc755741758a90729c6f27b08ae6f92e3c1405ce39be05e6d76eb79a4c1c6b035308336edd0431a8b9ff69c77e385bef9b9ba50484762ad02cb6ab1b3f98662395734b1d02461803340b801bcf4cd9097649b28e1daa3f4d651904ce493d3303eb2c99825da3b8b7cb52254942307f07dfdc57a0e45f73fccc3bf59cf480d6b638fae1f1fb80e42cd9f402db9828c0c05581c1a7ff362d4e627167c3d10b25a86764beb7d518de601cb0c5b4fa1c8b41bb07587f2924b1ea409fc4455c02dc8b59d0aed0a1fe56059fc237dbe842abdaee7d321742740c2d486c0a6a56ecaed3fabd2208ab23b2db922dea434e6db420b23ba5b5a4902e6c0744b64ab6bb7d31db0c3a079406f550e93f9c255b510b5b96c7148b42525fcdb660bf4d98a2a47cef90b712340b21a10860dc331f9a5118e82af1fca016565847d683148a6dc902115d01cda2c2f2911f8be6c36e2fb45a7b8a8ffab5e35261112da4afe4eb60022f4dee4fd4de8c3cfb222e85b751b2175babda414ee9bf4ba2226caf12e202154d5a0a6dee5817e2b7a369c3d19a8bfafa0161356babba0f7124534f40c0f90bffb2f392edaba9bd1f2fa803195cfea426e40a5d41e280b655be89d4e208a8a5416ff776aeec8fb8bfa2a07f87ccff4c79c56568c7ee9c408f52aadcfb982692b5d33c62280559c6e0f1e9dbba627e2064b55f4a45c22e5519bc729bc6d5be339a9ca18ff4d95f161f863e0cf11bf31eb96e7b73d48f1e64271f53eea45fa12fc1ef34736cf76ab571a0067468e09418c03af715d64e35c0e2e1b7646aaa9c816f64ea7451aab5d220eb5b89896e9b0ec6a0ab286aa829767101e85fe7b6055e11ef6aaa5ba96c365eb82b053e5cf6e6127801fd665b80f304874173a4e9f953e06042ec1a304ec9f35a421af4157d87892fedb961c0bc196e593a714061854d3538165cb007ac9ba34d27ebbc47e8beccb52c69889396e737ed3855ea77f1b2a613c4432ce27cd5ccd8cdeca99f8c84737c718f197e0323dcff2b9d34e7f04fc4d48a0cce95e08d4e537bce4e5c6d3732d1ee9c9d42440dc2d8202abf1d33b8cddd04b6a8d812a37428f225f5b02612827d61990bc6eef4e1378f9bd834d763247c5c5aabed5abd10c2fbc7617c338e3e4d4152af4490eca302534da5b217068ffe277e24c4ed3e7b226a5038feaaa1ad6332999c6a5bc1116c0d7501f6cd298673845936b1db3cd1035a4e1b6af6b07c7156146d818d3f422f929b828a0dff15a7500d14d6fd652fad398badc17ae15475a4b820a46b4c4838320ff61e0fc0b0f86d7454c77aaa070699f8c3414f5e518066b05d9dd9eeb940efc57cb811e7d75af28a0a121da6fba51babad79cc6023135d46639e0f9735006473e6fef6e3a98f724f38aa13fdda848cd5fd1d221bb76eb6cab04332e01188ff18d0e32be88092b1e06816bacabd4a1059c810aa67e40c1c65f0278f18d98424d6a14c83f13024f870e75ef03d78e26dcfefcb0c4a7f510e9d0d259d80be22b845f2c48c261e5df4b48fb3645695e5e69fdaea5036714171e22c2d346da71a36a7c94cdf038fe3b3b7f4970383df0fd191182a451471e24745a8a01c80a2ac84bc3a659640911e030689df7a7e3832411a1f316ed0065cc789c6337851e761d964f35452888ce08bcee4ea1c0585ffd85f05755c721441ab07ea492d964f0952a389329accc949280f9077a762955400552ff1dbd6f8f2fbdd4794f3104efe9f63bd633d0795c89cb071d062a26d2f4a39d532821135e360b284ec6100084a9ef431116cf8529cb71859493fa4e7ac7d3f2d6a7ae8305f3de1f0b386b3ebc8a5489f0dfb3572cc73fcb9da2b94f26573da95d86d2a7a9e2f5246c4fc6c0e820f16793c78b991d3d77135df0c1bb718a63383dd26feea8cdb2a5af39448242a78218791e6fd7208d28e7296d2fd8d1a5418405a4e2dc1bd98ae388c32c07240d9d907716817479bd740c5560f06896ef43d2a2f979f170fadbeb237d742980229c69c5139b1d0fdb5e63ca6011caae00f9025e6075442beb34a940520e2c18f4c2f9ce21482a6e02d585f0dfb89a93944ab7cf57e0457d943fbb7f1718043b594d25efd9eec290190401c800f5a96ab90df24722daf565a40ae8a715ac4c8d0e6303e41884ad819960400e02f5eeec4d0d4b44be0ca16dd791cf063b72d2c708d4787c2a5a9b906c37d40f01f80880638041e1457cee9cf81c7960e28f7f2cf670b21a8c929c1eea7c8810c3051a1f7f96bedaf9cc79bde71d7b126f75c3a37db9ad772dde42f0018d7edbcde940e41bfc4676a66b8871a5cdb2a61a56b2089bae8fdc702fb14cb6cbde901b75f4b2a90f3ad9d7c1f9dd565f1cf6cd17f345161987512ee9ff0b52c125b210dd17c58da801461cae34ce60c2f5d21d562ba251ac984b62d356d684118613245c290c6029cf26693659043b3c694948efb44bf589cf3c2fc223784e1bdaae1bd185775a51d9910f8c838c9c962a8043198a02abe8ba5fc5a5b5ddde2ff61313a282a1e383a6688b8bda77ccee898c485e820d7c56a5760a8c6f4a309aeafcfc0e42a70f3028b7800147fedd580f8fa07d99f3f72f42e5120a0cc484dffe2af658a605ec84d17321bf86d67f70ddc1b8bd248576a251fb364ef7567b897b345e4bff7a6b67d0ade55e1e299d222426444b1b2a2ca6221f3449af10c16698e064f8e898c8092522d7eeac19007c851bc42accbbfb207fbcd8f9c3f0dc7a5db5a380a96c2196708d643910f012d3ae6e361043113c44b6c912ca70e65e03f79abadc0b843c73fcd6a3415d81e18966add1cdb868918537b8a83bf7099280a18d4d1bbda035e5d54c0d20ed8b6038c9c097dfdf0d1f26fc31ffa507f6e1fb796ec3bc31c3be166c9d423c4b42008c65d892556caaedd255988b485da632875427a214681e3f18b2436bd1876460ddb95571ecb56dd91ed8657abb8903a72e612bee30dafe1e389cee1db37c1a7a8bcd95c663ce650414d8d020889138a9c47254b100e90f1887c81d8836b014f1cf95987ef1384abfef04b6174682ee09abbf702e67d2159dbcc344ae744ce196b0c5e6c6e2610ff2aaace5b32f3d8a0c83fbcc7f5671846fb61e4a1cfb2fe1cd1907991233f12f23a1e518c879e58f9e28fdd7c879e0765b2af82ee808fa2f18f24212ba6ee7c26b1feedc9faed902d13e6d214aaf11f5dc80316a097080e8328798976e70c43d732a3b6d1213a9b7ed6ddc2f65693dbd72058ed2bab92d3b158fd525ade11c6c5d2db793d65038c3194a2c810dd58d51e0441fbb82ab5bd610553666c318cd6acd66dbf07f77db6a0f7abfe980a94a293646a341cbe7de3860e82944c6d948dfa6ea31bb8a3fd3adb2ce0d01f8315f5a8ad3d91ed1cb69102312ca20d7a66be8292e5b6529d6bfdf1cf3ad82f4b4c4200f75a01e793f1e7b46f0dcb6a5b2472faa14d918f2997643d42c4c5e5ee8ddcf4ffeed1b80d1b3130a57d2a55159b95677595aae7ad742783d12b4b61d81b56cc82087b985b23a38dff73a54da32a3dc40b5f81909fa9bd62227555fdb7687b5ecbfa6a34338c9f9fa4bd0bce629f82ec6e9626dbbccb806c2074473531bb39e89a350534bbbdf0041158b137d5e1cc4250cbb6bbf65ca0dd2596b6d0e90767a9a75ffa19d2376f58d41189afa7500fd84272d83684815cc850b0cc83ede06d9bf05baab5b9602d26a71775508ac68e0f13881f72e9e7815081830b2cb37fca96a744f8e005a9c1671c4cf66840e4b9dccdfaedcea862a539b9ab5931ffce0becf69556a61b4ef9235d1d98426275d68eb8484640817ebb90b98fdbe5aecb803381643ed146f5e79c6eaa0276a8711c2c6ab79aa55120a72c29de70ba8b8405dee07035660c3a48991e2550f74068540f7686a969552d01bd2bfc8d9058af08cd42b2ee806569ce48f04c740b53c1c8fcc2126639b9b9990a78336e69cd6639acead700b40932842f781d0fc765e9787569c25ca724c7680cf69e4992dcf5ecf1d9c45e00c6b8cf930d9f6597be940a88cc0ccc59056c97abeb17f040880dcbbe201884b34a8a15a9db6cbfc22da13c72ca779f149d79a3848065dcba0b6a5363bcc5a8f948c6f007c00e98aa993177eca9c6b778e812ec2d47c3f39d7c61f605d02ccee968bf80cb7233e96ec083d11405c03e7cfb01e71ff5fb183100ca56a151c20dd253bfe375209465c6e6d3b3f8c2a36a17c6a39cd3a484e92a9d19ddc793c1f19a82ff8398a9da960af3036373674b6149d9a8673d6665d674497fcd1fd03c283bfdf6927365dc91dcbabb0fcf3d5f1da750adcbd246b48108705ea7e0f65ce5a53ac9eb430d9d2ac83e0f61bb60f68e7cff97336fd88a44479f541c8cd327ed8a63e89e3640b6f8f0085682555982b2d9da7b0425a5afb3eb4621ab1ae3c910d6a16ab7c335cb828c157dd3df881896e569984d4bab07c75c5d655569209e585c75b706278</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">在这输入文章密码</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+    <h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>安装nginx，先配置yum源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">vim nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p><code>nginx.conf</code>文件的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/$releasever/$basearch/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=true</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，直接yum安装nginx就好了，yum会自动更新并配置上源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nginx -y</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，cd进入目录，将原先的nginx.conf备份</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/nginx</span><br><span class="line">mv nginx.conf nginx.conf.bak</span><br></pre></td></tr></table></figure>
+
+<p>然后使用工具cs2modrewrite生成对应你你cs中profile文件的nginx.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/threatexpress/cs2modrewrite</span><br><span class="line">cd cs2modrewrite</span><br><span class="line">python3 ./cs2nginx.py -i &lt;profile&gt; -c http://&lt;cs监听的地址和端口&gt; -r https://www.baidu.com -H &lt;域名或ip&gt; &gt;/etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>举个例子，我的环境如下</p>
+<ul>
+<li>nginx: 192.168.1.100</li>
+<li>cs server: 192.168.1.101</li>
+<li>profile filename: test.profile</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 ./cs2nginx.py -i test.profile -c http://192.168.1.101 -r https://www.baidu.com -H 192.168.1.101 &gt;/etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>于是你就会得到这样一份文件</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094022987.png" alt="image-20230414094022987"></p>
+<h1 id="排错"><a href="#排错" class="headerlink" title="排错"></a>排错</h1><p>这里面有很多东西都是用不上的，例如xff是为了获取到ip，more_set_headers是为了隐藏标识</p>
+<p>所以我们改一下配置文件</p>
+<ul>
+<li>首先第12行的内容</li>
+</ul>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094110517.png" alt="image-20230414094110517"></p>
+<p>我们是root启动，不需要这个，注销</p>
+<ul>
+<li>36行的内容</li>
+</ul>
+<p>这个需要额外装一个模块来设置，这个说实话没啥必要在，不配置了</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094132839.png" alt="image-20230414094132839"></p>
+<ul>
+<li>132行的规则</li>
+</ul>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094150932.png" alt="image-20230414094150932"></p>
+<p>这里有个问题，正常来说按照profile生成的内容不会有错，但是在实际的请求中我们可以看到GET请求的地址不只是jquery-3.1.1.min.js，而是&#x2F;cs&#x2F;jquery-3.1.1.min.js</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094209872.png" alt="image-20230414094209872"></p>
+<p>这是因为我们对路径进行了修改，所以在配置文件中体现不了的话，生成的规则是有误的（如果没修改的话，无视这条），当你上了重定向器，会发现规则匹配不上而导致无法生效重定向器</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094316976.png" alt="image-20230414094316976"></p>
+<p>所以我们稍微修改一下规则，这样不管前面是什么，只要以这些结尾，都能匹配的上，然后触发反向代理</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094334952.png" alt="image-20230414094334952"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~* (^/.*)(jquery-3.3.1.min.js|vue.min.js|jquery-3.3.2.min.js|bootstrap-2.min.js) &#123;</span><br><span class="line">xxx</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>关闭selinux</li>
+</ul>
+<p>配置完成并开启后，发现返回的是504的内容了</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094401468.png" alt="image-20230414094401468"></p>
+<p>这个时候去&#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log中查看，会发现如下报错</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094416042.png" alt="image-20230414094416042"></p>
+<p>关闭selinux即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 临时关闭，重启后失效</span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line"># 永久关闭，但需要重启机器</span><br><span class="line">vim /etc/selinux/config</span><br><span class="line">SELINUX=enforcing --&gt; SELINUX=disabled</span><br></pre></td></tr></table></figure>
+
+<p>尝试上线</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094705540.png" alt="image-20230414094705540"></p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094455249.png" alt="image-20230414094455249"></p>
+
   </div>
 </article>
 
@@ -182,7 +245,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E9%94%99"><span class="toc-number">2.</span> <span class="toc-text">排错</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -196,7 +259,7 @@
   <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&title=nginx反向代理实验（仅ip）"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&name=nginx反向代理实验（仅ip）&description=这里需要密码"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&name=nginx反向代理实验（仅ip）&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
   <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/04/14/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E9%AA%8C/&t=nginx反向代理实验（仅ip）"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 

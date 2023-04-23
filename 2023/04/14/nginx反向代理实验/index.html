@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094705540.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094455249.png">
 <meta property="article:published_time" content="2023-04-14T01:28:00.000Z">
-<meta property="article:modified_time" content="2023-04-14T01:52:02.298Z">
+<meta property="article:modified_time" content="2023-04-23T09:52:15.044Z">
 <meta property="article:author" content="Elapse">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230414094022987.png">
@@ -168,7 +168,7 @@
 <p>安装完成后，cd进入目录，将原先的nginx.conf备份</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/nginx</span><br><span class="line">mv nginx.conf nginx.conf.bak</span><br></pre></td></tr></table></figure>
 
-<p>然后使用工具cs2modrewrite生成对应你你cs中profile文件的nginx.conf</p>
+<p>然后使用工具cs2modrewrite生成对应你的cs中profile文件的nginx.conf</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/threatexpress/cs2modrewrite</span><br><span class="line">cd cs2modrewrite</span><br><span class="line">python3 ./cs2nginx.py -i &lt;profile&gt; -c http://&lt;cs监听的地址和端口&gt; -r https://www.baidu.com -H &lt;域名或ip&gt; &gt;/etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
 
 <p>举个例子，我的环境如下</p>

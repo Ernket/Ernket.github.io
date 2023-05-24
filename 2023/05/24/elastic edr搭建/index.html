@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="前言还没更新完，这破zeek太难装了，还是博客好，随时更新 正文安装elasticsearch按照一下步骤安装elasticsearch 123456apt-get install curl apt-transport-httpscurl -s https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch | apt-key add -echo &quot;">
+    <meta name="description" content="前言全文更新完毕，zeek那部分，老实说，关于路由设置一直有一个问题，某厂的文章中设置的是2，我文中设置的内容为1，但是看起来好像并不会影响什么，我环境中route print看到的是1，实际也确实能检测到流量  然后就在想，这个日志的，跟路由有啥关系吗（ 正文安装elasticsearch按照一下步骤安装elasticsearch 123456apt-get install curl apt-t">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elastic Edr搭建">
-<meta property="og:url" content="https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:url" content="https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/index.html">
 <meta property="og:site_name" content="Elapse&#39;s Blog">
-<meta property="og:description" content="前言还没更新完，这破zeek太难装了，还是博客好，随时更新 正文安装elasticsearch按照一下步骤安装elasticsearch 123456apt-get install curl apt-transport-httpscurl -s https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;GPG-KEY-elasticsearch | apt-key add -echo &quot;">
+<meta property="og:description" content="前言全文更新完毕，zeek那部分，老实说，关于路由设置一直有一个问题，某厂的文章中设置的是2，我文中设置的内容为1，但是看起来好像并不会影响什么，我环境中route print看到的是1，实际也确实能检测到流量  然后就在想，这个日志的，跟路由有啥关系吗（ 正文安装elasticsearch按照一下步骤安装elasticsearch 123456apt-get install curl apt-t">
 <meta property="og:locale">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112745.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230516095115583.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230516171224.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230516171411.png">
@@ -45,15 +46,21 @@
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230517115302.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230517115343.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519102232.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524110939.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524111557.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112041.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112143.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112300.png">
+<meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112516.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519102500.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519103911.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519105007.png">
 <meta property="og:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519103111.png">
-<meta property="article:published_time" content="2023-05-19T04:03:00.000Z">
-<meta property="article:modified_time" content="2023-05-19T08:29:37.563Z">
+<meta property="article:published_time" content="2023-05-24T03:26:00.000Z">
+<meta property="article:modified_time" content="2023-05-24T03:28:25.215Z">
 <meta property="article:author" content="Elapse">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/image-20230516095115583.png">
+<meta name="twitter:image" content="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112745.png">
     
     
       
@@ -127,22 +134,22 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&text=Elastic Edr搭建"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&is_video=false&description=Elastic Edr搭建"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Elastic Edr搭建&body=Check out this article: https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&name=Elastic Edr搭建&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&t=Elastic Edr搭建"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&text=Elastic Edr搭建"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&is_video=false&description=Elastic Edr搭建"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Elastic Edr搭建&body=Check out this article: https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&name=Elastic Edr搭建&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&t=Elastic Edr搭建"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85elasticsearch"><span class="toc-number">2.1.</span> <span class="toc-text">安装elasticsearch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85kibana"><span class="toc-number">2.2.</span> <span class="toc-text">安装kibana</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSL%E5%92%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">配置SSL和身份验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9B%86%E6%88%90"><span class="toc-number">2.4.</span> <span class="toc-text">添加集成</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Agent"><span class="toc-number">3.</span> <span class="toc-text">添加Agent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Zeek"><span class="toc-number">4.</span> <span class="toc-text">安装Zeek</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9D%91%E7%82%B9%E9%9B%86%E5%90%88"><span class="toc-number">5.</span> <span class="toc-text">坑点集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E"><span class="toc-number">5.1.</span> <span class="toc-text">Cmake版本过低</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.2.</span> <span class="toc-text">gcc版本过低的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85agent%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%97%A5%E5%BF%97"><span class="toc-number">5.3.</span> <span class="toc-text">安装agent后，没日志</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85elasticsearch"><span class="toc-number">2.1.</span> <span class="toc-text">安装elasticsearch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85kibana"><span class="toc-number">2.2.</span> <span class="toc-text">安装kibana</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSL%E5%92%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">配置SSL和身份验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9B%86%E6%88%90"><span class="toc-number">2.4.</span> <span class="toc-text">添加集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Agent"><span class="toc-number">2.5.</span> <span class="toc-text">添加Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Zeek"><span class="toc-number">2.6.</span> <span class="toc-text">安装Zeek</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0zeek%E9%9B%86%E6%88%90%E5%B9%B6%E9%83%A8%E7%BD%B2"><span class="toc-number">2.7.</span> <span class="toc-text">添加zeek集成并部署</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9D%91%E7%82%B9%E9%9B%86%E5%90%88"><span class="toc-number">3.</span> <span class="toc-text">坑点集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E"><span class="toc-number">3.1.</span> <span class="toc-text">Cmake版本过低</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">gcc版本过低的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85agent%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%97%A5%E5%BF%97"><span class="toc-number">3.3.</span> <span class="toc-text">安装agent后，没日志</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -166,7 +173,7 @@
       
     <div class="postdate">
       
-        <time datetime="2023-05-19T04:03:00.000Z" itemprop="datePublished">2023-05-19</time>
+        <time datetime="2023-05-24T03:26:00.000Z" itemprop="datePublished">2023-05-24</time>
         
       
     </div>
@@ -181,7 +188,9 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>还没更新完，这破zeek太难装了，还是博客好，随时更新</p>
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>全文更新完毕，zeek那部分，老实说，关于路由设置一直有一个问题，某厂的文章中设置的是2，我文中设置的内容为1，但是看起来好像并不会影响什么，我环境中<code>route print</code>看到的是1，实际也确实能检测到流量</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112745.png" alt="image-20230524112744971"></p>
+<p>然后就在想，这个日志的，跟路由有啥关系吗（</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="安装elasticsearch"><a href="#安装elasticsearch" class="headerlink" title="安装elasticsearch"></a>安装elasticsearch</h2><p>按照一下步骤安装<code>elasticsearch</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt-get install curl apt-transport-https</span><br><span class="line">curl -s https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -</span><br><span class="line">echo &quot;deb https://artifacts.elastic.co/packages/7.x/apt stable main&quot;</span><br><span class="line">tee /etc/apt/sources.list.d/elastic-7.x.list</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install elasticsearch</span><br></pre></td></tr></table></figure>
 
@@ -264,7 +273,7 @@
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230516180137.png" alt="image-20230516180136846"></p>
 <p>点击添加后，设置名称即可</p>
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230516180520.png" alt="image-20230516180520111"></p>
-<h1 id="添加Agent"><a href="#添加Agent" class="headerlink" title="添加Agent"></a>添加Agent</h1><p>下载agent（我们是Ubuntu,所以先获取一个tar.gz的地址即可）</p>
+<h2 id="添加Agent"><a href="#添加Agent" class="headerlink" title="添加Agent"></a>添加Agent</h2><p>下载agent（我们是Ubuntu,所以先获取一个tar.gz的地址即可）</p>
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230517101431.png" alt="image-20230517101431519"></p>
 <p>添加Fleet服务器主机，ip写自己，协议为<code>https</code>，端口是8220，点击生成</p>
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230517113426.png" alt="image-20230517113425883"></p>
@@ -284,7 +293,7 @@
 <p>记住后面需要加一个参数<code>--insecure</code>，不然会报错，提示无法连接</p>
 <p>然后我们就能看到存在的两台机器了</p>
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230517115343.png" alt="image-20230517115343367"></p>
-<h1 id="安装Zeek"><a href="#安装Zeek" class="headerlink" title="安装Zeek"></a>安装Zeek</h1><p>有两种方式进行安装</p>
+<h2 id="安装Zeek"><a href="#安装Zeek" class="headerlink" title="安装Zeek"></a>安装Zeek</h2><p>有两种方式进行安装</p>
 <ol>
 <li>通过源码安装</li>
 </ol>
@@ -310,14 +319,29 @@
 <p>安装第三方包</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip3 install gitpython</span><br><span class="line">pip3 install semantic-version</span><br><span class="line">pip3 install git+http://github.com/zeek/package-manager@master</span><br><span class="line">zkg autoconfig</span><br></pre></td></tr></table></figure>
 
+<p>安装完成后，修改配置文件<code>/usr/local/zeek/etc/node.cfg</code></p>
+<p>(ps:网上的教程都是修改路径或者指定安装路径，例如<code>/opt/zeek</code>，但是我环境中的还是<code>/usr/local/zeek</code>，看教程好像也没修改什么，但是突然就变成了<code>/opt</code>下的路径，可能是他抄错了，也可能是我眼拙，当然，如果你在看别的教程出现ztc这个词，不用怀疑，那是etc)</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524110939.png" alt="image-20230524110939386"></p>
+<p>修改配置文件<code>/usr/local/zeek/networks.cfg</code>，设置要监听的段</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524111557.png" alt="image-20230524111556936"></p>
+<p>修改配置文件<code>/usr/local/zeek/share/zeek/site/local.zeek</code>，将输出内容设置为json</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@load policy/tuning/json-logs.zeek</span><br><span class="line">@load packages</span><br></pre></td></tr></table></figure>
 
+<p>加载配置，开始监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 开始监听</span><br><span class="line">zeekctl deploy</span><br><span class="line"># 关闭zeek</span><br><span class="line">zeekctl stop</span><br></pre></td></tr></table></figure>
 
+<h2 id="添加zeek集成并部署"><a href="#添加zeek集成并部署" class="headerlink" title="添加zeek集成并部署"></a>添加zeek集成并部署</h2><p>去集成里搜<code>zeek</code></p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112041.png" alt="image-20230524112041017"></p>
+<p>你如果要安装在新的机器，单独新建一个策略，然后再Fleet中安装即可，如果你像我一样，一台ubuntu做全部，那么</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112143.png" alt="image-20230524112142669"></p>
+<p>你在ubuntu的策略里，点右上角添加集成，添加zeek后，他就会自动下发了，方便快捷</p>
+<p>当然，特别注意一点，要修改这个路径</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112300.png" alt="image-20230524112259996"></p>
+<p>然后其他主机就可以设置路由到到zeek服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -p add 10.0.0.0 MASK 255.255.0.0 10.0.0.9 METRIC 1</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
+<p>接着你就能在网络中，测试你的请求了，我这边尝试请求了iis和python3开启的http</p>
+<p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230524112516.png" alt="image-20230524112516351"></p>
 <h1 id="坑点集合"><a href="#坑点集合" class="headerlink" title="坑点集合"></a>坑点集合</h1><h2 id="Cmake版本过低"><a href="#Cmake版本过低" class="headerlink" title="Cmake版本过低"></a>Cmake版本过低</h2><p>在安装zeek的时候提示下面报错</p>
 <p><img src="https://elapse-blog-pic.oss-cn-shenzhen.aliyuncs.com/pic/20230519102500.png" alt="image-20230519102500257"></p>
 <p>先去<a target="_blank" rel="noopener" href="https://cmake.org/files/%E4%B8%8B%E8%BD%BD%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E7%89%88%E6%9C%AC">https://cmake.org/files/下载所需要的版本</a></p>
@@ -368,22 +392,22 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85elasticsearch"><span class="toc-number">2.1.</span> <span class="toc-text">安装elasticsearch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85kibana"><span class="toc-number">2.2.</span> <span class="toc-text">安装kibana</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSL%E5%92%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">配置SSL和身份验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9B%86%E6%88%90"><span class="toc-number">2.4.</span> <span class="toc-text">添加集成</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Agent"><span class="toc-number">3.</span> <span class="toc-text">添加Agent</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Zeek"><span class="toc-number">4.</span> <span class="toc-text">安装Zeek</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9D%91%E7%82%B9%E9%9B%86%E5%90%88"><span class="toc-number">5.</span> <span class="toc-text">坑点集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E"><span class="toc-number">5.1.</span> <span class="toc-text">Cmake版本过低</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.2.</span> <span class="toc-text">gcc版本过低的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85agent%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%97%A5%E5%BF%97"><span class="toc-number">5.3.</span> <span class="toc-text">安装agent后，没日志</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85elasticsearch"><span class="toc-number">2.1.</span> <span class="toc-text">安装elasticsearch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85kibana"><span class="toc-number">2.2.</span> <span class="toc-text">安装kibana</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESSL%E5%92%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.</span> <span class="toc-text">配置SSL和身份验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%9B%86%E6%88%90"><span class="toc-number">2.4.</span> <span class="toc-text">添加集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Agent"><span class="toc-number">2.5.</span> <span class="toc-text">添加Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Zeek"><span class="toc-number">2.6.</span> <span class="toc-text">安装Zeek</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0zeek%E9%9B%86%E6%88%90%E5%B9%B6%E9%83%A8%E7%BD%B2"><span class="toc-number">2.7.</span> <span class="toc-text">添加zeek集成并部署</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9D%91%E7%82%B9%E9%9B%86%E5%90%88"><span class="toc-number">3.</span> <span class="toc-text">坑点集合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cmake%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E"><span class="toc-number">3.1.</span> <span class="toc-text">Cmake版本过低</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">gcc版本过低的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85agent%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%97%A5%E5%BF%97"><span class="toc-number">3.3.</span> <span class="toc-text">安装agent后，没日志</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&text=Elastic Edr搭建"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&is_video=false&description=Elastic Edr搭建"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Elastic Edr搭建&body=Check out this article: https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&name=Elastic Edr搭建&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/05/19/elastic%20edr%E6%90%AD%E5%BB%BA/&t=Elastic Edr搭建"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&text=Elastic Edr搭建"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&is_video=false&description=Elastic Edr搭建"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Elastic Edr搭建&body=Check out this article: https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&title=Elastic Edr搭建"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&name=Elastic Edr搭建&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ernket.github.io/2023/05/24/elastic%20edr%E6%90%AD%E5%BB%BA/&t=Elastic Edr搭建"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
